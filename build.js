@@ -30,7 +30,7 @@ function buildHome() {
   const html = pageShell(
     {
       title: 'Calculadoras Gratis — IVA, Finiquito, Hipoteca, Nómina y más | CalcYa',
-      description: '11 calculadoras gratuitas para España: IVA, finiquito, nómina neta, hipoteca, porcentajes, IMC, préstamo, ahorro, propina, combustible y días entre fechas. Sin registro, sin publicidad invasiva.',
+      description: '11 calculadoras gratis para España: IVA, finiquito, nómina, hipoteca, préstamo, ahorro, IMC y más. Sin registro, resultado inmediato.',
       canonicalPath: '',
       depth: 0,
       activePage: 'home',
