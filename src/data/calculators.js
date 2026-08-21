@@ -20,6 +20,8 @@ const CALCS = [
       { q: '¿Puedo deducirme el IVA?', a: 'Solo si eres autónomo o empresa y la compra está relacionada con tu actividad económica. Consulta con tu asesor fiscal.' },
     ],
     aff: null,
+    method: 'El IVA se calcula aplicando el porcentaje del tipo (4%, 10% o 21%) sobre el precio sin IVA. Para añadir IVA, multiplica el precio por el tipo y súmalo; para quitarlo, divide el precio con IVA entre (1 + tipo).',
+    related: ['porcentaje', 'prestamo'],
   },
   {
     id: 'finiquito',
@@ -37,6 +39,8 @@ const CALCS = [
       { q: '¿Tengo que firmar el finiquito?', a: 'Puedes firmar con la frase "no conforme" si crees que el importe es incorrecto. Esto no impide que cobres y te reserva el derecho a reclamar la diferencia.' },
     ],
     aff: { text: 'Si crees que el finiquito no está bien calculado, puedes consultarlo con un abogado laboral. Muchos ofrecen primera consulta gratuita.', link: '#', linkText: 'Buscar asesoramiento laboral →' },
+    method: 'Se suma el salario de los días trabajados en el mes, las vacaciones no disfrutadas (a razón de tu salario diario) y, si corresponde, los días de preaviso no cumplidos. El resultado es el importe bruto, antes de IRPF y Seguridad Social.',
+    related: ['nomina'],
   },
   {
     id: 'nomina',
@@ -54,6 +58,8 @@ const CALCS = [
       { q: '¿Qué son las pagas extra?', a: 'La mayoría de convenios contemplan dos pagas extra al año (junio y diciembre). Si las tienes prorrateadas, están incluidas en tu salario mensual.' },
     ],
     aff: null,
+    method: 'Al salario bruto se le restan las cotizaciones a la Seguridad Social (6,35% del trabajador) y la retención de IRPF, que depende de tu tramo de renta anual y del número de hijos a cargo. Lo que queda es el neto que recibes en cuenta.',
+    related: ['finiquito', 'ahorro'],
   },
   {
     id: 'hipoteca',
@@ -71,6 +77,8 @@ const CALCS = [
       { q: '¿Cuánto debería pagar como máximo?', a: 'La recomendación habitual es que la hipoteca no supere el 30–35 % de tus ingresos netos mensuales.' },
     ],
     aff: { text: 'Antes de firmar, compara hipotecas. Los comparadores gratuitos como HelpMyCash o Rankia pueden ahorrarte miles de euros.', link: '#', linkText: 'Comparar hipotecas →' },
+    method: 'La cuota mensual se calcula con el sistema de amortización francés: el capital prestado se reparte en cuotas fijas que incluyen capital e intereses, según el tipo de interés anual y el plazo en años.',
+    related: ['prestamo', 'ahorro'],
   },
   {
     id: 'porcentaje',
@@ -87,6 +95,8 @@ const CALCS = [
       { q: '¿Cómo calculo la variación porcentual?', a: 'Resta el valor nuevo menos el antiguo, divide entre el antiguo y multiplica por 100. Si es positivo, es un aumento; si es negativo, una reducción.' },
     ],
     aff: null,
+    method: 'Elige el tipo de cálculo: qué es el X% de una cantidad, qué porcentaje representa un valor sobre otro, o la variación porcentual entre dos valores (la diferencia dividida entre el valor inicial, en tanto por ciento).',
+    related: ['iva', 'dias'],
   },
   {
     id: 'dias',
@@ -103,6 +113,8 @@ const CALCS = [
       { q: '¿Para qué se usa?', a: 'Calcular plazos de contratos, preaviso de baja laboral, tiempo hasta vacaciones o vencimiento de facturas.' },
     ],
     aff: null,
+    method: 'Se calcula la diferencia en días naturales entre las dos fechas elegidas. Si activas "días laborables", se excluyen sábados y domingos del recuento (los festivos no se descuentan automáticamente).',
+    related: ['porcentaje'],
   },
   {
     id: 'imc',
@@ -119,6 +131,8 @@ const CALCS = [
       { q: '¿Cuáles son los rangos de la OMS?', a: 'Bajo peso: <18,5. Peso normal: 18,5–24,9. Sobrepeso: 25–29,9. Obesidad grado I: 30–34,9. Obesidad grado II: 35–39,9. Obesidad grado III: ≥40.' },
     ],
     aff: null,
+    method: 'El IMC se calcula dividiendo el peso en kilogramos entre la altura en metros al cuadrado (kg/m²). El resultado se compara con los rangos de referencia establecidos por la Organización Mundial de la Salud.',
+    related: [],
   },
   {
     id: 'prestamo',
@@ -135,6 +149,8 @@ const CALCS = [
       { q: '¿Puedo amortizar anticipadamente?', a: 'Sí, aunque algunos contratos incluyen comisiones de amortización anticipada. Revisa las condiciones de tu préstamo.' },
     ],
     aff: { text: 'Antes de contratar, compara varios préstamos. Un punto menos de interés en 10.000 € a 5 años son más de 250 € de ahorro.', link: '#', linkText: 'Comparar préstamos →' },
+    method: 'La cuota mensual se calcula igual que en una hipoteca: capital, TIN anual y plazo en meses determinan una cuota fija mediante el sistema de amortización francés. El TAE estimado añade el efecto de la capitalización mensual.',
+    related: ['hipoteca', 'ahorro'],
   },
   {
     id: 'ahorro',
@@ -151,6 +167,8 @@ const CALCS = [
       { q: '¿Qué rentabilidad puedo esperar?', a: 'Una cuenta de ahorro puede dar un 2–3 % actualmente. Un fondo indexado global ha dado históricamente un 7–9 % anual. A mayor rentabilidad potencial, mayor riesgo.' },
     ],
     aff: null,
+    method: 'A partir de tu objetivo, tu ahorro inicial y la rentabilidad anual esperada, se calcula la aportación mensual constante necesaria para alcanzarlo, aplicando la fórmula del interés compuesto sobre aportaciones periódicas.',
+    related: ['porcentaje', 'prestamo'],
   },
   {
     id: 'propina',
@@ -167,6 +185,8 @@ const CALCS = [
       { q: '¿Y en otros países?', a: 'En EEUU la propina del 15–20 % es prácticamente obligatoria. En Japón, no se da propina. Infórmate siempre antes de viajar.' },
     ],
     aff: null,
+    method: 'Se aplica el porcentaje de propina elegido sobre el total de la cuenta y se reparte el importe final (cuenta + propina) entre el número de personas indicado.',
+    related: ['combustible'],
   },
   {
     id: 'combustible',
@@ -183,6 +203,8 @@ const CALCS = [
       { q: '¿Dónde ver el precio del combustible?', a: 'El Ministerio de Industria publica el precio de todas las gasolineras de España en geoportal.minetur.gob.es. Apps como Gasolineras.es también lo tienen en tiempo real.' },
     ],
     aff: null,
+    method: 'Se calculan los litros necesarios multiplicando los kilómetros por el consumo (l/100 km) y dividiendo entre 100. El coste total es esos litros multiplicados por el precio del combustible por litro.',
+    related: ['propina'],
   },
 ];
 
