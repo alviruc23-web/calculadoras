@@ -24,9 +24,13 @@
   }
 
   function attachEvents(id, root) {
-    root.querySelectorAll('.btn-calc').forEach(function (btn) {
-      btn.onclick = function () { RENDERERS[id](root); };
-    });
+    var form = root.querySelector('#body-' + id + ' form');
+    if (form) {
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        RENDERERS[id](root);
+      };
+    }
     root.querySelectorAll('.btn-copy').forEach(function (btn) {
       btn.onclick = function () {
         var txt = btn.dataset.copy;
@@ -40,6 +44,9 @@
         this.classList.add('on');
         RENDERERS[id](root);
       };
+    });
+    root.querySelectorAll('#body-' + id + ' input[type=number]').forEach(function (el) {
+      el.addEventListener('focus', function () { this.select(); });
     });
   }
 
@@ -64,7 +71,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="iva-precio">Precio <span class="lbl-note">(€)</span></label>' +
             '<input type="number" id="iva-precio" min="0" step="0.01" placeholder="100,00" value="' + (precio || '') + '">' +
@@ -84,8 +91,8 @@
               '<option value="quitar"' + (modo === 'quitar' ? ' selected' : '') + '>Quitar IVA (precio con IVA → sin IVA)</option>' +
             '</select>' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular IVA</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular IVA</button>' +
+        '</form>' +
         '<div>' +
           (precio > 0 ?
             '<div class="result-box">' +
@@ -124,7 +131,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="fin-salario">Salario bruto mensual <span class="lbl-note">(€)</span></label>' +
             '<input type="number" id="fin-salario" min="0" step="50" placeholder="1.800" value="' + (salario || '') + '">' +
@@ -143,8 +150,8 @@
             '<input type="number" id="fin-preaviso" min="0" max="90" placeholder="0" value="' + (preaviso || '') + '">' +
             '<p class="field-note">Solo si el preaviso no se ha cumplido y corresponde indemnizarlo.</p>' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular finiquito</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular finiquito</button>' +
+        '</form>' +
         '<div>' +
           (salario > 0 ?
             '<div class="result-box">' +
@@ -194,7 +201,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="nom-bruto">Salario bruto mensual <span class="lbl-note">(€)</span></label>' +
             '<input type="number" id="nom-bruto" min="0" step="50" placeholder="2.000" value="' + (bruto || '') + '">' +
@@ -210,8 +217,8 @@
             '<label class="lbl" for="nom-hijos">Hijos a cargo</label>' +
             '<input type="number" id="nom-hijos" min="0" max="10" placeholder="0" value="' + (hijos || '') + '">' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular neto</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular neto</button>' +
+        '</form>' +
         '<div>' +
           (bruto > 0 ?
             '<div class="result-box">' +
@@ -250,7 +257,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="hip-capital">Importe del préstamo <span class="lbl-note">(€)</span></label>' +
             '<input type="number" id="hip-capital" min="0" step="1000" placeholder="150.000" value="' + (capital || '') + '">' +
@@ -264,8 +271,8 @@
             '<input type="number" id="hip-tipo" min="0" max="20" step="0.01" placeholder="3,00" value="' + tipo + '">' +
             '<p class="field-note">Para hipoteca variable usa el Euríbor actual + diferencial.</p>' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular hipoteca</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular hipoteca</button>' +
+        '</form>' +
         '<div>' +
           (capital > 0 ?
             '<div class="result-box">' +
@@ -318,7 +325,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" id="pct-modo-label">Tipo de cálculo</label>' +
             '<div class="seg" role="group" aria-labelledby="pct-modo-label">' +
@@ -335,8 +342,8 @@
             '<label class="lbl" for="pct-b">' + lbls[1] + '</label>' +
             '<input type="number" id="pct-b" step="any" placeholder="0" value="' + (b || '') + '">' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular</button>' +
+        '</form>' +
         '<div>' +
           '<div class="result-box">' +
             '<div class="result-label">' + (label || 'Resultado') + '</div>' +
@@ -382,7 +389,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="dias-f1">Fecha de inicio</label>' +
             '<input type="date" id="dias-f1" value="' + f1v + '">' +
@@ -395,8 +402,8 @@
             '<input type="checkbox" id="dias-lab"' + (labOpt ? ' checked' : '') + '>' +
             '<label for="dias-lab">Mostrar solo días laborables</label>' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular</button>' +
+        '</form>' +
         '<div>' +
           '<div class="result-box">' +
             '<div class="result-label">' + (labOpt ? 'Días laborables' : 'Días totales') + '</div>' +
@@ -435,7 +442,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="imc-peso">Peso <span class="lbl-note">(kg)</span></label>' +
             '<input type="number" id="imc-peso" min="1" max="300" step="0.1" placeholder="70" value="' + (peso || '') + '">' +
@@ -444,8 +451,8 @@
             '<label class="lbl" for="imc-altura">Altura <span class="lbl-note">(cm)</span></label>' +
             '<input type="number" id="imc-altura" min="50" max="250" step="1" placeholder="170" value="' + (altura || '') + '">' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular IMC</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular IMC</button>' +
+        '</form>' +
         '<div>' +
           (imc > 0 ?
             '<div class="result-box">' +
@@ -481,7 +488,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="pre-capital">Importe <span class="lbl-note">(€)</span></label>' +
             '<input type="number" id="pre-capital" min="0" step="100" placeholder="10.000" value="' + (capital || '') + '">' +
@@ -494,8 +501,8 @@
             '<label class="lbl" for="pre-meses">Plazo <span class="lbl-note">(meses)</span></label>' +
             '<input type="number" id="pre-meses" min="1" max="120" placeholder="48" value="' + meses + '">' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular cuota</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular cuota</button>' +
+        '</form>' +
         '<div>' +
           (capital > 0 ?
             '<div class="result-box">' +
@@ -538,7 +545,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="aho-objetivo">Objetivo de ahorro <span class="lbl-note">(€)</span></label>' +
             '<input type="number" id="aho-objetivo" min="0" step="500" placeholder="20.000" value="' + (objetivo || '') + '">' +
@@ -556,8 +563,8 @@
             '<input type="number" id="aho-renta" min="0" max="30" step="0.1" placeholder="3,0" value="' + rentabilidad + '">' +
             '<p class="field-note">Cuenta de ahorro: 2–3 %. Fondo indexado histórico: 7–9 %.</p>' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular ahorro</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular ahorro</button>' +
+        '</form>' +
         '<div>' +
           (objetivo > 0 ?
             '<div class="result-box">' +
@@ -593,7 +600,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="pro-cuenta">Total de la cuenta <span class="lbl-note">(€)</span></label>' +
             '<input type="number" id="pro-cuenta" min="0" step="0.5" placeholder="60,00" value="' + (cuenta || '') + '">' +
@@ -611,8 +618,8 @@
             '<label class="lbl" for="pro-personas">Personas</label>' +
             '<input type="number" id="pro-personas" min="1" max="50" placeholder="2" value="' + personas + '">' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular reparto</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular reparto</button>' +
+        '</form>' +
         '<div>' +
           (cuenta > 0 ?
             '<div class="result-box">' +
@@ -649,7 +656,7 @@
 
     body.innerHTML =
       '<div class="panel-grid">' +
-        '<div>' +
+        '<form novalidate>' +
           '<div class="field">' +
             '<label class="lbl" for="com-km">Distancia del viaje <span class="lbl-note">(km)</span></label>' +
             '<input type="number" id="com-km" min="0" step="10" placeholder="500" value="' + (km || '') + '">' +
@@ -663,8 +670,8 @@
             '<input type="number" id="com-precio" min="0" max="5" step="0.001" placeholder="1,650" value="' + precio + '">' +
             '<p class="field-note">Gasolineras.es tiene el precio actualizado de cada estación.</p>' +
           '</div>' +
-          '<button type="button" class="btn-calc">Calcular coste</button>' +
-        '</div>' +
+          '<button type="submit" class="btn-calc">Calcular coste</button>' +
+        '</form>' +
         '<div>' +
           (km > 0 ?
             '<div class="result-box">' +

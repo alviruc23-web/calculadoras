@@ -11,9 +11,10 @@ const fs = require('fs');
 const path = require('path');
 
 const { CALCS } = require('./src/data/calculators');
+const { SITE } = require('./src/data/site');
 const { pageShell } = require('./src/templates/layout');
-const { renderHomeBody } = require('./src/templates/home');
-const { renderCalculatorBody } = require('./src/templates/calculatorPage');
+const { renderHomeBody, buildHomeStructuredData } = require('./src/templates/home');
+const { renderCalculatorBody, buildStructuredData } = require('./src/templates/calculatorPage');
 
 const ROOT = __dirname;
 
@@ -29,10 +30,11 @@ function buildHome() {
   const html = pageShell(
     {
       title: 'Calculadoras Gratis — IVA, Finiquito, Hipoteca, Nómina y más | CalcYa',
-      description: '11 calculadoras gratuitas para España: IVA, finiquito, nómina neta, hipoteca, porcentajes, IMC, préstamo, ahorro, propina, combustible y días entre fechas. Sin registro, sin publicidad invasiva.',
+      description: '11 calculadoras gratis para España: IVA, finiquito, nómina, hipoteca, préstamo, ahorro, IMC y más. Sin registro, resultado inmediato.',
       canonicalPath: '',
       depth: 0,
       activePage: 'home',
+      structuredData: buildHomeStructuredData(),
     },
     body,
     '<script src="assets/js/home.js"></script>'
@@ -41,6 +43,7 @@ function buildHome() {
 }
 
 function buildCalculatorPage(c) {
+  const canonicalUrl = `${SITE.baseUrl}${c.id}/`;
   const body = renderCalculatorBody(c, '../');
   const html = pageShell(
     {
@@ -49,6 +52,7 @@ function buildCalculatorPage(c) {
       canonicalPath: `${c.id}/`,
       depth: 1,
       activePage: null,
+      structuredData: buildStructuredData(c, canonicalUrl),
     },
     body,
     `<script src="../assets/js/calculators.js"></script>\n<script>CalcYa.initCalculator('${c.id}');</script>`

@@ -57,7 +57,12 @@ function renderFooter(depth) {
 </footer>`;
 }
 
-// meta: { title, description, canonicalPath, depth, activePage, bodyClass }
+function renderJsonLd(schemas) {
+  if (!schemas || !schemas.length) return '';
+  return schemas.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n');
+}
+
+// meta: { title, description, canonicalPath, depth, activePage, structuredData }
 function pageShell(meta, bodyHtml, extraScripts) {
   const p = prefixFor(meta.depth);
   const canonical = SITE.baseUrl + (meta.canonicalPath || '');
@@ -71,14 +76,20 @@ function pageShell(meta, bodyHtml, extraScripts) {
 <meta name="description" content="${meta.description}">
 <link rel="canonical" href="${canonical}">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="${SITE.name}">
 <meta property="og:title" content="${meta.title}">
 <meta property="og:description" content="${meta.description}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonical}">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${meta.title}">
+<meta name="twitter:description" content="${meta.description}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${p}assets/css/main.css">
+${renderJsonLd(meta.structuredData)}
 </head>
 <body>
 ${renderHeader(meta.depth, meta.activePage)}
