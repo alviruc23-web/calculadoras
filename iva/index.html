@@ -8,14 +8,22 @@
 <meta name="description" content="Añade o quita IVA a cualquier precio. Todos los tipos: 21%, 10% y 4%. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="canonical" href="https://alviruc23-web.github.io/calculadoras/iva/">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="CalcYa">
 <meta property="og:title" content="Calculadora de IVA — Gratis y sin registro | CalcYa">
 <meta property="og:description" content="Añade o quita IVA a cualquier precio. Todos los tipos: 21%, 10% y 4%. Calculadora gratuita, sin registro, resultado inmediato.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://alviruc23-web.github.io/calculadoras/iva/">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Calculadora de IVA — Gratis y sin registro | CalcYa">
+<meta name="twitter:description" content="Añade o quita IVA a cualquier precio. Todos los tipos: 21%, 10% y 4%. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/main.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://alviruc23-web.github.io/calculadoras/"},{"@type":"ListItem","position":2,"name":"Calculadoras","item":"https://alviruc23-web.github.io/calculadoras/#calculadoras"},{"@type":"ListItem","position":3,"name":"Calculadora de IVA","item":"https://alviruc23-web.github.io/calculadoras/iva/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de IVA","description":"Añade o quita IVA a cualquier precio. Todos los tipos: 21%, 10% y 4%.","url":"https://alviruc23-web.github.io/calculadoras/iva/","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué tipo de IVA aplica en España?","acceptedAnswer":{"@type":"Answer","text":"El tipo general es el 21 %. Se aplica al 10 % en hostelería, transporte y algunos alimentos. El tipo superreducido del 4 % es para alimentos básicos, libros y medicamentos."}},{"@type":"Question","name":"¿Cómo sé si un precio lleva IVA incluido?","acceptedAnswer":{"@type":"Answer","text":"Las facturas a consumidores finales siempre deben indicar el importe con y sin IVA. En comercios, el precio visible suele llevar IVA incluido."}},{"@type":"Question","name":"¿Puedo deducirme el IVA?","acceptedAnswer":{"@type":"Answer","text":"Solo si eres autónomo o empresa y la compra está relacionada con tu actividad económica. Consulta con tu asesor fiscal."}}]}</script>
 </head>
 <body>
 
@@ -65,12 +73,13 @@
 
 <div class="wrap">
   <div class="calc-panel" id="panel-iva">
-    <div class="panel-body" id="body-iva">
+    <div class="panel-body" id="body-iva" aria-live="polite">
       <noscript><p>Esta calculadora necesita JavaScript activado para funcionar.</p></noscript>
     </div>
     <div class="info-section">
+      <div class="method-box"><h2>Cómo se calcula</h2><p>El IVA se calcula aplicando el porcentaje del tipo (4%, 10% o 21%) sobre el precio sin IVA. Para añadir IVA, multiplica el precio por el tipo y súmalo; para quitarlo, divide el precio con IVA entre (1 + tipo).</p></div>
       
-      <div class="faq" style="margin-top:0">
+      <div class="faq" style="margin-top:14px">
         <h2>Preguntas frecuentes</h2>
         <details><summary>¿Qué tipo de IVA aplica en España?</summary><p>El tipo general es el 21 %. Se aplica al 10 % en hostelería, transporte y algunos alimentos. El tipo superreducido del 4 % es para alimentos básicos, libros y medicamentos.</p></details><details><summary>¿Cómo sé si un precio lleva IVA incluido?</summary><p>Las facturas a consumidores finales siempre deben indicar el importe con y sin IVA. En comercios, el precio visible suele llevar IVA incluido.</p></details><details><summary>¿Puedo deducirme el IVA?</summary><p>Solo si eres autónomo o empresa y la compra está relacionada con tu actividad económica. Consulta con tu asesor fiscal.</p></details>
       </div>
@@ -80,6 +89,21 @@
   <div class="ad-slot ad-slot-rect" aria-label="Espacio publicitario">
     <span>Publicidad · 300×250 · AdSense / Red de display</span>
   </div>
+  
+  <section class="related" aria-labelledby="related-heading">
+    <h2 id="related-heading">Calculadoras relacionadas</h2>
+    <div class="related-grid">
+      
+      <a class="related-card" href="../porcentaje/">
+        <div class="card-icon" style="background:#F5F3FF; color:#5B21B6; width:32px; height:32px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2"/><circle cx="15" cy="15" r="2"/><line x1="7" y1="17" x2="17" y2="7"/></svg></div>
+        <span>Calculadora de porcentajes</span>
+      </a>
+      <a class="related-card" href="../prestamo/">
+        <div class="card-icon" style="background:#EFF6FF; color:#1E40AF; width:32px; height:32px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <span>Calculadora de préstamo</span>
+      </a>
+    </div>
+  </section>
 
   <a class="back-link" href="../index.html#calculadoras">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>

@@ -8,14 +8,22 @@
 <meta name="description" content="Calcula cuántos días, semanas o meses hay entre dos fechas. Con opción de días laborables. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="canonical" href="https://alviruc23-web.github.io/calculadoras/dias/">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="CalcYa">
 <meta property="og:title" content="Días entre dos fechas — Gratis y sin registro | CalcYa">
 <meta property="og:description" content="Calcula cuántos días, semanas o meses hay entre dos fechas. Con opción de días laborables. Calculadora gratuita, sin registro, resultado inmediato.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://alviruc23-web.github.io/calculadoras/dias/">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Días entre dos fechas — Gratis y sin registro | CalcYa">
+<meta name="twitter:description" content="Calcula cuántos días, semanas o meses hay entre dos fechas. Con opción de días laborables. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/main.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://alviruc23-web.github.io/calculadoras/"},{"@type":"ListItem","position":2,"name":"Calculadoras","item":"https://alviruc23-web.github.io/calculadoras/#calculadoras"},{"@type":"ListItem","position":3,"name":"Días entre dos fechas","item":"https://alviruc23-web.github.io/calculadoras/dias/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Días entre dos fechas","description":"Calcula cuántos días, semanas o meses hay entre dos fechas. Con opción de días laborables.","url":"https://alviruc23-web.github.io/calculadoras/dias/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Se cuentan los sábados y domingos?","acceptedAnswer":{"@type":"Answer","text":"Por defecto sí. Activa la opción de días laborables para excluir fines de semana. Los festivos nacionales no se excluyen automáticamente."}},{"@type":"Question","name":"¿Para qué se usa?","acceptedAnswer":{"@type":"Answer","text":"Calcular plazos de contratos, preaviso de baja laboral, tiempo hasta vacaciones o vencimiento de facturas."}}]}</script>
 </head>
 <body>
 
@@ -65,12 +73,13 @@
 
 <div class="wrap">
   <div class="calc-panel" id="panel-dias">
-    <div class="panel-body" id="body-dias">
+    <div class="panel-body" id="body-dias" aria-live="polite">
       <noscript><p>Esta calculadora necesita JavaScript activado para funcionar.</p></noscript>
     </div>
     <div class="info-section">
+      <div class="method-box"><h2>Cómo se calcula</h2><p>Se calcula la diferencia en días naturales entre las dos fechas elegidas. Si activas "días laborables", se excluyen sábados y domingos del recuento (los festivos no se descuentan automáticamente).</p></div>
       
-      <div class="faq" style="margin-top:0">
+      <div class="faq" style="margin-top:14px">
         <h2>Preguntas frecuentes</h2>
         <details><summary>¿Se cuentan los sábados y domingos?</summary><p>Por defecto sí. Activa la opción de días laborables para excluir fines de semana. Los festivos nacionales no se excluyen automáticamente.</p></details><details><summary>¿Para qué se usa?</summary><p>Calcular plazos de contratos, preaviso de baja laboral, tiempo hasta vacaciones o vencimiento de facturas.</p></details>
       </div>
@@ -80,6 +89,17 @@
   <div class="ad-slot ad-slot-rect" aria-label="Espacio publicitario">
     <span>Publicidad · 300×250 · AdSense / Red de display</span>
   </div>
+  
+  <section class="related" aria-labelledby="related-heading">
+    <h2 id="related-heading">Calculadoras relacionadas</h2>
+    <div class="related-grid">
+      
+      <a class="related-card" href="../porcentaje/">
+        <div class="card-icon" style="background:#F5F3FF; color:#5B21B6; width:32px; height:32px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2"/><circle cx="15" cy="15" r="2"/><line x1="7" y1="17" x2="17" y2="7"/></svg></div>
+        <span>Calculadora de porcentajes</span>
+      </a>
+    </div>
+  </section>
 
   <a class="back-link" href="../index.html#calculadoras">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>

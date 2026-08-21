@@ -8,14 +8,22 @@
 <meta name="description" content="Índice de masa corporal según peso y altura, con tabla de categorías de la OMS. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="canonical" href="https://alviruc23-web.github.io/calculadoras/imc/">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="CalcYa">
 <meta property="og:title" content="Calculadora de IMC — Gratis y sin registro | CalcYa">
 <meta property="og:description" content="Índice de masa corporal según peso y altura, con tabla de categorías de la OMS. Calculadora gratuita, sin registro, resultado inmediato.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://alviruc23-web.github.io/calculadoras/imc/">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Calculadora de IMC — Gratis y sin registro | CalcYa">
+<meta name="twitter:description" content="Índice de masa corporal según peso y altura, con tabla de categorías de la OMS. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/main.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://alviruc23-web.github.io/calculadoras/"},{"@type":"ListItem","position":2,"name":"Calculadoras","item":"https://alviruc23-web.github.io/calculadoras/#calculadoras"},{"@type":"ListItem","position":3,"name":"Calculadora de IMC","item":"https://alviruc23-web.github.io/calculadoras/imc/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de IMC","description":"Índice de masa corporal según peso y altura, con tabla de categorías de la OMS.","url":"https://alviruc23-web.github.io/calculadoras/imc/","applicationCategory":"HealthApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿El IMC es suficiente para evaluar mi salud?","acceptedAnswer":{"@type":"Answer","text":"El IMC es una referencia sencilla pero no tiene en cuenta la composición corporal, masa muscular ni distribución de grasa. Consulta siempre a un médico."}},{"@type":"Question","name":"¿Cuáles son los rangos de la OMS?","acceptedAnswer":{"@type":"Answer","text":"Bajo peso: <18,5. Peso normal: 18,5–24,9. Sobrepeso: 25–29,9. Obesidad grado I: 30–34,9. Obesidad grado II: 35–39,9. Obesidad grado III: ≥40."}}]}</script>
 </head>
 <body>
 
@@ -65,12 +73,13 @@
 
 <div class="wrap">
   <div class="calc-panel" id="panel-imc">
-    <div class="panel-body" id="body-imc">
+    <div class="panel-body" id="body-imc" aria-live="polite">
       <noscript><p>Esta calculadora necesita JavaScript activado para funcionar.</p></noscript>
     </div>
     <div class="info-section">
+      <div class="method-box"><h2>Cómo se calcula</h2><p>El IMC se calcula dividiendo el peso en kilogramos entre la altura en metros al cuadrado (kg/m²). El resultado se compara con los rangos de referencia establecidos por la Organización Mundial de la Salud.</p></div>
       
-      <div class="faq" style="margin-top:0">
+      <div class="faq" style="margin-top:14px">
         <h2>Preguntas frecuentes</h2>
         <details><summary>¿El IMC es suficiente para evaluar mi salud?</summary><p>El IMC es una referencia sencilla pero no tiene en cuenta la composición corporal, masa muscular ni distribución de grasa. Consulta siempre a un médico.</p></details><details><summary>¿Cuáles son los rangos de la OMS?</summary><p>Bajo peso: <18,5. Peso normal: 18,5–24,9. Sobrepeso: 25–29,9. Obesidad grado I: 30–34,9. Obesidad grado II: 35–39,9. Obesidad grado III: ≥40.</p></details>
       </div>
@@ -80,6 +89,7 @@
   <div class="ad-slot ad-slot-rect" aria-label="Espacio publicitario">
     <span>Publicidad · 300×250 · AdSense / Red de display</span>
   </div>
+  
 
   <a class="back-link" href="../index.html#calculadoras">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>

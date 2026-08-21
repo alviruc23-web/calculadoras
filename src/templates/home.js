@@ -1,11 +1,14 @@
 const { CALCS } = require('../data/calculators');
-const { CATEGORIES } = require('../data/site');
+const { CATEGORIES, SITE } = require('../data/site');
 
-function renderCard(c, prefix) {
+const POPULAR_IDS = ['iva', 'nomina', 'hipoteca', 'imc'];
+
+function renderCard(c, prefix, opts) {
+  const popular = opts && opts.popular;
   return `
     <a class="calc-card" href="${prefix}${c.id}/" data-cat="${c.cat}" data-keywords="${(c.name + ' ' + c.short + ' ' + c.keywords).toLowerCase()}">
       <div class="card-icon" style="background:${c.catColor}; color:${c.catText}">${c.icon}</div>
-      <div class="card-cat" style="color:${c.catText}">${c.catLabel}</div>
+      <div class="card-cat" style="color:${c.catText}">${c.catLabel}${popular ? ' · Popular' : ''}</div>
       <h3>${c.name}</h3>
       <p>${c.short}</p>
       <span class="card-cta">
@@ -16,7 +19,10 @@ function renderCard(c, prefix) {
 }
 
 function renderHomeBody(prefix) {
+  const byId = Object.fromEntries(CALCS.map(c => [c.id, c]));
+  const popular = POPULAR_IDS.map(id => byId[id]).filter(Boolean);
   const cards = CALCS.map(c => renderCard(c, prefix)).join('');
+  const popularCards = popular.map(c => renderCard(c, prefix, { popular: true })).join('');
   const chips = CATEGORIES.map(cg => `<button type="button" class="chip" data-cat="${cg.cat}" aria-pressed="false">${cg.label}</button>`).join('\n    ');
 
   return `
@@ -43,7 +49,14 @@ function renderHomeBody(prefix) {
   </div>
 </div>
 
+<div class="wrap popular-section">
+  <h2>Calculadoras más usadas</h2>
+  <div class="grid grid-popular">${popularCards}
+  </div>
+</div>
+
 <div class="wrap grid-section" id="calculadoras">
+  <h2>Todas las calculadoras</h2>
   <div class="filters" role="group" aria-label="Filtrar por categoría">
     <button type="button" class="chip on" data-cat="todas" aria-pressed="true">Todas</button>
     ${chips}
@@ -67,4 +80,17 @@ function renderHomeBody(prefix) {
 </main>`;
 }
 
-module.exports = { renderHomeBody };
+function buildHomeStructuredData() {
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: SITE.name,
+      url: SITE.baseUrl,
+      description: SITE.tagline,
+      inLanguage: 'es-ES',
+    },
+  ];
+}
+
+module.exports = { renderHomeBody, buildHomeStructuredData };

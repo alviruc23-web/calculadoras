@@ -8,14 +8,22 @@
 <meta name="description" content="Calcula lo que te deben al dejar un trabajo: salario pendiente, vacaciones y preavisos. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="canonical" href="https://alviruc23-web.github.io/calculadoras/finiquito/">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="CalcYa">
 <meta property="og:title" content="Calculadora de finiquito — Gratis y sin registro | CalcYa">
 <meta property="og:description" content="Calcula lo que te deben al dejar un trabajo: salario pendiente, vacaciones y preavisos. Calculadora gratuita, sin registro, resultado inmediato.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://alviruc23-web.github.io/calculadoras/finiquito/">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Calculadora de finiquito — Gratis y sin registro | CalcYa">
+<meta name="twitter:description" content="Calcula lo que te deben al dejar un trabajo: salario pendiente, vacaciones y preavisos. Calculadora gratuita, sin registro, resultado inmediato.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/main.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://alviruc23-web.github.io/calculadoras/"},{"@type":"ListItem","position":2,"name":"Calculadoras","item":"https://alviruc23-web.github.io/calculadoras/#calculadoras"},{"@type":"ListItem","position":3,"name":"Calculadora de finiquito","item":"https://alviruc23-web.github.io/calculadoras/finiquito/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de finiquito","description":"Calcula lo que te deben al dejar un trabajo: salario pendiente, vacaciones y preavisos.","url":"https://alviruc23-web.github.io/calculadoras/finiquito/","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿El finiquito y la indemnización son lo mismo?","acceptedAnswer":{"@type":"Answer","text":"No. El finiquito recoge los conceptos devengados pendientes de cobro (días trabajados, vacaciones…). La indemnización es la compensación por despido, que solo corresponde en ciertos tipos."}},{"@type":"Question","name":"¿Cuándo debo recibir el finiquito?","acceptedAnswer":{"@type":"Answer","text":"La ley no fija un plazo exacto, pero la práctica habitual es recibirlo el último día o en el plazo máximo de unos días. Retrasos injustificados pueden reclamarse."}},{"@type":"Question","name":"¿Tengo que firmar el finiquito?","acceptedAnswer":{"@type":"Answer","text":"Puedes firmar con la frase \"no conforme\" si crees que el importe es incorrecto. Esto no impide que cobres y te reserva el derecho a reclamar la diferencia."}}]}</script>
 </head>
 <body>
 
@@ -65,10 +73,11 @@
 
 <div class="wrap">
   <div class="calc-panel" id="panel-finiquito">
-    <div class="panel-body" id="body-finiquito">
+    <div class="panel-body" id="body-finiquito" aria-live="polite">
       <noscript><p>Esta calculadora necesita JavaScript activado para funcionar.</p></noscript>
     </div>
     <div class="info-section">
+      <div class="method-box"><h2>Cómo se calcula</h2><p>Se suma el salario de los días trabajados en el mes, las vacaciones no disfrutadas (a razón de tu salario diario) y, si corresponde, los días de preaviso no cumplidos. El resultado es el importe bruto, antes de IRPF y Seguridad Social.</p></div>
       
       <div class="aff-box">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -84,6 +93,17 @@
   <div class="ad-slot ad-slot-rect" aria-label="Espacio publicitario">
     <span>Publicidad · 300×250 · AdSense / Red de display</span>
   </div>
+  
+  <section class="related" aria-labelledby="related-heading">
+    <h2 id="related-heading">Calculadoras relacionadas</h2>
+    <div class="related-grid">
+      
+      <a class="related-card" href="../nomina/">
+        <div class="card-icon" style="background:#F0FDF4; color:#166534; width:32px; height:32px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <span>Calculadora de nómina neta</span>
+      </a>
+    </div>
+  </section>
 
   <a class="back-link" href="../index.html#calculadoras">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>

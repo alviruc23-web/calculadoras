@@ -11,9 +11,10 @@ const fs = require('fs');
 const path = require('path');
 
 const { CALCS } = require('./src/data/calculators');
+const { SITE } = require('./src/data/site');
 const { pageShell } = require('./src/templates/layout');
-const { renderHomeBody } = require('./src/templates/home');
-const { renderCalculatorBody } = require('./src/templates/calculatorPage');
+const { renderHomeBody, buildHomeStructuredData } = require('./src/templates/home');
+const { renderCalculatorBody, buildStructuredData } = require('./src/templates/calculatorPage');
 
 const ROOT = __dirname;
 
@@ -33,6 +34,7 @@ function buildHome() {
       canonicalPath: '',
       depth: 0,
       activePage: 'home',
+      structuredData: buildHomeStructuredData(),
     },
     body,
     '<script src="assets/js/home.js"></script>'
@@ -41,6 +43,7 @@ function buildHome() {
 }
 
 function buildCalculatorPage(c) {
+  const canonicalUrl = `${SITE.baseUrl}${c.id}/`;
   const body = renderCalculatorBody(c, '../');
   const html = pageShell(
     {
@@ -49,6 +52,7 @@ function buildCalculatorPage(c) {
       canonicalPath: `${c.id}/`,
       depth: 1,
       activePage: null,
+      structuredData: buildStructuredData(c, canonicalUrl),
     },
     body,
     `<script src="../assets/js/calculators.js"></script>\n<script>CalcYa.initCalculator('${c.id}');</script>`
