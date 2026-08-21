@@ -1,332 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta name="google-site-verification" content="OYHROaMHKcjjCctPkQ6btAdgsKgja80-pOEaiZodUyI" />
+<head>
+<meta name="google-site-verification" content="OYHROaMHKcjjCctPkQ6btAdgsKgja80-pOEaiZodUyI" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadoras Gratis — IVA, Finiquito, Hipoteca, Nómina y más | CalcYa</title>
 <meta name="description" content="11 calculadoras gratuitas para España: IVA, finiquito, nómina neta, hipoteca, porcentajes, IMC, préstamo, ahorro, propina, combustible y días entre fechas. Sin registro, sin publicidad invasiva.">
-<meta property="og:title" content="CalcYa — Calculadoras gratuitas para España">
-<meta property="og:description" content="Calcula IVA, finiquito, nómina, hipoteca y más. Gratis, sin registro, resultado inmediato.">
+<link rel="canonical" href="https://alviruc23-web.github.io/calculadoras/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:title" content="Calculadoras Gratis — IVA, Finiquito, Hipoteca, Nómina y más | CalcYa">
+<meta property="og:description" content="11 calculadoras gratuitas para España: IVA, finiquito, nómina neta, hipoteca, porcentajes, IMC, préstamo, ahorro, propina, combustible y días entre fechas. Sin registro, sin publicidad invasiva.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://alviruc23-web.github.io/calculadoras/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #F7F8FA;
-  --surface: #FFFFFF;
-  --border: #E5E7EB;
-  --border2: #D1D5DB;
-  --text: #111827;
-  --muted: #6B7280;
-  --dim: #9CA3AF;
-  --blue: #2563EB;
-  --blue-soft: #EFF6FF;
-  --blue-mid: #DBEAFE;
-  --green: #059669;
-  --green-soft: #ECFDF5;
-  --red: #DC2626;
-  --r: 10px;
-  --rl: 16px;
-  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
-  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ---- layout ---- */
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
-.narrow { max-width: 680px; }
-
-/* ---- header ---- */
-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 40;
-}
-.hdr-in {
-  height: 58px;
-  display: flex; align-items: center; gap: 12px;
-}
-.logo {
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 700; font-size: 18px; letter-spacing: -.03em;
-  color: var(--text); text-decoration: none;
-}
-.logo-mark {
-  width: 30px; height: 30px;
-  background: var(--blue); border-radius: 8px;
-  display: grid; place-items: center;
-}
-.logo-mark svg { display: block; }
-nav { display: flex; gap: 2px; margin-left: 10px; }
-.nav-link {
-  padding: 6px 11px; border-radius: 8px;
-  font-size: 14px; font-weight: 500; color: var(--muted);
-  text-decoration: none; transition: color .15s, background .15s;
-}
-.nav-link:hover { color: var(--text); background: var(--bg); }
-.nav-link.on { color: var(--blue); }
-.spacer { flex: 1; }
-
-/* ---- hero ---- */
-.hero { padding: 52px 0 36px; }
-.hero h1 {
-  font-size: clamp(28px, 5.5vw, 46px);
-  font-weight: 700; letter-spacing: -.03em; line-height: 1.1;
-  max-width: 18ch;
-}
-.hero h1 span { color: var(--blue); }
-.hero p { color: var(--muted); font-size: 17px; margin-top: 14px; max-width: 52ch; }
-
-/* ---- búsqueda ---- */
-.search-wrap { margin-top: 26px; position: relative; max-width: 480px; }
-.search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--dim); pointer-events: none; }
-#search {
-  width: 100%; height: 48px; padding: 0 16px 0 44px;
-  border: 1px solid var(--border2); border-radius: var(--rl);
-  background: var(--surface); font: inherit; font-size: 15px;
-  outline: none; transition: border-color .15s, box-shadow .15s;
-}
-#search:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-mid); }
-#search::placeholder { color: var(--dim); }
-
-/* ---- filtros ---- */
-.filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; margin-top: 32px; }
-.filters::-webkit-scrollbar { display: none; }
-.chip {
-  flex: none; height: 34px; padding: 0 14px;
-  border: 1px solid var(--border2); border-radius: 999px;
-  font: inherit; font-size: 13px; font-weight: 500; color: var(--muted);
-  background: var(--surface); cursor: pointer;
-  transition: all .15s; white-space: nowrap;
-}
-.chip:hover { border-color: var(--blue); color: var(--blue); }
-.chip.on { background: var(--blue); border-color: var(--blue); color: #fff; }
-
-/* ---- grid de calculadoras ---- */
-.grid-section { padding: 28px 0 52px; }
-.grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
-@media (min-width: 540px) { .grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
-
-.calc-card {
-  display: flex; flex-direction: column;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--rl); padding: 20px;
-  cursor: pointer; text-decoration: none; color: inherit;
-  transition: border-color .18s, box-shadow .18s, transform .18s;
-  box-shadow: var(--shadow);
-}
-.calc-card:hover { border-color: var(--blue); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.calc-card:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-
-.card-icon {
-  width: 40px; height: 40px; border-radius: 10px;
-  display: grid; place-items: center; margin-bottom: 14px; flex-shrink: 0;
-}
-.card-icon svg { display: block; }
-
-.card-cat {
-  font-size: 10.5px; font-weight: 600; letter-spacing: .08em;
-  text-transform: uppercase; margin-bottom: 6px;
-}
-.calc-card h3 { font-size: 16px; font-weight: 600; letter-spacing: -.01em; line-height: 1.25; }
-.calc-card p { color: var(--muted); font-size: 13px; margin-top: 6px; line-height: 1.5; flex: 1; }
-.card-cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--blue);
-}
-.card-cta svg { transition: transform .15s; }
-.calc-card:hover .card-cta svg { transform: translateX(3px); }
-
-/* ---- PANEL DE CALCULADORA ---- */
-.calc-panel {
-  display: none;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--rl); box-shadow: var(--shadow-md);
-  overflow: hidden; margin-bottom: 20px;
-}
-.calc-panel.open { display: block; animation: slideIn .22s ease-out both; }
-@keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } }
-
-.panel-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 18px 20px; border-bottom: 1px solid var(--border);
-  background: var(--bg);
-}
-.panel-title { font-size: 17px; font-weight: 700; letter-spacing: -.02em; flex: 1; }
-.panel-close {
-  width: 32px; height: 32px; display: grid; place-items: center;
-  border: 1px solid var(--border); border-radius: 8px;
-  background: none; cursor: pointer; color: var(--muted);
-  transition: background .15s, color .15s;
-}
-.panel-close:hover { background: var(--border); color: var(--text); }
-
-.panel-body { padding: 24px 20px; }
-.panel-grid { display: grid; gap: 0; }
-@media (min-width: 700px) { .panel-grid { grid-template-columns: 1fr 1fr; gap: 0 32px; } }
-
-/* ---- campos ---- */
-.field { margin-bottom: 18px; }
-label.lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; }
-.lbl-note { font-size: 12px; font-weight: 400; color: var(--muted); margin-left: 6px; }
-input[type=number], input[type=text], select {
-  width: 100%; height: 44px; padding: 0 13px;
-  border: 1px solid var(--border2); border-radius: var(--r);
-  background: var(--surface); font: inherit; font-size: 15px; color: var(--text);
-  outline: none; transition: border-color .15s, box-shadow .15s;
-  -moz-appearance: textfield;
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
-input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-mid); }
-.field-note { font-size: 12px; color: var(--dim); margin-top: 5px; }
-
-/* segmentado */
-.seg { display: flex; border: 1px solid var(--border2); border-radius: var(--r); overflow: hidden; }
-.seg button {
-  flex: 1; height: 44px; border: none; background: var(--surface);
-  font: inherit; font-size: 13px; font-weight: 500; color: var(--muted);
-  cursor: pointer; transition: background .12s, color .12s;
-  border-right: 1px solid var(--border2);
-}
-.seg button:last-child { border-right: none; }
-.seg button.on { background: var(--blue); color: #fff; font-weight: 600; }
-
-/* botón calcular */
-.btn-calc {
-  display: inline-flex; align-items: center; gap: 8px;
-  height: 46px; padding: 0 24px; border-radius: var(--r);
-  background: var(--blue); color: #fff; border: none;
-  font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
-  transition: filter .15s, transform .12s;
-  margin-top: 8px;
-}
-.btn-calc:hover { filter: brightness(1.1); }
-.btn-calc:active { transform: translateY(1px); }
-.btn-calc:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
-
-/* ---- resultado ---- */
-.result-box {
-  background: #064E3B; border-radius: var(--r);
-  padding: 22px 20px; margin-top: 24px;
-  display: none; animation: fadeUp .25s ease-out both;
-}
-.result-box.show { display: block; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } }
-
-.result-main {
-  font-family: 'DM Mono', ui-monospace, monospace;
-  font-size: clamp(32px, 7vw, 52px); font-weight: 500;
-  color: #ECFDF5; letter-spacing: -.03em; line-height: 1;
-}
-.result-label { font-size: 13px; font-weight: 600; color: #6EE7B7; margin-bottom: 8px; letter-spacing: .05em; text-transform: uppercase; }
-.result-rows { margin-top: 18px; display: flex; flex-direction: column; gap: 0; }
-.result-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.08);
-  font-size: 14px;
-}
-.result-row:last-child { border-bottom: none; }
-.result-row .rk { color: #A7F3D0; }
-.result-row .rv { font-family: 'DM Mono', monospace; font-size: 15px; color: #ECFDF5; font-weight: 500; }
-.result-note { margin-top: 16px; font-size: 12.5px; color: #6EE7B7; line-height: 1.55; }
-
-/* botones resultado */
-.result-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-.btn-copy {
-  display: inline-flex; align-items: center; gap: 6px;
-  height: 34px; padding: 0 14px; border-radius: 8px;
-  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
-  color: #ECFDF5; font: inherit; font-size: 13px; cursor: pointer;
-  transition: background .15s;
-}
-.btn-copy:hover { background: rgba(255,255,255,.18); }
-
-/* ---- afiliado ---- */
-.aff-box {
-  display: flex; gap: 12px; align-items: flex-start;
-  background: var(--blue-soft); border: 1px solid var(--blue-mid);
-  border-radius: var(--r); padding: 14px 16px; margin-top: 14px;
-}
-.aff-box svg { color: var(--blue); flex-shrink: 0; margin-top: 2px; }
-.aff-box p { font-size: 13px; color: #1E40AF; line-height: 1.5; }
-.aff-box a { font-weight: 600; color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
-
-/* ---- sección info / FAQ ---- */
-.info-section { padding: 12px 20px 20px; border-top: 1px solid var(--border); background: var(--bg); }
-.info-section h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
-.faq details { border-bottom: 1px solid var(--border); }
-.faq details:first-child { border-top: 1px solid var(--border); }
-.faq summary {
-  padding: 11px 0; font-size: 14px; font-weight: 600;
-  cursor: pointer; list-style: none; display: flex; justify-content: space-between;
-}
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: '+'; color: var(--muted); font-weight: 400; }
-details[open] summary::after { content: '−'; }
-.faq p { font-size: 13.5px; color: var(--muted); padding-bottom: 12px; line-height: 1.6; }
-
-/* ---- espacio publicitario ---- */
-.ad-slot {
-  background: var(--surface); border: 1px dashed var(--border2);
-  border-radius: var(--r); padding: 16px; text-align: center;
-  color: var(--dim); font-size: 12px; margin: 20px 0;
-}
-.ad-slot-banner { min-height: 90px; display: grid; place-items: center; }
-.ad-slot-rect { min-height: 250px; display: grid; place-items: center; }
-
-/* ---- footer ---- */
-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 36px 0 48px; margin-top: 20px; }
-.foot-grid { display: grid; gap: 28px; }
-@media (min-width: 640px) { .foot-grid { grid-template-columns: 2fr 1fr 1fr; } }
-.foot-logo { font-weight: 700; font-size: 16px; color: var(--text); letter-spacing: -.02em; }
-footer p { color: var(--muted); font-size: 13.5px; margin-top: 8px; max-width: 30ch; }
-.foot-col h5 { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--dim); margin-bottom: 12px; }
-.foot-col a { display: block; font-size: 14px; color: var(--muted); text-decoration: none; margin-bottom: 8px; transition: color .15s; }
-.foot-col a:hover { color: var(--blue); }
-.foot-bottom { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 28px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-.foot-bottom span { font-size: 13px; color: var(--dim); }
-
-/* ---- toast ---- */
-.toast {
-  position: fixed; left: 50%; bottom: 24px;
-  transform: translateX(-50%);
-  background: var(--text); color: #fff;
-  padding: 10px 18px; border-radius: 999px;
-  font-size: 13px; font-weight: 600;
-  box-shadow: 0 8px 24px rgba(0,0,0,.2);
-  z-index: 99; animation: toastIn .2s ease-out;
-  pointer-events: none;
-}
-@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 8px); } }
-
-/* no results */
-.no-results { text-align: center; padding: 40px 0; color: var(--muted); }
-.no-results strong { display: block; font-size: 17px; color: var(--text); margin-bottom: 6px; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
-}
-</style>
+<link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
 
-<!-- ============================================================ HEADER -->
+<a class="skip-link" href="#main">Saltar al contenido</a>
 <header>
   <div class="wrap hdr-in">
-    <a href="#" class="logo" onclick="showHome()">
+    <a href="index.html" class="logo">
       <div class="logo-mark">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <rect x="2" y="2" width="5" height="5" rx="1" fill="white"/>
           <rect x="9" y="2" width="5" height="5" rx="1" fill="white" opacity=".6"/>
           <rect x="2" y="9" width="5" height="5" rx="1" fill="white" opacity=".6"/>
@@ -335,54 +33,160 @@ footer p { color: var(--muted); font-size: 13.5px; margin-top: 8px; max-width: 3
       </div>
       CalcYa
     </a>
-    <nav>
-      <a href="#" class="nav-link on" onclick="showHome(); return false;">Inicio</a>
-      <a href="#calculadoras" class="nav-link" onclick="scrollToCalcs(); return false;">Calculadoras</a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="index.html" class="nav-link on" aria-current="page">Inicio</a>
+      <a href="index.html#calculadoras" class="nav-link">Calculadoras</a>
     </nav>
     <div class="spacer"></div>
   </div>
 </header>
 
-<!-- ============================================================ CONTENIDO PRINCIPAL -->
 <main id="main">
 
-<!-- ---- HERO ---- -->
 <section class="hero">
   <div class="wrap">
-    <p style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;">11 calculadoras · gratis · sin registro</p>
+    <p class="eyebrow">11 calculadoras · gratis · sin registro</p>
     <h1>Calcula lo que necesitas. <span>Resultado inmediato.</span></h1>
-    <p>IVA, finiquito, nómina, hipoteca, préstamo y más. Sin publicidad invasiva, sin letra pequeña.</p>
+    <p class="lead">IVA, finiquito, nómina, hipoteca, préstamo y más. Sin publicidad invasiva, sin letra pequeña.</p>
 
     <div class="search-wrap">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
       </svg>
-      <input type="search" id="search" placeholder="Busca una calculadora…" aria-label="Buscar calculadora" oninput="filterCalcs(this.value)">
+      <input type="search" id="search" placeholder="Busca una calculadora…" aria-label="Buscar calculadora">
     </div>
   </div>
 </section>
 
-<!-- ---- ANUNCIO BANNER (formato 728×90 adaptado) ---- -->
 <div class="wrap">
   <div class="ad-slot ad-slot-banner" aria-label="Espacio publicitario">
     <span>Publicidad · 728×90 · AdSense / Red de display</span>
   </div>
 </div>
 
-<!-- ---- FILTROS + GRID ---- -->
 <div class="wrap grid-section" id="calculadoras">
   <div class="filters" role="group" aria-label="Filtrar por categoría">
-    <button class="chip on" data-cat="todas" onclick="setCat('todas',this)">Todas</button>
-    <button class="chip" data-cat="fiscal" onclick="setCat('fiscal',this)">💰 Fiscal</button>
-    <button class="chip" data-cat="laboral" onclick="setCat('laboral',this)">👔 Laboral</button>
-    <button class="chip" data-cat="financiera" onclick="setCat('financiera',this)">🏦 Financiero</button>
-    <button class="chip" data-cat="matematica" onclick="setCat('matematica',this)">📐 Matemática</button>
-    <button class="chip" data-cat="salud" onclick="setCat('salud',this)">❤️ Salud</button>
-    <button class="chip" data-cat="viaje" onclick="setCat('viaje',this)">🚗 Viaje</button>
+    <button type="button" class="chip on" data-cat="todas" aria-pressed="true">Todas</button>
+    <button type="button" class="chip" data-cat="fiscal" aria-pressed="false">💰 Fiscal</button>
+    <button type="button" class="chip" data-cat="laboral" aria-pressed="false">👔 Laboral</button>
+    <button type="button" class="chip" data-cat="financiera" aria-pressed="false">🏦 Financiero</button>
+    <button type="button" class="chip" data-cat="matematica" aria-pressed="false">📐 Matemática</button>
+    <button type="button" class="chip" data-cat="salud" aria-pressed="false">❤️ Salud</button>
+    <button type="button" class="chip" data-cat="viaje" aria-pressed="false">🚗 Viaje</button>
   </div>
 
-  <!-- contenedor de tarjetas + paneles -->
-  <div id="calcs-container" style="margin-top:20px;"></div>
+  <div class="grid" style="margin-top:20px;">
+    <a class="calc-card" href="iva/" data-cat="fiscal" data-keywords="calculadora de iva añade o quita iva a cualquier precio. todos los tipos: 21%, 10% y 4%. iva impuesto valor añadido precio fiscal">
+      <div class="card-icon" style="background:#FEF3C7; color:#92400E"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+      <div class="card-cat" style="color:#92400E">Fiscal</div>
+      <h3>Calculadora de IVA</h3>
+      <p>Añade o quita IVA a cualquier precio. Todos los tipos: 21%, 10% y 4%.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="finiquito/" data-cat="laboral" data-keywords="calculadora de finiquito calcula lo que te deben al dejar un trabajo: salario pendiente, vacaciones y preavisos. finiquito despido baja voluntaria salario vacaciones laboral">
+      <div class="card-icon" style="background:#F0FDF4; color:#166534"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 014 0"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+      <div class="card-cat" style="color:#166534">Laboral</div>
+      <h3>Calculadora de finiquito</h3>
+      <p>Calcula lo que te deben al dejar un trabajo: salario pendiente, vacaciones y preavisos.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="nomina/" data-cat="laboral" data-keywords="calculadora de nómina neta de salario bruto a lo que recibes en cuenta, descontando irpf y seguridad social. nómina salario neto bruto irpf seguridad social retención">
+      <div class="card-icon" style="background:#F0FDF4; color:#166534"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+      <div class="card-cat" style="color:#166534">Laboral</div>
+      <h3>Calculadora de nómina neta</h3>
+      <p>De salario bruto a lo que recibes en cuenta, descontando IRPF y Seguridad Social.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="hipoteca/" data-cat="financiera" data-keywords="calculadora de hipoteca cuota mensual, total pagado y tabla de amortización de tu hipoteca. hipoteca cuota mensual préstamo piso casa vivienda euribor">
+      <div class="card-icon" style="background:#EFF6FF; color:#1E40AF"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/><path d="M3 21h18"/></svg></div>
+      <div class="card-cat" style="color:#1E40AF">Financiero</div>
+      <h3>Calculadora de hipoteca</h3>
+      <p>Cuota mensual, total pagado y tabla de amortización de tu hipoteca.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="porcentaje/" data-cat="matematica" data-keywords="calculadora de porcentajes tres operaciones en una: x% de y, qué % es x de y, y variación porcentual. porcentaje tanto por ciento descuento aumento variación">
+      <div class="card-icon" style="background:#F5F3FF; color:#5B21B6"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2"/><circle cx="15" cy="15" r="2"/><line x1="7" y1="17" x2="17" y2="7"/></svg></div>
+      <div class="card-cat" style="color:#5B21B6">Matemática</div>
+      <h3>Calculadora de porcentajes</h3>
+      <p>Tres operaciones en una: X% de Y, qué % es X de Y, y variación porcentual.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="dias/" data-cat="matematica" data-keywords="días entre dos fechas calcula cuántos días, semanas o meses hay entre dos fechas. con opción de días laborables. días fechas calendario plazo laborables semanas meses">
+      <div class="card-icon" style="background:#F5F3FF; color:#5B21B6"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="card-cat" style="color:#5B21B6">Matemática</div>
+      <h3>Días entre dos fechas</h3>
+      <p>Calcula cuántos días, semanas o meses hay entre dos fechas. Con opción de días laborables.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="imc/" data-cat="salud" data-keywords="calculadora de imc índice de masa corporal según peso y altura, con tabla de categorías de la oms. imc índice masa corporal peso altura obesidad sobrepeso">
+      <div class="card-icon" style="background:#FFF1F2; color:#9F1239"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5c0 5.5-5 11-5 11S7 12.5 7 7a5 5 0 015-5z"/><circle cx="12" cy="7" r="2"/></svg></div>
+      <div class="card-cat" style="color:#9F1239">Salud</div>
+      <h3>Calculadora de IMC</h3>
+      <p>Índice de masa corporal según peso y altura, con tabla de categorías de la OMS.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="prestamo/" data-cat="financiera" data-keywords="calculadora de préstamo cuota mensual y coste total de cualquier préstamo personal. préstamo personal cuota interés crédito banco financiación">
+      <div class="card-icon" style="background:#EFF6FF; color:#1E40AF"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="card-cat" style="color:#1E40AF">Financiero</div>
+      <h3>Calculadora de préstamo</h3>
+      <p>Cuota mensual y coste total de cualquier préstamo personal.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="ahorro/" data-cat="financiera" data-keywords="calculadora de ahorro cuánto ahorrar al mes para llegar a tu objetivo, con interés compuesto incluido. ahorro inversión objetivo interés compuesto fondo emergencia">
+      <div class="card-icon" style="background:#EFF6FF; color:#1E40AF"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-6"/></svg></div>
+      <div class="card-cat" style="color:#1E40AF">Financiero</div>
+      <h3>Calculadora de ahorro</h3>
+      <p>Cuánto ahorrar al mes para llegar a tu objetivo, con interés compuesto incluido.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="propina/" data-cat="viaje" data-keywords="calculadora de propina propina y reparto de la cuenta entre cualquier número de personas. propina cuenta restaurante reparto personas viaje">
+      <div class="card-icon" style="background:#ECFDF5; color:#065F46"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9V7a5 5 0 00-10 0v2"/><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 12v5"/></svg></div>
+      <div class="card-cat" style="color:#065F46">Viaje</div>
+      <h3>Calculadora de propina</h3>
+      <p>Propina y reparto de la cuenta entre cualquier número de personas.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+    <a class="calc-card" href="combustible/" data-cat="viaje" data-keywords="calculadora de combustible coste total de un viaje en coche: kilómetros, consumo y precio del combustible. combustible gasolina diésel viaje coste kilómetros litros">
+      <div class="card-icon" style="background:#ECFDF5; color:#065F46"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></div>
+      <div class="card-cat" style="color:#065F46">Viaje</div>
+      <h3>Calculadora de combustible</h3>
+      <p>Coste total de un viaje en coche: kilómetros, consumo y precio del combustible.</p>
+      <span class="card-cta">
+        Calcular ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+  </div>
 
   <div id="no-results" class="no-results" style="display:none;">
     <strong>Sin resultados para esa búsqueda</strong>
@@ -390,7 +194,6 @@ footer p { color: var(--muted); font-size: 13.5px; margin-top: 8px; max-width: 3
   </div>
 </div>
 
-<!-- ---- ANUNCIO RECTANGULO MEDIO ---- -->
 <div class="wrap">
   <div class="ad-slot ad-slot-rect" aria-label="Espacio publicitario">
     <span>Publicidad · 300×250 · AdSense / Red de display</span>
@@ -399,7 +202,6 @@ footer p { color: var(--muted); font-size: 13.5px; margin-top: 8px; max-width: 3
 
 </main>
 
-<!-- ============================================================ FOOTER -->
 <footer>
   <div class="wrap">
     <div class="foot-grid">
@@ -408,21 +210,21 @@ footer p { color: var(--muted); font-size: 13.5px; margin-top: 8px; max-width: 3
         <p>Calculadoras prácticas para España. Gratis, sin registro y sin datos que recopilar.</p>
       </div>
       <div class="foot-col">
-        <h5>Calculadoras</h5>
-        <a href="#" onclick="openCalc('iva');return false;">Calculadora de IVA</a>
-        <a href="#" onclick="openCalc('finiquito');return false;">Calculadora de finiquito</a>
-        <a href="#" onclick="openCalc('nomina');return false;">Calculadora de nómina</a>
-        <a href="#" onclick="openCalc('hipoteca');return false;">Calculadora de hipoteca</a>
-        <a href="#" onclick="openCalc('prestamo');return false;">Calculadora de préstamo</a>
+        <h2>Calculadoras</h2>
+        <a href="iva/">Calculadora de IVA</a>
+        <a href="finiquito/">Calculadora de finiquito</a>
+        <a href="nomina/">Calculadora de nómina neta</a>
+        <a href="hipoteca/">Calculadora de hipoteca</a>
+        <a href="prestamo/">Calculadora de préstamo</a>
       </div>
       <div class="foot-col">
-        <h5>Más herramientas</h5>
-        <a href="#" onclick="openCalc('porcentaje');return false;">Porcentajes</a>
-        <a href="#" onclick="openCalc('dias');return false;">Días entre fechas</a>
-        <a href="#" onclick="openCalc('imc');return false;">IMC</a>
-        <a href="#" onclick="openCalc('ahorro');return false;">Ahorro</a>
-        <a href="#" onclick="openCalc('propina');return false;">Propina</a>
-        <a href="#" onclick="openCalc('combustible');return false;">Combustible</a>
+        <h2>Más herramientas</h2>
+        <a href="porcentaje/">Calculadora de porcentajes</a>
+        <a href="dias/">Días entre dos fechas</a>
+        <a href="imc/">Calculadora de IMC</a>
+        <a href="ahorro/">Calculadora de ahorro</a>
+        <a href="propina/">Calculadora de propina</a>
+        <a href="combustible/">Calculadora de combustible</a>
       </div>
     </div>
     <div class="foot-bottom">
@@ -430,1007 +232,6 @@ footer p { color: var(--muted); font-size: 13.5px; margin-top: 8px; max-width: 3
     </div>
   </div>
 </footer>
-
-<!-- ============================================================ JAVASCRIPT -->
-<script>
-// ─── DATOS ───────────────────────────────────────────────────────────────────
-
-const CALCS = [
-  {
-    id: 'iva',
-    cat: 'fiscal',
-    catLabel: 'Fiscal',
-    catColor: '#FEF3C7',
-    catText: '#92400E',
-    name: 'Calculadora de IVA',
-    short: 'Añade o quita IVA a cualquier precio. Todos los tipos: 21%, 10% y 4%.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
-    keywords: 'iva impuesto valor añadido precio fiscal',
-    faq: [
-      { q: '¿Qué tipo de IVA aplica en España?', a: 'El tipo general es el 21 %. Se aplica al 10 % en hostelería, transporte y algunos alimentos. El tipo superreducido del 4 % es para alimentos básicos, libros y medicamentos.' },
-      { q: '¿Cómo sé si un precio lleva IVA incluido?', a: 'Las facturas a consumidores finales siempre deben indicar el importe con y sin IVA. En comercios, el precio visible suele llevar IVA incluido.' },
-      { q: '¿Puedo deducirme el IVA?', a: 'Solo si eres autónomo o empresa y la compra está relacionada con tu actividad económica. Consulta con tu asesor fiscal.' },
-    ],
-    aff: null,
-    render: renderIVA,
-  },
-  {
-    id: 'finiquito',
-    cat: 'laboral',
-    catLabel: 'Laboral',
-    catColor: '#F0FDF4',
-    catText: '#166534',
-    name: 'Calculadora de finiquito',
-    short: 'Calcula lo que te deben al dejar un trabajo: salario pendiente, vacaciones y preavisos.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 014 0"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>`,
-    keywords: 'finiquito despido baja voluntaria salario vacaciones laboral',
-    faq: [
-      { q: '¿El finiquito y la indemnización son lo mismo?', a: 'No. El finiquito recoge los conceptos devengados pendientes de cobro (días trabajados, vacaciones…). La indemnización es la compensación por despido, que solo corresponde en ciertos tipos.' },
-      { q: '¿Cuándo debo recibir el finiquito?', a: 'La ley no fija un plazo exacto, pero la práctica habitual es recibirlo el último día o en el plazo máximo de unos días. Retrasos injustificados pueden reclamarse.' },
-      { q: '¿Tengo que firmar el finiquito?', a: 'Puedes firmar con la frase "no conforme" si crees que el importe es incorrecto. Esto no impide que cobres y te reserva el derecho a reclamar la diferencia.' },
-    ],
-    aff: { text: 'Si crees que el finiquito no está bien calculado, puedes consultarlo con un abogado laboral. Muchos ofrecen primera consulta gratuita.', link: '#', linkText: 'Buscar asesoramiento laboral →' },
-    render: renderFiniquito,
-  },
-  {
-    id: 'nomina',
-    cat: 'laboral',
-    catLabel: 'Laboral',
-    catColor: '#F0FDF4',
-    catText: '#166534',
-    name: 'Calculadora de nómina neta',
-    short: 'De salario bruto a lo que recibes en cuenta, descontando IRPF y Seguridad Social.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
-    keywords: 'nómina salario neto bruto irpf seguridad social retención',
-    faq: [
-      { q: '¿Por qué hay diferencia entre bruto y neto?', a: 'De tu salario bruto se descuentan las cotizaciones a la Seguridad Social (aprox. 6,35 % del trabajador) y la retención de IRPF, que varía según tu situación personal y tramo.' },
-      { q: '¿Cómo se calcula la retención de IRPF?', a: 'Depende del salario anual, situación familiar, número de hijos y otros factores. El cálculo exacto requiere el modelo 145. Esta calculadora usa tablas simplificadas orientativas.' },
-      { q: '¿Qué son las pagas extra?', a: 'La mayoría de convenios contemplan dos pagas extra al año (junio y diciembre). Si las tienes prorrateadas, están incluidas en tu salario mensual.' },
-    ],
-    aff: null,
-    render: renderNomina,
-  },
-  {
-    id: 'hipoteca',
-    cat: 'financiera',
-    catLabel: 'Financiero',
-    catColor: '#EFF6FF',
-    catText: '#1E40AF',
-    name: 'Calculadora de hipoteca',
-    short: 'Cuota mensual, total pagado y tabla de amortización de tu hipoteca.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/><path d="M3 21h18"/></svg>`,
-    keywords: 'hipoteca cuota mensual préstamo piso casa vivienda euribor',
-    faq: [
-      { q: '¿Qué es el TAE?', a: 'La Tasa Anual Equivalente incluye el tipo de interés nominal más comisiones y gastos. Es el dato que permite comparar hipotecas de forma real.' },
-      { q: '¿Hipoteca fija o variable?', a: 'La fija da estabilidad en la cuota. La variable (referenciada al Euríbor) puede ser más barata o más cara según evolucione el índice. Hoy el Euríbor ronda el 2,5–3 %.' },
-      { q: '¿Cuánto debería pagar como máximo?', a: 'La recomendación habitual es que la hipoteca no supere el 30–35 % de tus ingresos netos mensuales.' },
-    ],
-    aff: { text: 'Antes de firmar, compara hipotecas. Los comparadores gratuitos como HelpMyCash o Rankia pueden ahorrarte miles de euros.', link: '#', linkText: 'Comparar hipotecas →' },
-    render: renderHipoteca,
-  },
-  {
-    id: 'porcentaje',
-    cat: 'matematica',
-    catLabel: 'Matemática',
-    catColor: '#F5F3FF',
-    catText: '#5B21B6',
-    name: 'Calculadora de porcentajes',
-    short: 'Tres operaciones en una: X% de Y, qué % es X de Y, y variación porcentual.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2"/><circle cx="15" cy="15" r="2"/><line x1="7" y1="17" x2="17" y2="7"/></svg>`,
-    keywords: 'porcentaje tanto por ciento descuento aumento variación',
-    faq: [
-      { q: '¿Cómo calculo un descuento del 20 %?', a: 'Multiplica el precio original por 0,20 para saber cuánto ahorras. El precio final es el original multiplicado por 0,80.' },
-      { q: '¿Cómo calculo la variación porcentual?', a: 'Resta el valor nuevo menos el antiguo, divide entre el antiguo y multiplica por 100. Si es positivo, es un aumento; si es negativo, una reducción.' },
-    ],
-    aff: null,
-    render: renderPorcentaje,
-  },
-  {
-    id: 'dias',
-    cat: 'matematica',
-    catLabel: 'Matemática',
-    catColor: '#F5F3FF',
-    catText: '#5B21B6',
-    name: 'Días entre dos fechas',
-    short: 'Calcula cuántos días, semanas o meses hay entre dos fechas. Con opción de días laborables.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
-    keywords: 'días fechas calendario plazo laborables semanas meses',
-    faq: [
-      { q: '¿Se cuentan los sábados y domingos?', a: 'Por defecto sí. Activa la opción de días laborables para excluir fines de semana. Los festivos nacionales no se excluyen automáticamente.' },
-      { q: '¿Para qué se usa?', a: 'Calcular plazos de contratos, preaviso de baja laboral, tiempo hasta vacaciones o vencimiento de facturas.' },
-    ],
-    aff: null,
-    render: renderDias,
-  },
-  {
-    id: 'imc',
-    cat: 'salud',
-    catLabel: 'Salud',
-    catColor: '#FFF1F2',
-    catText: '#9F1239',
-    name: 'Calculadora de IMC',
-    short: 'Índice de masa corporal según peso y altura, con tabla de categorías de la OMS.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5c0 5.5-5 11-5 11S7 12.5 7 7a5 5 0 015-5z"/><circle cx="12" cy="7" r="2"/></svg>`,
-    keywords: 'imc índice masa corporal peso altura obesidad sobrepeso',
-    faq: [
-      { q: '¿El IMC es suficiente para evaluar mi salud?', a: 'El IMC es una referencia sencilla pero no tiene en cuenta la composición corporal, masa muscular ni distribución de grasa. Consulta siempre a un médico.' },
-      { q: '¿Cuáles son los rangos de la OMS?', a: 'Bajo peso: <18,5. Peso normal: 18,5–24,9. Sobrepeso: 25–29,9. Obesidad grado I: 30–34,9. Obesidad grado II: 35–39,9. Obesidad grado III: ≥40.' },
-    ],
-    aff: null,
-    render: renderIMC,
-  },
-  {
-    id: 'prestamo',
-    cat: 'financiera',
-    catLabel: 'Financiero',
-    catColor: '#EFF6FF',
-    catText: '#1E40AF',
-    name: 'Calculadora de préstamo',
-    short: 'Cuota mensual y coste total de cualquier préstamo personal.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 010 7H6"/></svg>`,
-    keywords: 'préstamo personal cuota interés crédito banco financiación',
-    faq: [
-      { q: '¿Qué diferencia hay entre TIN y TAE?', a: 'El TIN es el tipo de interés nominal, solo los intereses. El TAE incluye comisiones y gastos, y es el dato real para comparar ofertas.' },
-      { q: '¿Puedo amortizar anticipadamente?', a: 'Sí, aunque algunos contratos incluyen comisiones de amortización anticipada. Revisa las condiciones de tu préstamo.' },
-    ],
-    aff: { text: 'Antes de contratar, compara varios préstamos. Un punto menos de interés en 10.000 € a 5 años son más de 250 € de ahorro.', link: '#', linkText: 'Comparar préstamos →' },
-    render: renderPrestamo,
-  },
-  {
-    id: 'ahorro',
-    cat: 'financiera',
-    catLabel: 'Financiero',
-    catColor: '#EFF6FF',
-    catText: '#1E40AF',
-    name: 'Calculadora de ahorro',
-    short: 'Cuánto ahorrar al mes para llegar a tu objetivo, con interés compuesto incluido.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-6"/></svg>`,
-    keywords: 'ahorro inversión objetivo interés compuesto fondo emergencia',
-    faq: [
-      { q: '¿Qué es el interés compuesto?', a: 'Los intereses generados se reinvierten y también generan intereses. A largo plazo, el efecto es exponencial. Einstein lo llamó "la octava maravilla del mundo".' },
-      { q: '¿Qué rentabilidad puedo esperar?', a: 'Una cuenta de ahorro puede dar un 2–3 % actualmente. Un fondo indexado global ha dado históricamente un 7–9 % anual. A mayor rentabilidad potencial, mayor riesgo.' },
-    ],
-    aff: null,
-    render: renderAhorro,
-  },
-  {
-    id: 'propina',
-    cat: 'viaje',
-    catLabel: 'Viaje',
-    catColor: '#ECFDF5',
-    catText: '#065F46',
-    name: 'Calculadora de propina',
-    short: 'Propina y reparto de la cuenta entre cualquier número de personas.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9V7a5 5 0 00-10 0v2"/><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 12v5"/></svg>`,
-    keywords: 'propina cuenta restaurante reparto personas viaje',
-    faq: [
-      { q: '¿Cuánto se deja de propina en España?', a: 'En España no hay norma establecida. Se deja un 5–10 % si el servicio es bueno, aunque no es obligatorio. En restaurantes de alto nivel, un 10 % es habitual.' },
-      { q: '¿Y en otros países?', a: 'En EEUU la propina del 15–20 % es prácticamente obligatoria. En Japón, no se da propina. Infórmate siempre antes de viajar.' },
-    ],
-    aff: null,
-    render: renderPropina,
-  },
-  {
-    id: 'combustible',
-    cat: 'viaje',
-    catLabel: 'Viaje',
-    catColor: '#ECFDF5',
-    catText: '#065F46',
-    name: 'Calculadora de combustible',
-    short: 'Coste total de un viaje en coche: kilómetros, consumo y precio del combustible.',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>`,
-    keywords: 'combustible gasolina diésel viaje coste kilómetros litros',
-    faq: [
-      { q: '¿Cómo sé el consumo de mi coche?', a: 'Puedes consultarlo en el manual del vehículo o en la ficha técnica. Suele indicarse en litros/100 km. El consumo real suele ser un 10–15 % superior al oficial.' },
-      { q: '¿Dónde ver el precio del combustible?', a: 'El Ministerio de Industria publica el precio de todas las gasolineras de España en geoportal.minetur.gob.es. Apps como Gasolineras.es también lo tienen en tiempo real.' },
-    ],
-    aff: null,
-    render: renderCombustible,
-  },
-];
-
-// ─── ESTADO ──────────────────────────────────────────────────────────────────
-let currentCat = 'todas';
-let currentSearch = '';
-let openId = null;
-
-// ─── RENDER PRINCIPAL ────────────────────────────────────────────────────────
-function renderAll() {
-  const container = document.getElementById('calcs-container');
-  const nr = document.getElementById('no-results');
-  const q = currentSearch.toLowerCase().trim();
-
-  const visible = CALCS.filter(c => {
-    const catOk = currentCat === 'todas' || c.cat === currentCat;
-    const searchOk = !q || c.keywords.includes(q) || c.name.toLowerCase().includes(q) || c.short.toLowerCase().includes(q);
-    return catOk && searchOk;
-  });
-
-  if (!visible.length) {
-    container.innerHTML = '';
-    nr.style.display = 'block';
-    return;
-  }
-  nr.style.display = 'none';
-
-  // construimos HTML de cada tarjeta + su panel
-  container.innerHTML = visible.map(c => `
-    <div id="wrap-${c.id}">
-      <a class="calc-card" href="#${c.id}" onclick="openCalc('${c.id}'); return false;" role="button" aria-expanded="${openId===c.id}">
-        <div class="card-icon" style="background:${c.catColor}; color:${c.catText}">
-          ${c.icon}
-        </div>
-        <div class="card-cat" style="color:${c.catText}">${c.catLabel}</div>
-        <h3>${c.name}</h3>
-        <p>${c.short}</p>
-        <span class="card-cta">
-          Calcular ahora
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </span>
-      </a>
-      <div class="calc-panel${openId===c.id?' open':''}" id="panel-${c.id}" role="region" aria-label="${c.name}">
-        ${renderPanel(c)}
-      </div>
-    </div>
-  `).join('<div style="display:contents"></div>');
-
-  // envolver en grid
-  const wraps = container.innerHTML;
-  container.innerHTML = `<div class="grid">${wraps}</div>`;
-
-  // re-adjuntar eventos
-  visible.forEach(c => {
-    const panel = document.getElementById(`panel-${c.id}`);
-    if (panel && openId === c.id) {
-      c.render(panel);
-      attachPanelEvents(c, panel);
-    }
-  });
-}
-
-function renderPanel(c) {
-  return `
-    <div class="panel-header">
-      <div class="card-icon" style="background:${c.catColor}; color:${c.catText}; width:32px; height:32px; border-radius:8px;">${c.icon}</div>
-      <div class="panel-title">${c.name}</div>
-      <button class="panel-close" onclick="closePanel()" aria-label="Cerrar calculadora">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="panel-body" id="body-${c.id}">
-      <!-- renderizado por JS según calculadora -->
-    </div>
-    <div class="info-section">
-      ${c.aff ? `
-      <div class="aff-box">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <p>${c.aff.text} <a href="${c.aff.link}" target="_blank" rel="noopener">${c.aff.linkText}</a></p>
-      </div>` : ''}
-      <div class="faq" style="margin-top:${c.aff ? '14px' : '0'}">
-        ${c.faq.map(f => `<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function openCalc(id) {
-  if (openId === id) { closePanel(); return; }
-  openId = id;
-  renderAll();
-  setTimeout(() => {
-    const panel = document.getElementById(`panel-${id}`);
-    if (panel) {
-      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      const c = CALCS.find(x => x.id === id);
-      if (c) { c.render(panel); attachPanelEvents(c, panel); }
-    }
-  }, 60);
-}
-
-function closePanel() { openId = null; renderAll(); }
-function filterCalcs(v) { currentSearch = v; renderAll(); }
-function setCat(cat, el) {
-  currentCat = cat;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
-  el.classList.add('on');
-  renderAll();
-}
-function showHome() { currentCat = 'todas'; currentSearch = ''; document.getElementById('search').value = ''; renderAll(); }
-function scrollToCalcs() { document.getElementById('calculadoras').scrollIntoView({ behavior: 'smooth' }); }
-
-function attachPanelEvents(c, panel) {
-  panel.querySelectorAll('.btn-calc').forEach(btn => {
-    btn.onclick = () => c.render(panel);
-  });
-  panel.querySelectorAll('.btn-copy').forEach(btn => {
-    btn.onclick = () => {
-      const txt = btn.dataset.copy;
-      navigator.clipboard.writeText(txt).catch(() => {});
-      showToast('Resultado copiado');
-    };
-  });
-  panel.querySelectorAll('.seg button').forEach(btn => {
-    btn.onclick = function() {
-      this.closest('.seg').querySelectorAll('button').forEach(b => b.classList.remove('on'));
-      this.classList.add('on');
-    };
-  });
-}
-
-function showToast(msg) {
-  const t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2200);
-}
-
-function fmt(n, dec=2) {
-  return Number(n).toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-}
-function fmtE(n) { return fmt(n, 2) + ' €'; }
-
-// ─── CALCULADORAS ────────────────────────────────────────────────────────────
-
-// ── IVA ──────────────────────────────────────────────────────────────────────
-function renderIVA(panel) {
-  const body = panel.querySelector(`#body-iva`);
-  if (!body) return;
-
-  // leer valores
-  const precio = parseFloat(body.querySelector?.('#iva-precio')?.value) || 0;
-  const tipo = body.querySelector?.('.seg .on')?.dataset?.val || '21';
-  const modo = body.querySelector?.('#iva-modo')?.value || 'anadir';
-
-  const tipoN = parseFloat(tipo) / 100;
-  let sinIVA, conIVA, ivaImporte;
-  if (modo === 'anadir') {
-    sinIVA = precio; ivaImporte = precio * tipoN; conIVA = precio + ivaImporte;
-  } else {
-    conIVA = precio; sinIVA = precio / (1 + tipoN); ivaImporte = conIVA - sinIVA;
-  }
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="iva-precio">Precio <span class="lbl-note">(€)</span></label>
-          <input type="number" id="iva-precio" min="0" step="0.01" placeholder="100,00" value="${precio || ''}">
-        </div>
-        <div class="field">
-          <label class="lbl">Tipo de IVA</label>
-          <div class="seg">
-            <button data-val="4" class="${tipo==='4'?'on':''}">4 %</button>
-            <button data-val="10" class="${tipo==='10'?'on':''}">10 %</button>
-            <button data-val="21" class="${tipo==='21'?'on':''}">21 %</button>
-          </div>
-        </div>
-        <div class="field">
-          <label class="lbl" for="iva-modo">Operación</label>
-          <select id="iva-modo">
-            <option value="anadir" ${modo==='anadir'?'selected':''}>Añadir IVA (precio sin IVA → con IVA)</option>
-            <option value="quitar" ${modo==='quitar'?'selected':''}>Quitar IVA (precio con IVA → sin IVA)</option>
-          </select>
-        </div>
-        <button class="btn-calc">Calcular IVA</button>
-      </div>
-      <div>
-        ${precio > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Precio con IVA</div>
-          <div class="result-main">${fmt(conIVA, 2)} €</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Precio sin IVA</span><span class="rv">${fmt(sinIVA,2)} €</span></div>
-            <div class="result-row"><span class="rk">IVA (${tipo} %)</span><span class="rv">${fmt(ivaImporte,2)} €</span></div>
-            <div class="result-row"><span class="rk">Precio con IVA</span><span class="rv">${fmt(conIVA,2)} €</span></div>
-          </div>
-          <div class="result-actions">
-            <button class="btn-copy" data-copy="Sin IVA: ${fmt(sinIVA,2)} €\nIVA (${tipo} %): ${fmt(ivaImporte,2)} €\nCon IVA: ${fmt(conIVA,2)} €">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar
-            </button>
-          </div>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando precio</div><div class="result-main">—</div><p class="result-note">Introduce el precio arriba y pulsa Calcular.</p></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='iva'), panel);
-}
-
-// ── FINIQUITO ────────────────────────────────────────────────────────────────
-function renderFiniquito(panel) {
-  const body = panel.querySelector('#body-finiquito');
-  if (!body) return;
-
-  const salario = parseFloat(body.querySelector?.('#fin-salario')?.value) || 0;
-  const diasTrab = parseInt(body.querySelector?.('#fin-dias')?.value) || 0;
-  const vacPend = parseFloat(body.querySelector?.('#fin-vac')?.value) || 0;
-  const preaviso = parseInt(body.querySelector?.('#fin-preaviso')?.value) || 0;
-  const pagas = body.querySelector?.('#fin-pagas')?.value || '12';
-
-  const diasAnio = pagas === '14' ? 365 : 365;
-  const salarioDia = salario / 30;
-  const salarioPend = salarioDia * diasTrab;
-  const vacsPend = (salario / 30) * vacPend;
-  const preavVisoPend = preaviso > 0 ? salarioDia * preaviso : 0;
-  const total = salarioPend + vacsPend + preavVisoPend;
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="fin-salario">Salario bruto mensual <span class="lbl-note">(€)</span></label>
-          <input type="number" id="fin-salario" min="0" step="50" placeholder="1.800" value="${salario||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="fin-dias">Días del mes en curso trabajados</label>
-          <input type="number" id="fin-dias" min="0" max="31" placeholder="15" value="${diasTrab||''}">
-          <p class="field-note">Días trabajados en el mes de baja o despido.</p>
-        </div>
-        <div class="field">
-          <label class="lbl" for="fin-vac">Días de vacaciones pendientes</label>
-          <input type="number" id="fin-vac" min="0" max="30" step="0.5" placeholder="8" value="${vacPend||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="fin-preaviso">Días de preaviso no trabajados <span class="lbl-note">(si aplica)</span></label>
-          <input type="number" id="fin-preaviso" min="0" max="90" placeholder="0" value="${preaviso||''}">
-          <p class="field-note">Solo si el preaviso no se ha cumplido y corresponde indemnizarlo.</p>
-        </div>
-        <button class="btn-calc">Calcular finiquito</button>
-      </div>
-      <div>
-        ${salario > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Total finiquito (bruto)</div>
-          <div class="result-main">${fmtE(total)}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Salario días trabajados</span><span class="rv">${fmtE(salarioPend)}</span></div>
-            <div class="result-row"><span class="rk">Vacaciones pendientes</span><span class="rv">${fmtE(vacsPend)}</span></div>
-            ${preaviso>0?`<div class="result-row"><span class="rk">Preaviso no trabajado</span><span class="rv">${fmtE(preavVisoPend)}</span></div>`:''}
-          </div>
-          <p class="result-note">⚠️ Este es el importe bruto. Se aplicará IRPF y Seguridad Social. El finiquito no incluye indemnización por despido, que es un concepto separado.</p>
-          <div class="result-actions">
-            <button class="btn-copy" data-copy="Finiquito estimado (bruto): ${fmtE(total)}\n- Salario pendiente: ${fmtE(salarioPend)}\n- Vacaciones: ${fmtE(vacsPend)}">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar
-            </button>
-          </div>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando datos</div><div class="result-main">—</div><p class="result-note">Rellena el salario y los días trabajados.</p></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='finiquito'), panel);
-}
-
-// ── NÓMINA NETA ──────────────────────────────────────────────────────────────
-function renderNomina(panel) {
-  const body = panel.querySelector('#body-nomina');
-  if (!body) return;
-
-  const bruto = parseFloat(body.querySelector?.('#nom-bruto')?.value) || 0;
-  const pagas = body.querySelector?.('#nom-pagas')?.value || '14';
-  const hijos = parseInt(body.querySelector?.('#nom-hijos')?.value) || 0;
-
-  let irpf = 0;
-  const brutoAnual = bruto * (pagas === '14' ? 14 : 12);
-  if (brutoAnual <= 12450) irpf = 0.19;
-  else if (brutoAnual <= 20200) irpf = 0.24;
-  else if (brutoAnual <= 35200) irpf = 0.30;
-  else if (brutoAnual <= 60000) irpf = 0.37;
-  else if (brutoAnual <= 300000) irpf = 0.45;
-  else irpf = 0.47;
-
-  // reducción por hijos (simplificada)
-  if (hijos >= 1) irpf = Math.max(irpf - 0.02, 0.05);
-  if (hijos >= 3) irpf = Math.max(irpf - 0.02, 0.05);
-
-  const ss = 0.0635;
-  const descIRPF = bruto * irpf;
-  const descSS = bruto * ss;
-  const neto = bruto - descIRPF - descSS;
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="nom-bruto">Salario bruto mensual <span class="lbl-note">(€)</span></label>
-          <input type="number" id="nom-bruto" min="0" step="50" placeholder="2.000" value="${bruto||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="nom-pagas">Número de pagas al año</label>
-          <select id="nom-pagas">
-            <option value="12" ${pagas==='12'?'selected':''}>12 pagas (extras prorrateadas)</option>
-            <option value="14" ${pagas==='14'?'selected':''}>14 pagas (extras en junio y diciembre)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label class="lbl" for="nom-hijos">Hijos a cargo</label>
-          <input type="number" id="nom-hijos" min="0" max="10" placeholder="0" value="${hijos||''}">
-        </div>
-        <button class="btn-calc">Calcular neto</button>
-      </div>
-      <div>
-        ${bruto > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Salario neto mensual</div>
-          <div class="result-main">${fmtE(neto)}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Salario bruto</span><span class="rv">${fmtE(bruto)}</span></div>
-            <div class="result-row"><span class="rk">IRPF (${(irpf*100).toFixed(0)} %)</span><span class="rv">− ${fmtE(descIRPF)}</span></div>
-            <div class="result-row"><span class="rk">Seg. Social (6,35 %)</span><span class="rv">− ${fmtE(descSS)}</span></div>
-            <div class="result-row"><span class="rk">Neto mensual</span><span class="rv">${fmtE(neto)}</span></div>
-            <div class="result-row"><span class="rk">Neto anual</span><span class="rv">${fmtE(neto * (pagas==='14'?14:12))}</span></div>
-          </div>
-          <p class="result-note">⚠️ Cálculo orientativo. El IRPF real depende de tu situación personal completa. Consulta tu nómina o a tu gestor.</p>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando salario</div><div class="result-main">—</div></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='nomina'), panel);
-}
-
-// ── HIPOTECA ─────────────────────────────────────────────────────────────────
-function renderHipoteca(panel) {
-  const body = panel.querySelector('#body-hipoteca');
-  if (!body) return;
-
-  const capital = parseFloat(body.querySelector?.('#hip-capital')?.value) || 0;
-  const anios = parseInt(body.querySelector?.('#hip-anios')?.value) || 25;
-  const tipo = parseFloat(body.querySelector?.('#hip-tipo')?.value) || 3;
-
-  const n = anios * 12;
-  const r = (tipo / 100) / 12;
-  const cuota = r === 0 ? capital / n : capital * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
-  const totalPagado = cuota * n;
-  const totalIntereses = totalPagado - capital;
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="hip-capital">Importe del préstamo <span class="lbl-note">(€)</span></label>
-          <input type="number" id="hip-capital" min="0" step="1000" placeholder="150.000" value="${capital||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="hip-anios">Plazo <span class="lbl-note">(años)</span></label>
-          <input type="number" id="hip-anios" min="1" max="40" placeholder="25" value="${anios}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="hip-tipo">Tipo de interés anual <span class="lbl-note">(%)</span></label>
-          <input type="number" id="hip-tipo" min="0" max="20" step="0.01" placeholder="3,00" value="${tipo}">
-          <p class="field-note">Para hipoteca variable usa el Euríbor actual + diferencial.</p>
-        </div>
-        <button class="btn-calc">Calcular hipoteca</button>
-      </div>
-      <div>
-        ${capital > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Cuota mensual</div>
-          <div class="result-main">${fmtE(cuota)}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Capital prestado</span><span class="rv">${fmtE(capital)}</span></div>
-            <div class="result-row"><span class="rk">Total intereses</span><span class="rv">${fmtE(totalIntereses)}</span></div>
-            <div class="result-row"><span class="rk">Total pagado</span><span class="rv">${fmtE(totalPagado)}</span></div>
-            <div class="result-row"><span class="rk">Coste real (% capital)</span><span class="rv">${fmt(totalIntereses/capital*100, 1)} %</span></div>
-          </div>
-          <div class="result-actions">
-            <button class="btn-copy" data-copy="Cuota mensual: ${fmtE(cuota)}\nTotal intereses: ${fmtE(totalIntereses)}\nTotal pagado: ${fmtE(totalPagado)}">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar
-            </button>
-          </div>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando datos</div><div class="result-main">—</div></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='hipoteca'), panel);
-}
-
-// ── PORCENTAJES ──────────────────────────────────────────────────────────────
-function renderPorcentaje(panel) {
-  const body = panel.querySelector('#body-porcentaje');
-  if (!body) return;
-
-  const modo = body.querySelector?.('.seg .on')?.dataset?.val || 'pct_de';
-  const a = parseFloat(body.querySelector?.('#pct-a')?.value) || 0;
-  const b = parseFloat(body.querySelector?.('#pct-b')?.value) || 0;
-
-  let label = '', main = '', rows = [];
-  if (modo === 'pct_de') {
-    const r = (a/100) * b;
-    label = `${fmt(a,0)} % de ${fmt(b,2)}`; main = fmtE(r);
-    rows = [{k:'Porcentaje',v:`${fmt(a,0)} %`},{k:'Base',v:fmtE(b)},{k:'Resultado',v:fmtE(r)}];
-  } else if (modo === 'que_pct') {
-    const r = b !== 0 ? (a/b)*100 : 0;
-    label = `${fmt(a,2)} es el … % de ${fmt(b,2)}`; main = fmt(r,2) + ' %';
-    rows = [{k:'Valor',v:fmtE(a)},{k:'Total',v:fmtE(b)},{k:'Porcentaje',v:fmt(r,2)+' %'}];
-  } else {
-    const r = b !== 0 ? ((b-a)/a)*100 : 0;
-    const sign = r >= 0 ? '+' : '';
-    label = 'Variación porcentual'; main = sign + fmt(r,2) + ' %';
-    rows = [{k:'Valor inicial',v:fmtE(a)},{k:'Valor final',v:fmtE(b)},{k:'Variación',v:sign+fmt(r,2)+' %'},{k:'Diferencia',v:fmtE(b-a)}];
-  }
-
-  const labels = {pct_de:['Porcentaje (%)', 'Valor base'], que_pct:['Es (valor)', 'De (total)'], variacion:['Valor inicial', 'Valor final']};
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl">Tipo de cálculo</label>
-          <div class="seg">
-            <button data-val="pct_de" class="${modo==='pct_de'?'on':''}">X% de Y</button>
-            <button data-val="que_pct" class="${modo==='que_pct'?'on':''}">Qué %</button>
-            <button data-val="variacion" class="${modo==='variacion'?'on':''}">Variación</button>
-          </div>
-        </div>
-        <div class="field">
-          <label class="lbl" for="pct-a">${(labels[modo]||labels.pct_de)[0]}</label>
-          <input type="number" id="pct-a" step="any" placeholder="0" value="${a||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="pct-b">${(labels[modo]||labels.pct_de)[1]}</label>
-          <input type="number" id="pct-b" step="any" placeholder="0" value="${b||''}">
-        </div>
-        <button class="btn-calc">Calcular</button>
-      </div>
-      <div>
-        <div class="result-box show">
-          <div class="result-label">${label||'Resultado'}</div>
-          <div class="result-main">${(a||b) ? main : '—'}</div>
-          ${(a||b) ? `<div class="result-rows">${rows.map(r=>`<div class="result-row"><span class="rk">${r.k}</span><span class="rv">${r.v}</span></div>`).join('')}</div>` : '<p class="result-note">Introduce los valores arriba.</p>'}
-        </div>
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='porcentaje'), panel);
-}
-
-// ── DÍAS ENTRE FECHAS ────────────────────────────────────────────────────────
-function renderDias(panel) {
-  const body = panel.querySelector('#body-dias');
-  if (!body) return;
-
-  const today = new Date().toISOString().slice(0,10);
-  const f1v = body.querySelector?.('#dias-f1')?.value || today;
-  const f2v = body.querySelector?.('#dias-f2')?.value || today;
-  const labOpt = body.querySelector?.('#dias-lab')?.checked ?? false;
-
-  let dias = 0, diasLab = 0, main = '—', rows = [];
-  if (f1v && f2v) {
-    const d1 = new Date(f1v), d2 = new Date(f2v);
-    const ms = Math.abs(d2 - d1);
-    dias = Math.round(ms / 86400000);
-    const semanas = Math.floor(dias / 7);
-    const meses = Math.round(dias / 30.44);
-
-    // contar laborables (sin sábados ni domingos)
-    let cur = new Date(Math.min(d1,d2)), end = new Date(Math.max(d1,d2));
-    diasLab = 0;
-    while (cur <= end) { const d = cur.getDay(); if (d!==0&&d!==6) diasLab++; cur.setDate(cur.getDate()+1); }
-
-    main = (labOpt ? diasLab : dias) + ' días';
-    rows = [
-      {k:'Días totales',v:dias+' días'},
-      {k:'Días laborables',v:diasLab+' días'},
-      {k:'Semanas completas',v:semanas+' sem.'},
-      {k:'Meses aprox.',v:meses+' meses'},
-    ];
-  }
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="dias-f1">Fecha de inicio</label>
-          <input type="date" id="dias-f1" value="${f1v}" style="height:44px;padding:0 13px;">
-        </div>
-        <div class="field">
-          <label class="lbl" for="dias-f2">Fecha de fin</label>
-          <input type="date" id="dias-f2" value="${f2v}" style="height:44px;padding:0 13px;">
-        </div>
-        <div class="field" style="display:flex;align-items:center;gap:10px;">
-          <input type="checkbox" id="dias-lab" ${labOpt?'checked':''} style="width:18px;height:18px;accent-color:var(--blue);">
-          <label for="dias-lab" style="font-size:14px;font-weight:500;cursor:pointer;">Mostrar solo días laborables</label>
-        </div>
-        <button class="btn-calc">Calcular</button>
-      </div>
-      <div>
-        <div class="result-box show">
-          <div class="result-label">${labOpt?'Días laborables':'Días totales'}</div>
-          <div class="result-main">${main}</div>
-          ${dias>0?`<div class="result-rows">${rows.map(r=>`<div class="result-row"><span class="rk">${r.k}</span><span class="rv">${r.v}</span></div>`).join('')}</div>`:'<p class="result-note">Selecciona las dos fechas.</p>'}
-        </div>
-      </div>
-    </div>
-  `;
-  // eventos fecha y checkbox: recalcular al cambiar
-  ['#dias-f1','#dias-f2','#dias-lab'].forEach(sel => {
-    const el = body.querySelector(sel);
-    if (el) el.onchange = () => renderDias(panel);
-  });
-  attachPanelEvents(CALCS.find(c=>c.id==='dias'), panel);
-}
-
-// ── IMC ───────────────────────────────────────────────────────────────────────
-function renderIMC(panel) {
-  const body = panel.querySelector('#body-imc');
-  if (!body) return;
-
-  const peso = parseFloat(body.querySelector?.('#imc-peso')?.value) || 0;
-  const altura = parseFloat(body.querySelector?.('#imc-altura')?.value) || 0;
-
-  let imc = 0, categoria = '', nota = '';
-  if (peso > 0 && altura > 0) {
-    const altM = altura / 100;
-    imc = peso / (altM * altM);
-    if (imc < 18.5)      { categoria = 'Bajo peso'; nota = 'IMC por debajo de lo recomendado por la OMS.'; }
-    else if (imc < 25)   { categoria = 'Peso normal'; nota = 'IMC dentro del rango saludable según la OMS.'; }
-    else if (imc < 30)   { categoria = 'Sobrepeso'; nota = 'IMC por encima del rango saludable.'; }
-    else if (imc < 35)   { categoria = 'Obesidad grado I'; nota = 'Se recomienda consultar con un médico.'; }
-    else if (imc < 40)   { categoria = 'Obesidad grado II'; nota = 'Se recomienda atención médica.'; }
-    else                  { categoria = 'Obesidad grado III'; nota = 'Consulta médica prioritaria.'; }
-  }
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="imc-peso">Peso <span class="lbl-note">(kg)</span></label>
-          <input type="number" id="imc-peso" min="1" max="300" step="0.1" placeholder="70" value="${peso||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="imc-altura">Altura <span class="lbl-note">(cm)</span></label>
-          <input type="number" id="imc-altura" min="50" max="250" step="1" placeholder="170" value="${altura||''}">
-        </div>
-        <button class="btn-calc">Calcular IMC</button>
-      </div>
-      <div>
-        ${imc > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Índice de masa corporal</div>
-          <div class="result-main">${fmt(imc,1)}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Categoría OMS</span><span class="rv">${categoria}</span></div>
-            <div class="result-row"><span class="rk">Peso normal para tu altura</span><span class="rv">${fmt(18.5*(altura/100)**2,1)} – ${fmt(24.9*(altura/100)**2,1)} kg</span></div>
-          </div>
-          <p class="result-note">⚠️ ${nota} El IMC es un indicador general; no sustituye la evaluación médica.</p>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando datos</div><div class="result-main">—</div></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='imc'), panel);
-}
-
-// ── PRÉSTAMO PERSONAL ────────────────────────────────────────────────────────
-function renderPrestamo(panel) {
-  const body = panel.querySelector('#body-prestamo');
-  if (!body) return;
-
-  const capital = parseFloat(body.querySelector?.('#pre-capital')?.value) || 0;
-  const tin = parseFloat(body.querySelector?.('#pre-tin')?.value) || 8;
-  const meses = parseInt(body.querySelector?.('#pre-meses')?.value) || 48;
-
-  const r = (tin/100)/12;
-  const cuota = r===0 ? capital/meses : capital * r * Math.pow(1+r,meses) / (Math.pow(1+r,meses)-1);
-  const total = cuota * meses;
-  const intereses = total - capital;
-  const tae = Math.pow(1 + r, 12) - 1;
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="pre-capital">Importe <span class="lbl-note">(€)</span></label>
-          <input type="number" id="pre-capital" min="0" step="100" placeholder="10.000" value="${capital||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="pre-tin">TIN anual <span class="lbl-note">(%)</span></label>
-          <input type="number" id="pre-tin" min="0" max="50" step="0.01" placeholder="8,00" value="${tin}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="pre-meses">Plazo <span class="lbl-note">(meses)</span></label>
-          <input type="number" id="pre-meses" min="1" max="120" placeholder="48" value="${meses}">
-        </div>
-        <button class="btn-calc">Calcular cuota</button>
-      </div>
-      <div>
-        ${capital > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Cuota mensual</div>
-          <div class="result-main">${fmtE(cuota)}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Capital</span><span class="rv">${fmtE(capital)}</span></div>
-            <div class="result-row"><span class="rk">Intereses totales</span><span class="rv">${fmtE(intereses)}</span></div>
-            <div class="result-row"><span class="rk">Total a pagar</span><span class="rv">${fmtE(total)}</span></div>
-            <div class="result-row"><span class="rk">TAE estimado</span><span class="rv">${fmt(tae*100,2)} %</span></div>
-          </div>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando datos</div><div class="result-main">—</div></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='prestamo'), panel);
-}
-
-// ── AHORRO ───────────────────────────────────────────────────────────────────
-function renderAhorro(panel) {
-  const body = panel.querySelector('#body-ahorro');
-  if (!body) return;
-
-  const objetivo = parseFloat(body.querySelector?.('#aho-objetivo')?.value) || 0;
-  const inicial = parseFloat(body.querySelector?.('#aho-inicial')?.value) || 0;
-  const anios = parseInt(body.querySelector?.('#aho-anios')?.value) || 5;
-  const rentabilidad = parseFloat(body.querySelector?.('#aho-renta')?.value) || 3;
-
-  const n = anios * 12;
-  const r = (rentabilidad/100)/12;
-  let mensual = 0, totalAportado = 0, totalIntereses = 0;
-
-  if (objetivo > inicial) {
-    const falta = objetivo - inicial * Math.pow(1+r, n);
-    mensual = r === 0 ? falta/n : falta * r / (Math.pow(1+r,n)-1);
-    totalAportado = inicial + mensual * n;
-    totalIntereses = objetivo - totalAportado;
-  }
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="aho-objetivo">Objetivo de ahorro <span class="lbl-note">(€)</span></label>
-          <input type="number" id="aho-objetivo" min="0" step="500" placeholder="20.000" value="${objetivo||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="aho-inicial">Ahorro actual <span class="lbl-note">(€)</span></label>
-          <input type="number" id="aho-inicial" min="0" step="100" placeholder="0" value="${inicial||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="aho-anios">Plazo <span class="lbl-note">(años)</span></label>
-          <input type="number" id="aho-anios" min="1" max="40" placeholder="5" value="${anios}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="aho-renta">Rentabilidad anual esperada <span class="lbl-note">(%)</span></label>
-          <input type="number" id="aho-renta" min="0" max="30" step="0.1" placeholder="3,0" value="${rentabilidad}">
-          <p class="field-note">Cuenta de ahorro: 2–3 %. Fondo indexado histórico: 7–9 %.</p>
-        </div>
-        <button class="btn-calc">Calcular ahorro</button>
-      </div>
-      <div>
-        ${objetivo > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Ahorro mensual necesario</div>
-          <div class="result-main">${mensual>0?fmtE(mensual):'Ya lo tienes'}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Objetivo</span><span class="rv">${fmtE(objetivo)}</span></div>
-            <div class="result-row"><span class="rk">Total aportado</span><span class="rv">${fmtE(totalAportado)}</span></div>
-            <div class="result-row"><span class="rk">Intereses generados</span><span class="rv">${fmtE(Math.max(totalIntereses,0))}</span></div>
-            <div class="result-row"><span class="rk">Plazo</span><span class="rv">${anios} años (${n} meses)</span></div>
-          </div>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando datos</div><div class="result-main">—</div></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='ahorro'), panel);
-}
-
-// ── PROPINA ───────────────────────────────────────────────────────────────────
-function renderPropina(panel) {
-  const body = panel.querySelector('#body-propina');
-  if (!body) return;
-
-  const cuenta = parseFloat(body.querySelector?.('#pro-cuenta')?.value) || 0;
-  const personas = parseInt(body.querySelector?.('#pro-personas')?.value) || 2;
-  const pct = parseFloat(body.querySelector?.('.seg.pro-pct .on')?.dataset?.val || '10');
-
-  const propina = cuenta * (pct/100);
-  const total = cuenta + propina;
-  const porPersona = personas > 0 ? total/personas : 0;
-  const propinaPersona = personas > 0 ? propina/personas : 0;
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="pro-cuenta">Total de la cuenta <span class="lbl-note">(€)</span></label>
-          <input type="number" id="pro-cuenta" min="0" step="0.5" placeholder="60,00" value="${cuenta||''}">
-        </div>
-        <div class="field">
-          <label class="lbl">Propina</label>
-          <div class="seg pro-pct">
-            <button data-val="0" class="${pct===0?'on':''}">0 %</button>
-            <button data-val="5" class="${pct===5?'on':''}">5 %</button>
-            <button data-val="10" class="${pct===10?'on':''}">10 %</button>
-            <button data-val="15" class="${pct===15?'on':''}">15 %</button>
-          </div>
-        </div>
-        <div class="field">
-          <label class="lbl" for="pro-personas">Personas</label>
-          <input type="number" id="pro-personas" min="1" max="50" placeholder="2" value="${personas}">
-        </div>
-        <button class="btn-calc">Calcular reparto</button>
-      </div>
-      <div>
-        ${cuenta > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Por persona</div>
-          <div class="result-main">${fmtE(porPersona)}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Cuenta</span><span class="rv">${fmtE(cuenta)}</span></div>
-            <div class="result-row"><span class="rk">Propina (${pct} %)</span><span class="rv">${fmtE(propina)}</span></div>
-            <div class="result-row"><span class="rk">Total con propina</span><span class="rv">${fmtE(total)}</span></div>
-            <div class="result-row"><span class="rk">Propina por persona</span><span class="rv">${fmtE(propinaPersona)}</span></div>
-            <div class="result-row"><span class="rk">Total por persona</span><span class="rv">${fmtE(porPersona)}</span></div>
-          </div>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando cuenta</div><div class="result-main">—</div></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='propina'), panel);
-}
-
-// ── COMBUSTIBLE ──────────────────────────────────────────────────────────────
-function renderCombustible(panel) {
-  const body = panel.querySelector('#body-combustible');
-  if (!body) return;
-
-  const km = parseFloat(body.querySelector?.('#com-km')?.value) || 0;
-  const consumo = parseFloat(body.querySelector?.('#com-consumo')?.value) || 7;
-  const precio = parseFloat(body.querySelector?.('#com-precio')?.value) || 1.65;
-
-  const litros = (km * consumo) / 100;
-  const coste = litros * precio;
-  const costePorKm = km > 0 ? coste/km : 0;
-
-  body.innerHTML = `
-    <div class="panel-grid">
-      <div>
-        <div class="field">
-          <label class="lbl" for="com-km">Distancia del viaje <span class="lbl-note">(km)</span></label>
-          <input type="number" id="com-km" min="0" step="10" placeholder="500" value="${km||''}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="com-consumo">Consumo del vehículo <span class="lbl-note">(l/100 km)</span></label>
-          <input type="number" id="com-consumo" min="0" max="40" step="0.1" placeholder="7,0" value="${consumo}">
-        </div>
-        <div class="field">
-          <label class="lbl" for="com-precio">Precio del combustible <span class="lbl-note">(€/litro)</span></label>
-          <input type="number" id="com-precio" min="0" max="5" step="0.001" placeholder="1,650" value="${precio}">
-          <p class="field-note">Gasolineras.es tiene el precio actualizado de cada estación.</p>
-        </div>
-        <button class="btn-calc">Calcular coste</button>
-      </div>
-      <div>
-        ${km > 0 ? `
-        <div class="result-box show">
-          <div class="result-label">Coste del viaje</div>
-          <div class="result-main">${fmtE(coste)}</div>
-          <div class="result-rows">
-            <div class="result-row"><span class="rk">Litros necesarios</span><span class="rv">${fmt(litros,2)} l</span></div>
-            <div class="result-row"><span class="rk">Coste por km</span><span class="rv">${fmt(costePorKm,3)} €/km</span></div>
-            <div class="result-row"><span class="rk">Coste de ida y vuelta</span><span class="rv">${fmtE(coste*2)}</span></div>
-          </div>
-          <div class="result-actions">
-            <button class="btn-copy" data-copy="Viaje de ${km} km\nLitros: ${fmt(litros,2)} l\nCoste: ${fmtE(coste)}">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar
-            </button>
-          </div>
-        </div>` : `<div class="result-box show"><div class="result-label">Esperando distancia</div><div class="result-main">—</div></div>`}
-      </div>
-    </div>
-  `;
-  attachPanelEvents(CALCS.find(c=>c.id==='combustible'), panel);
-}
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-renderAll();
-
-// hashchange: abrir directamente desde la URL (SEO / enlace externo)
-function checkHash() {
-  const h = window.location.hash.replace('#','');
-  if (CALCS.find(c=>c.id===h)) openCalc(h);
-}
-window.addEventListener('hashchange', checkHash);
-checkHash();
-</script>
+<script src="assets/js/home.js"></script>
 </body>
 </html>
