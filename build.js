@@ -15,6 +15,7 @@ const { SITE } = require('./src/data/site');
 const { pageShell } = require('./src/templates/layout');
 const { renderHomeBody, buildHomeStructuredData } = require('./src/templates/home');
 const { renderCalculatorBody, buildStructuredData } = require('./src/templates/calculatorPage');
+const { renderPrivacyBody } = require('./src/templates/privacyPage');
 
 const ROOT = __dirname;
 
@@ -60,9 +61,23 @@ function buildCalculatorPage(c) {
   write(`${c.id}/index.html`, html);
 }
 
+function buildPrivacyPage() {
+  const body = renderPrivacyBody('../');
+  const html = pageShell(
+    {
+      title: `Política de privacidad | ${SITE.name}`,
+      description: `Cómo trata ${SITE.name} tus datos: qué información recogemos (ninguna a través de las calculadoras), qué cookies usamos y cómo gestionarlas.`,
+      canonicalPath: 'privacidad/',
+      depth: 1,
+      activePage: null,
+    },
+    body
+  );
+  write('privacidad/index.html', html);
+}
+
 function buildSitemap() {
-  const { SITE } = require('./src/data/site');
-  const urls = [SITE.baseUrl, ...CALCS.map(c => `${SITE.baseUrl}${c.id}/`)];
+  const urls = [SITE.baseUrl, ...CALCS.map(c => `${SITE.baseUrl}${c.id}/`), `${SITE.baseUrl}privacidad/`];
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url>\n    <loc>${u}</loc>\n  </url>`).join('\n')}\n</urlset>\n`;
   write('sitemap.xml', xml);
 }
@@ -70,5 +85,6 @@ function buildSitemap() {
 console.log('Generando CalcYa...');
 buildHome();
 CALCS.forEach(buildCalculatorPage);
+buildPrivacyPage();
 buildSitemap();
-console.log(`Listo: 1 home + ${CALCS.length} calculadoras.`);
+console.log(`Listo: 1 home + ${CALCS.length} calculadoras + 1 página de privacidad.`);

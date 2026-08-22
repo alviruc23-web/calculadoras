@@ -25,7 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de IMC","description":"Índice de masa corporal según peso y altura, con tabla de categorías de la OMS.","url":"https://alviruc23-web.github.io/calculadoras/imc/","applicationCategory":"HealthApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿El IMC es suficiente para evaluar mi salud?","acceptedAnswer":{"@type":"Answer","text":"El IMC es una referencia sencilla pero no tiene en cuenta la composición corporal, masa muscular ni distribución de grasa. Consulta siempre a un médico."}},{"@type":"Question","name":"¿Cuáles son los rangos de la OMS?","acceptedAnswer":{"@type":"Answer","text":"Bajo peso: <18,5. Peso normal: 18,5–24,9. Sobrepeso: 25–29,9. Obesidad grado I: 30–34,9. Obesidad grado II: 35–39,9. Obesidad grado III: ≥40."}}]}</script>
 </head>
-<body>
+<body data-root="../">
 
 <a class="skip-link" href="#main">Saltar al contenido</a>
 <header>
@@ -126,9 +126,12 @@
     </div>
     <div class="foot-bottom">
       <span>© 2026 CalcYa. Los resultados son orientativos. Consulta siempre a un profesional para decisiones importantes.</span>
+      <a href="../privacidad/" class="foot-legal-link">Política de privacidad</a>
+      <button type="button" class="foot-legal-link foot-legal-btn" data-cookie-preferences>Preferencias de cookies</button>
     </div>
   </div>
 </footer>
+<script src="../assets/js/consent.js"></script>
 <script src="../assets/js/calculators.js"></script>
 <script>CalcYa.initCalculator('imc');</script>
 </body>
