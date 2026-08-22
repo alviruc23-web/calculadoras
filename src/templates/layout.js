@@ -52,6 +52,8 @@ function renderFooter(depth) {
     </div>
     <div class="foot-bottom">
       <span>© ${SITE.year} ${SITE.name}. Los resultados son orientativos. Consulta siempre a un profesional para decisiones importantes.</span>
+      <a href="${p}privacidad/" class="foot-legal-link">Política de privacidad</a>
+      <button type="button" class="foot-legal-link foot-legal-btn" data-cookie-preferences>Preferencias de cookies</button>
     </div>
   </div>
 </footer>`;
@@ -91,10 +93,11 @@ function pageShell(meta, bodyHtml, extraScripts) {
 <link rel="stylesheet" href="${p}assets/css/main.css">
 ${renderJsonLd(meta.structuredData)}
 </head>
-<body>
+<body data-root="${p}">
 ${renderHeader(meta.depth, meta.activePage)}
 ${bodyHtml}
 ${renderFooter(meta.depth)}
+<script src="${p}assets/js/consent.js"></script>
 ${extraScripts || ''}
 </body>
 </html>

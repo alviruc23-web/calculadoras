@@ -25,7 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de ahorro","description":"Cuánto ahorrar al mes para llegar a tu objetivo, con interés compuesto incluido.","url":"https://alviruc23-web.github.io/calculadoras/ahorro/","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué es el interés compuesto?","acceptedAnswer":{"@type":"Answer","text":"Los intereses generados se reinvierten y también generan intereses. A largo plazo, el efecto es exponencial. Einstein lo llamó \"la octava maravilla del mundo\"."}},{"@type":"Question","name":"¿Qué rentabilidad puedo esperar?","acceptedAnswer":{"@type":"Answer","text":"Una cuenta de ahorro puede dar un 2–3 % actualmente. Un fondo indexado global ha dado históricamente un 7–9 % anual. A mayor rentabilidad potencial, mayor riesgo."}}]}</script>
 </head>
-<body>
+<body data-root="../">
 
 <a class="skip-link" href="#main">Saltar al contenido</a>
 <header>
@@ -140,9 +140,12 @@
     </div>
     <div class="foot-bottom">
       <span>© 2026 CalcYa. Los resultados son orientativos. Consulta siempre a un profesional para decisiones importantes.</span>
+      <a href="../privacidad/" class="foot-legal-link">Política de privacidad</a>
+      <button type="button" class="foot-legal-link foot-legal-btn" data-cookie-preferences>Preferencias de cookies</button>
     </div>
   </div>
 </footer>
+<script src="../assets/js/consent.js"></script>
 <script src="../assets/js/calculators.js"></script>
 <script>CalcYa.initCalculator('ahorro');</script>
 </body>

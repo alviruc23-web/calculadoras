@@ -25,7 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Días entre dos fechas","description":"Calcula cuántos días, semanas o meses hay entre dos fechas. Con opción de días laborables.","url":"https://alviruc23-web.github.io/calculadoras/dias/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Se cuentan los sábados y domingos?","acceptedAnswer":{"@type":"Answer","text":"Por defecto sí. Activa la opción de días laborables para excluir fines de semana. Los festivos nacionales no se excluyen automáticamente."}},{"@type":"Question","name":"¿Para qué se usa?","acceptedAnswer":{"@type":"Answer","text":"Calcular plazos de contratos, preaviso de baja laboral, tiempo hasta vacaciones o vencimiento de facturas."}}]}</script>
 </head>
-<body>
+<body data-root="../">
 
 <a class="skip-link" href="#main">Saltar al contenido</a>
 <header>
@@ -136,9 +136,12 @@
     </div>
     <div class="foot-bottom">
       <span>© 2026 CalcYa. Los resultados son orientativos. Consulta siempre a un profesional para decisiones importantes.</span>
+      <a href="../privacidad/" class="foot-legal-link">Política de privacidad</a>
+      <button type="button" class="foot-legal-link foot-legal-btn" data-cookie-preferences>Preferencias de cookies</button>
     </div>
   </div>
 </footer>
+<script src="../assets/js/consent.js"></script>
 <script src="../assets/js/calculators.js"></script>
 <script>CalcYa.initCalculator('dias');</script>
 </body>

@@ -25,7 +25,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Calculadora de nómina neta","description":"De salario bruto a lo que recibes en cuenta, descontando IRPF y Seguridad Social.","url":"https://alviruc23-web.github.io/calculadoras/nomina/","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Por qué hay diferencia entre bruto y neto?","acceptedAnswer":{"@type":"Answer","text":"De tu salario bruto se descuentan las cotizaciones a la Seguridad Social (aprox. 6,35 % del trabajador) y la retención de IRPF, que varía según tu situación personal y tramo."}},{"@type":"Question","name":"¿Cómo se calcula la retención de IRPF?","acceptedAnswer":{"@type":"Answer","text":"Depende del salario anual, situación familiar, número de hijos y otros factores. El cálculo exacto requiere el modelo 145. Esta calculadora usa tablas simplificadas orientativas."}},{"@type":"Question","name":"¿Qué son las pagas extra?","acceptedAnswer":{"@type":"Answer","text":"La mayoría de convenios contemplan dos pagas extra al año (junio y diciembre). Si las tienes prorrateadas, están incluidas en tu salario mensual."}}]}</script>
 </head>
-<body>
+<body data-root="../">
 
 <a class="skip-link" href="#main">Saltar al contenido</a>
 <header>
@@ -140,9 +140,12 @@
     </div>
     <div class="foot-bottom">
       <span>© 2026 CalcYa. Los resultados son orientativos. Consulta siempre a un profesional para decisiones importantes.</span>
+      <a href="../privacidad/" class="foot-legal-link">Política de privacidad</a>
+      <button type="button" class="foot-legal-link foot-legal-btn" data-cookie-preferences>Preferencias de cookies</button>
     </div>
   </div>
 </footer>
+<script src="../assets/js/consent.js"></script>
 <script src="../assets/js/calculators.js"></script>
 <script>CalcYa.initCalculator('nomina');</script>
 </body>
