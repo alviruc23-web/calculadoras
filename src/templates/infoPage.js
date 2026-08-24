@@ -59,6 +59,7 @@ function renderPrivacyBody(prefix) {
 
   <h2>2. ¿Qué datos recogemos?</h2>
   <p>${SITE.name} no requiere registro ni cuenta. Los datos que introduces en las calculadoras (salario, precio, peso, fechas...) se procesan únicamente en tu navegador: no se envían a ningún servidor ni se almacenan. No recopilamos nombre, correo ni ningún otro dato personal por el uso normal de las calculadoras.</p>
+  <p>La home recuerda qué calculadoras has usado recientemente para mostrarte un acceso directo en «Continuar donde lo dejaste». Ese historial se guarda solo en tu navegador (<code>localStorage</code>), nunca se envía a ningún servidor, y puedes borrarlo en cualquier momento borrando los datos de este sitio desde los ajustes de tu navegador.</p>
 
   <h2>3. Cookies, Google Analytics y Google AdSense</h2>
   <p>Al entrar te mostramos un aviso de cookies. <strong>Ningún script de medición o publicidad se carga hasta que aceptas.</strong> Si rechazas, el sitio sigue funcionando con normalidad y solo se guarda tu elección (en tu propio navegador, mediante <code>localStorage</code>).</p>
