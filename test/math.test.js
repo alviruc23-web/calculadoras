@@ -96,6 +96,21 @@ test('Hipoteca: cuota conocida (150.000 €, 25 años, 3 %)', () => {
   near(parseES(r.main.value), 711.32, 0.5);
 });
 
+test('Hipoteca: la barra capital/intereses suma 100 % y refleja los importes', () => {
+  const r = compute('hipoteca', { capital: '150000', anios: '25', interes: '3' });
+  assert.ok(Array.isArray(r.bar) && r.bar.length === 2);
+  const suma = r.bar.reduce((s, seg) => s + seg.pct, 0);
+  near(suma, 100, 0.01);
+  const capitalSeg = r.bar.find(s => s.cls === 'principal');
+  near(capitalSeg.value, 150000, 0.01);
+});
+
+test('Hipoteca: al 0 % de interés no hay barra de intereses con valor negativo', () => {
+  const r = compute('hipoteca', { capital: '120000', anios: '10', interes: '0' });
+  const interestSeg = r.bar.find(s => s.cls === 'interest');
+  assert.ok(interestSeg.value >= -0.01);
+});
+
 test('Hipoteca: al 0 % la cuota es capital / número de meses', () => {
   const r = compute('hipoteca', { capital: '120000', anios: '10', interes: '0' });
   near(parseES(r.main.value), 1000);
@@ -377,7 +392,8 @@ test('Ninguna calculadora devuelve NaN, Infinity o undefined con entradas extrem
       }
       const r = spec.compute(v);
       assert.ok(r && typeof r === 'object', `${id} no devolvió objeto`);
-      const texto = JSON.stringify(r);
+      // "bar":null es un valor legítimo (sin barra que dibujar), no un bug.
+      const texto = JSON.stringify(r).replace(/"bar":null,?/, '');
       assert.ok(!/NaN|Infinity|undefined|null,/.test(texto), `${id} con "${raw}" produjo: ${texto.slice(0, 200)}`);
     }
   }
@@ -391,6 +407,18 @@ test('Toda calculadora con campos vacíos pide datos en lugar de calcular', () =
     const r = spec.compute(v);
     assert.ok(r.empty || r.error, `${id} calculó algo con todo vacío`);
   }
+});
+
+test('splitBar: reparte proporcionalmente y suma 100 %', () => {
+  const bar = E.splitBar([{ label: 'A', value: 30, cls: 'principal' }, { label: 'B', value: 70, cls: 'interest' }]);
+  assert.equal(bar.length, 2);
+  near(bar[0].pct, 30);
+  near(bar[1].pct, 70);
+});
+
+test('splitBar: con total 0 o negativo no devuelve barra (evita 0/0)', () => {
+  assert.equal(E.splitBar([{ label: 'A', value: 0, cls: 'x' }, { label: 'B', value: 0, cls: 'y' }]), null);
+  assert.equal(E.splitBar([{ label: 'A', value: -5, cls: 'x' }]), null);
 });
 
 test('Cada especificación está bien formada', () => {
