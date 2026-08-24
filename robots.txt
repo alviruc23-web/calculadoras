@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://alviruc23-web.github.io/calculadoras/sitemap.xml
+Sitemap: https://calculadorasfaciles.es/sitemap.xml

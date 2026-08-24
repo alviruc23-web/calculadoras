@@ -1,42 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/</loc>
+    <loc>https://calculadorasfaciles.es/</loc>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/iva/</loc>
+    <loc>https://calculadorasfaciles.es/categoria/fiscal/</loc>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/finiquito/</loc>
+    <loc>https://calculadorasfaciles.es/categoria/laboral/</loc>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/nomina/</loc>
+    <loc>https://calculadorasfaciles.es/categoria/financiera/</loc>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/hipoteca/</loc>
+    <loc>https://calculadorasfaciles.es/categoria/matematica/</loc>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/porcentaje/</loc>
+    <loc>https://calculadorasfaciles.es/categoria/salud/</loc>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/dias/</loc>
+    <loc>https://calculadorasfaciles.es/categoria/viaje/</loc>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/imc/</loc>
+    <loc>https://calculadorasfaciles.es/iva/</loc>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/prestamo/</loc>
+    <loc>https://calculadorasfaciles.es/finiquito/</loc>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/ahorro/</loc>
+    <loc>https://calculadorasfaciles.es/nomina/</loc>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/propina/</loc>
+    <loc>https://calculadorasfaciles.es/hipoteca/</loc>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/combustible/</loc>
+    <loc>https://calculadorasfaciles.es/prestamo/</loc>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://alviruc23-web.github.io/calculadoras/privacidad/</loc>
+    <loc>https://calculadorasfaciles.es/ahorro/</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/porcentaje/</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/dias/</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/imc/</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/propina/</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/combustible/</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/sobre-calcya/</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/contacto/</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/privacidad/</loc>
+    <priority>0.3</priority>
   </url>
 </urlset>
