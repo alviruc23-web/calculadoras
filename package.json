@@ -1,8 +1,10 @@
 {
   "name": "calculadoras",
   "private": true,
-  "description": "Calculadoras gratis para España: IVA, finiquito, nómina, hipoteca y más.",
+  "description": "Calculadoras online gratis para España: IVA, nómina, hipoteca, IMC y más.",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "test": "node --test test/",
+    "pretest": "node build.js"
   }
 }
