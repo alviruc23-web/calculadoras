@@ -43,8 +43,15 @@ function renderHomeBody(prefix) {
 <section class="hero">
   <div class="wrap">
     <p class="eyebrow">${CALCS.length} calculadoras · gratis · sin registro</p>
-    <h1>Calcula lo que necesitas.<br><span>Resultado al instante.</span></h1>
+    <h1>¿Qué quieres calcular?</h1>
     <p class="lead">Impuestos, nómina, hipoteca, salud y más — con la fórmula y un ejemplo siempre a la vista. Sin publicidad invasiva ni letra pequeña.</p>
+    <form class="hero-search" role="search" action="${prefix}index.html" method="get" data-site-search data-hero-search>
+      <label class="sr-only" for="hero-search-input">Buscar una calculadora</label>
+      <svg class="hero-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      <input type="search" id="hero-search-input" name="q" placeholder="Busca por nombre: IVA, hipoteca, IMC…" autocomplete="off" aria-expanded="false" aria-controls="hero-search-results" role="combobox" aria-autocomplete="list">
+      <button type="submit" class="hero-search-btn">Buscar</button>
+      <div class="hdr-search-results hero-search-results" id="hero-search-results" role="listbox" hidden></div>
+    </form>
   </div>
 </section>
 
@@ -52,6 +59,11 @@ function renderHomeBody(prefix) {
   <div class="trust-strip" aria-hidden="true">
     <span>✓ Sin registro</span><span>✓ Cálculo instantáneo</span><span>✓ Fórmula explicada</span><span>✓ Funciona en el móvil</span>
   </div>
+
+  <section class="popular-section" id="recientes-section" aria-labelledby="recientes-heading" hidden>
+    <h2 id="recientes-heading">Continuar donde lo dejaste</h2>
+    <div class="grid grid-popular" id="recientes-grid"></div>
+  </section>
 
   <section class="popular-section" aria-labelledby="popular-heading">
     <h2 id="popular-heading">Calculadoras más usadas</h2>

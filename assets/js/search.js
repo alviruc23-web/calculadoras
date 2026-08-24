@@ -18,6 +18,9 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  function track(name, params) {
+    if (window.CalcYaConsent) window.CalcYaConsent.track(name, params);
+  }
 
   function normalize(s) {
     return String(s || '').toLowerCase()
@@ -77,26 +80,28 @@
       .map(function (r) { return r.e; });
   }
 
-  /* ---- buscador de cabecera (sugerencias, presente en toda la web) --- */
+  /* ---- buscador con sugerencias (cabecera y, en la home, el hero) ----
+     Puede haber más de una instancia en la misma página (la cabecera y
+     el buscador grande de la home), cada una con su propio desplegable
+     y sus propios ids únicos para no chocar entre sí. -------------- */
 
-  function initHeaderSearch() {
-    var form = document.querySelector('[data-site-search]');
-    if (!form) return;
+  function initSiteSearch(form, opts) {
     var input = form.querySelector('input[type=search]');
     var box = form.querySelector('.hdr-search-results');
+    if (!input || !box) return;
+    var idPrefix = input.id || 'search';
     var active = -1;
-    var items = [];
 
-    // Si venimos de otra página con ?q=, precarga el término.
-    var params = new URLSearchParams(location.search);
-    if (params.get('q') && !document.getElementById('search-page')) input.value = params.get('q');
+    if (opts && opts.prefillFromQuery) {
+      var params = new URLSearchParams(location.search);
+      if (params.get('q')) input.value = params.get('q');
+    }
 
     function render(list) {
-      items = list;
       active = -1;
       if (!list.length) { box.hidden = true; input.setAttribute('aria-expanded', 'false'); return; }
       box.innerHTML = list.map(function (e, i) {
-        return '<a href="' + esc(ROOT + e.url) + '" class="hdr-result" role="option" id="hdr-result-' + i + '">' +
+        return '<a href="' + esc(ROOT + e.url) + '" class="hdr-result" role="option" id="' + idPrefix + '-result-' + i + '">' +
           '<span class="hdr-result-name">' + esc(e.name) + '</span>' +
           '<span class="hdr-result-short">' + esc(e.short) + '</span></a>';
       }).join('');
@@ -115,15 +120,32 @@
       else if (e.key === 'Enter' && active >= 0) { e.preventDefault(); links[active].click(); return; }
       else return;
       links.forEach(function (l, i) { l.classList.toggle('is-active', i === active); });
-      if (active >= 0) input.setAttribute('aria-activedescendant', 'hdr-result-' + active);
+      if (active >= 0) input.setAttribute('aria-activedescendant', idPrefix + '-result-' + active);
     });
     document.addEventListener('click', function (e) { if (!form.contains(e.target)) box.hidden = true; });
+    box.addEventListener('click', function (e) {
+      if (e.target.closest('.hdr-result')) track('search', { search_term: input.value });
+    });
 
     form.addEventListener('submit', function (e) {
       // Si hay una coincidencia exacta o muy clara, ir directo a ella;
       // si no, dejar que el formulario navegue a la home con ?q=.
       var results = search(input.value, 1);
-      if (results.length) { e.preventDefault(); location.href = ROOT + results[0].url; }
+      if (results.length) {
+        e.preventDefault();
+        track('search', { search_term: input.value });
+        location.href = ROOT + results[0].url;
+      }
+    });
+  }
+
+  function initHeaderSearch() {
+    var forms = document.querySelectorAll('[data-site-search]');
+    forms.forEach(function (form) {
+      // El buscador de cabecera precarga ?q= solo cuando no estamos en la
+      // home (allí ya lo gestiona el filtro en directo de la rejilla).
+      var isHeader = !form.hasAttribute('data-hero-search');
+      initSiteSearch(form, { prefillFromQuery: isHeader && !document.getElementById('search-page') });
     });
   }
 
@@ -132,14 +154,17 @@
   function initGridFilter() {
     var page = document.getElementById('search-page');
     if (!page) return;
-    var input = document.getElementById('hdr-search-input');
+    // En la home hay dos cajas de búsqueda posibles (cabecera y hero):
+    // cualquiera de las dos filtra la misma rejilla.
+    var inputs = [document.getElementById('hdr-search-input'), document.getElementById('hero-search-input')].filter(Boolean);
     var cards = page.querySelectorAll('[data-calc-card]');
     var chips = page.querySelectorAll('.chip');
     var noResults = document.getElementById('no-results');
     var currentCat = 'todas';
+    var lastQuery = '';
 
     function apply() {
-      var q = normalize(input ? input.value : '');
+      var q = normalize(lastQuery);
       var matchIds = q ? search(q, 999).map(function (e) { return e.id; }) : null;
       var shown = 0;
       cards.forEach(function (card) {
@@ -154,7 +179,9 @@
       if (noResults) noResults.style.display = shown ? 'none' : '';
     }
 
-    if (input) input.addEventListener('input', apply);
+    inputs.forEach(function (input) {
+      input.addEventListener('input', function () { lastQuery = input.value; apply(); });
+    });
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
         chips.forEach(function (c) { c.classList.remove('on'); c.setAttribute('aria-pressed', 'false'); });
@@ -167,8 +194,48 @@
     apply();
   }
 
+  /* ---- "continuar donde lo dejaste" (home) ---------------------------
+     Lee assets/js/calc-ui.js -> calcya-recent (localStorage, solo en
+     este navegador) y, si hay alguna calculadora reciente que siga
+     existiendo, la muestra. No requiere consentimiento: no es medición,
+     no sale del navegador. ------------------------------------------ */
+  function initRecent() {
+    var section = document.getElementById('recientes-section');
+    var grid = document.getElementById('recientes-grid');
+    if (!section || !grid) return;
+    var ids;
+    try { ids = JSON.parse(localStorage.getItem('calcya-recent') || '[]'); } catch (e) { ids = []; }
+    if (!ids.length) return;
+
+    var byId = {};
+    INDEX.forEach(function (e) { byId[e.id] = e; });
+    var entries = ids.map(function (id) { return byId[id]; }).filter(Boolean).slice(0, 4);
+    if (!entries.length) return;
+
+    grid.innerHTML = entries.map(function (e) {
+      return '<a class="calc-card" href="' + esc(ROOT + e.url) + '">' +
+        '<span class="card-icon cat-' + esc(e.cat) + '">' + esc(e.catIcon) + '</span>' +
+        '<span class="card-cat">Reciente</span>' +
+        '<h3>' + esc(e.name) + '</h3>' +
+        '<p>' + esc(e.short) + '</p>' +
+        '<span class="card-cta">Volver a calcular' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>';
+    }).join('');
+    section.hidden = false;
+  }
+
+  /* ---- clic en "calculadoras relacionadas" (página de calculadora) --- */
+  function initRelatedTracking() {
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('.related-card');
+      if (link) track('related_click', { to_href: link.getAttribute('href') });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initHeaderSearch();
     initGridFilter();
+    initRecent();
+    initRelatedTracking();
   });
 })();
