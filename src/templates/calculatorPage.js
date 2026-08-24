@@ -1,5 +1,5 @@
-const { CALCS } = require('../data/calculators');
-const { SITE } = require('../data/site');
+const { CALCS, CALC_BY_ID } = require('../data/calculators');
+const { SITE, CATEGORY_BY_SLUG } = require('../data/site');
 
 const APP_CATEGORY = {
   fiscal: 'FinanceApplication',
@@ -10,13 +10,13 @@ const APP_CATEGORY = {
   viaje: 'UtilitiesApplication',
 };
 
-function buildStructuredData(c, canonicalUrl) {
+function buildStructuredData(c, canonicalUrl, cat) {
   const breadcrumb = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.baseUrl },
-      { '@type': 'ListItem', position: 2, name: 'Calculadoras', item: `${SITE.baseUrl}#calculadoras` },
+      { '@type': 'ListItem', position: 2, name: cat.label, item: `${SITE.baseUrl}categoria/${cat.slug}/` },
       { '@type': 'ListItem', position: 3, name: c.name, item: canonicalUrl },
     ],
   };
@@ -33,42 +33,55 @@ function buildStructuredData(c, canonicalUrl) {
   };
 
   const schemas = [breadcrumb, webApp];
-
   if (c.faq && c.faq.length) {
     schemas.push({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: c.faq.map(f => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
-      })),
+      mainEntity: c.faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
     });
   }
-
   return schemas;
 }
 
+function relatedCard(r, prefix) {
+  return `
+      <a class="related-card" href="${prefix}${r.id}/">
+        <span class="card-icon card-icon-sm cat-${r.cat}">${r.icon}</span>
+        <span>${r.name}</span>
+      </a>`;
+}
+
 function renderCalculatorBody(c, prefix) {
-  const affHtml = c.aff ? `
-      <div class="aff-box">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <p>${c.aff.text} <a href="${c.aff.link}" target="_blank" rel="noopener sponsored">${c.aff.linkText}</a></p>
+  const cat = CATEGORY_BY_SLUG[c.cat];
+  const related = (c.related || []).map(id => CALC_BY_ID[id]).filter(Boolean);
+
+  const formulaHtml = c.formula ? `
+  <section class="content-block formula-block" aria-labelledby="formula-heading">
+    <h2 id="formula-heading">${c.formula.title}</h2>
+    <div class="formula-lines">
+      ${c.formula.lines.map(l => `<div class="formula-line"><span class="formula-label">${l.label}</span><code>${l.expr}</code></div>`).join('')}
+    </div>
+    ${c.formula.note ? `<p class="formula-note">${c.formula.note}</p>` : ''}
+  </section>` : '';
+
+  const exampleHtml = c.example ? `
+  <section class="content-block example-block" aria-labelledby="example-heading">
+    <h2 id="example-heading">${c.example.title}</h2>
+    <p>${c.example.text}</p>
+  </section>` : '';
+
+  const tipHtml = c.tip ? `
+      <div class="tip-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>
+        <p>${c.tip}</p>
       </div>` : '';
 
   const faqHtml = c.faq.map(f => `<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('');
 
-  const byId = Object.fromEntries(CALCS.map(x => [x.id, x]));
-  const related = (c.related || []).map(id => byId[id]).filter(Boolean);
   const relatedHtml = related.length ? `
   <section class="related" aria-labelledby="related-heading">
     <h2 id="related-heading">Calculadoras relacionadas</h2>
-    <div class="related-grid">
-      ${related.map(r => `
-      <a class="related-card" href="${prefix}${r.id}/">
-        <div class="card-icon" style="background:${r.catColor}; color:${r.catText}; width:32px; height:32px;">${r.icon}</div>
-        <span>${r.name}</span>
-      </a>`).join('')}
+    <div class="related-grid">${related.map(r => relatedCard(r, prefix)).join('')}
     </div>
   </section>` : '';
 
@@ -79,49 +92,54 @@ function renderCalculatorBody(c, prefix) {
   <nav class="breadcrumb" aria-label="Migas de pan">
     <a href="${prefix}index.html">Inicio</a>
     <span aria-hidden="true">/</span>
-    <a href="${prefix}index.html#calculadoras">Calculadoras</a>
+    <a href="${prefix}categoria/${cat.slug}/">${cat.label}</a>
     <span aria-hidden="true">/</span>
     <span aria-current="page">${c.name}</span>
   </nav>
 </div>
 
 <section class="calc-hero">
-  <div class="wrap" style="display:flex; align-items:flex-start; gap:14px;">
-    <div class="card-icon" style="background:${c.catColor}; color:${c.catText}">${c.icon}</div>
+  <div class="wrap">
+    <span class="card-icon card-icon-lg cat-${c.cat}">${c.icon}</span>
     <div>
-      <h1>${c.name}</h1>
-      <p>${c.short}</p>
+      <h1>${c.h1 || c.name}</h1>
+      <p>${c.intro || c.short}</p>
     </div>
   </div>
 </section>
 
-<div class="wrap">
-  <div class="calc-panel" id="panel-${c.id}">
-    <div class="panel-body" id="body-${c.id}" aria-live="polite">
-      <noscript><p>Esta calculadora necesita JavaScript activado para funcionar.</p></noscript>
-    </div>
-    <div class="info-section">
-      ${c.method ? `<div class="method-box"><h2>Cómo se calcula</h2><p>${c.method}</p></div>` : ''}
-      ${affHtml}
-      <div class="faq" style="margin-top:${(c.method || c.aff) ? '14px' : '0'}">
-        <h2>Preguntas frecuentes</h2>
-        ${faqHtml}
+<div class="wrap calc-page-grid">
+  <div class="calc-main">
+    <div class="calc-panel">
+      <div id="calc-${c.id}" class="calc-mount">
+        <noscript><p class="noscript-note">Esta calculadora necesita JavaScript activado para funcionar.</p></noscript>
       </div>
     </div>
+
+    ${formulaHtml}
+    ${exampleHtml}
+
+    <section class="content-block faq-block" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Preguntas frecuentes</h2>
+      <div class="faq">${faqHtml}</div>
+    </section>
+
+    ${relatedHtml}
+
+    <a class="back-link" href="${prefix}categoria/${cat.slug}/">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Más calculadoras de ${cat.label.toLowerCase()}
+    </a>
   </div>
 
-  <div class="ad-slot ad-slot-rect" aria-label="Espacio publicitario">
-    <span>Publicidad · 300×250 · AdSense / Red de display</span>
-  </div>
-  ${relatedHtml}
-
-  <a class="back-link" href="${prefix}index.html#calculadoras">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-    Volver a todas las calculadoras
-  </a>
+  <aside class="calc-side">
+    ${tipHtml}
+    <div class="side-updated">Contenido y fórmulas revisados en ${SITE.reviewedLabel}.</div>
+  </aside>
 </div>
 
-</main>`;
+</main>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.CalcUI)window.CalcUI.init('${c.id}');});</script>`;
 }
 
 module.exports = { renderCalculatorBody, buildStructuredData };
