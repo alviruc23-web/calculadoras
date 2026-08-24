@@ -29,7 +29,7 @@ assets/js/           código que corre en el navegador (sin dependencias)
 
 assets/css/main.css  sistema de diseño único para todo el sitio
 
-test/math.test.js    58 pruebas de la matemática (node --test)
+test/math.test.js    65 pruebas de la matemática (node --test)
 test/e2e.js           pruebas de extremo a extremo en navegador real (Playwright)
 build.js             genera todo el HTML estático a partir de lo anterior
 ```
@@ -50,7 +50,15 @@ se carga en el navegador del usuario.
 
 Con eso, la calculadora aparece automáticamente en su categoría, en la home,
 en el sitemap, en el buscador y en el enlazado interno de "relacionadas".
-No hay que copiar HTML ni tocar `build.js`.
+No hay que copiar HTML ni tocar `build.js`. `node build.js` valida el
+contenido (id único, categoría existente, relacionadas que existen, etc.) y
+falla con un mensaje claro si algo falta.
+
+Opcional en `compute(v)`: devolver `bar` (vía el helper `splitBar`, en
+`calc-engine.js`) para dibujar un reparto proporcional en el resultado —
+usado en hipoteca, préstamo y ahorro para mostrar capital vs. intereses. Solo
+tiene sentido cuando el resultado es, de verdad, un reparto de dos o más
+partes de un total.
 
 ## Cómo añadir una categoría nueva
 
@@ -80,6 +88,18 @@ El sitio usa Google Analytics y Google AdSense (Auto ads), ambos declarados en
 `src/data/site.js` → `SERVICES`. **Ninguno de los dos se carga hasta que el
 usuario acepta el aviso de cookies** (`assets/js/consent.js`): esto es un
 requisito de las políticas de AdSense y del RGPD, no una opción de diseño.
+
+Además de las páginas vistas (automáticas de GA), se envían eventos de
+producto — `calc_view`, `calc_compute`, `calc_error`, `calc_share_copy`,
+`search`, `related_click` — a través de `window.CalcYaConsent.track(name,
+params)` (`assets/js/consent.js`). Son un no-op si no hay consentimiento o
+Analytics no está cargado: usan el mismo GA ya declarado, no añaden ningún
+servicio nuevo.
+
+"Continuar donde lo dejaste" (home) es distinto: guarda las últimas
+calculadoras visitadas en `localStorage` (`calcya-recent`, solo en ese
+navegador). No es medición ni sale del navegador, así que no depende del
+consentimiento — igual que recordar la propia preferencia de cookies.
 
 ## Despliegue
 
