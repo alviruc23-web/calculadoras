@@ -1,16 +1,18 @@
 /* ============================================================
-   CalcYa — consentimiento de cookies.
-   No instala ninguna cookie de análisis ni publicidad por sí
-   mismo: solo guarda la elección del usuario en localStorage y
-   expone `window.CalcYaConsent` para que, cuando en el futuro se
-   active Google AdSense, ese código pueda comprobar el consentimiento
-   antes de cargar nada. Sin librerías externas.
+   CalcYa — consentimiento de cookies + carga condicional de
+   Google Analytics y Google AdSense.
+
+   Ningún script de medición o publicidad se inserta en el DOM
+   hasta que el usuario acepta. Si ya aceptó en una visita anterior
+   (localStorage), se cargan de inmediato en las siguientes.
+   Sin librerías externas.
    ============================================================ */
 (function () {
   'use strict';
 
   var STORAGE_KEY = 'calcya-cookie-consent'; // 'accepted' | 'rejected'
   var banner = null;
+  var loaded = false;
 
   function getConsent() {
     try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
@@ -18,34 +20,62 @@
   function setConsent(value) {
     try { localStorage.setItem(STORAGE_KEY, value); } catch (e) {}
   }
+  function root() {
+    return document.body.getAttribute('data-root') || '';
+  }
+
+  /* ---- carga de Analytics / AdSense, solo si hay consentimiento ---- */
+
+  function loadServices() {
+    if (loaded) return;
+    var svc = window.CALCYA_SERVICES || {};
+    loaded = true;
+
+    if (svc.analyticsId) {
+      var gtagSrc = document.createElement('script');
+      gtagSrc.async = true;
+      gtagSrc.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(svc.analyticsId);
+      document.head.appendChild(gtagSrc);
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', svc.analyticsId, { anonymize_ip: true });
+    }
+
+    if (svc.adsenseClient) {
+      var ads = document.createElement('script');
+      ads.async = true;
+      ads.crossOrigin = 'anonymous';
+      ads.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(svc.adsenseClient);
+      document.head.appendChild(ads);
+    }
+  }
+
+  /* ---- banner -------------------------------------------------------- */
 
   function buildBanner() {
-    var el = document.createElement('div');
-    el.className = 'cookie-banner';
-    el.setAttribute('role', 'region');
-    el.setAttribute('aria-label', 'Aviso de cookies');
-    el.innerHTML =
+    var elDiv = document.createElement('div');
+    elDiv.className = 'cookie-banner';
+    elDiv.setAttribute('role', 'region');
+    elDiv.setAttribute('aria-label', 'Aviso de cookies');
+    elDiv.innerHTML =
       '<div class="cookie-banner-inner">' +
-        '<p>Usamos cookies propias necesarias para el funcionamiento del sitio. Si aceptas, también podremos mostrar en el futuro anuncios de Google AdSense usando cookies de terceros. Puedes cambiar tu decisión cuando quieras desde "Preferencias de cookies" en el pie de página. <a href="' + rootPrefix() + 'privacidad/">Más información</a>.</p>' +
+        '<p>Usamos cookies propias necesarias para el sitio. Si aceptas, también activamos Google Analytics y Google AdSense, que instalan cookies de medición y publicidad. Puedes cambiar tu decisión cuando quieras desde "Preferencias de cookies" en el pie de página. <a href="' + root() + 'privacidad/">Más información</a>.</p>' +
         '<div class="cookie-banner-actions">' +
           '<button type="button" class="btn-cookie btn-cookie-reject">Rechazar</button>' +
           '<button type="button" class="btn-cookie btn-cookie-accept">Aceptar</button>' +
         '</div>' +
       '</div>';
-    document.body.appendChild(el);
-
-    el.querySelector('.btn-cookie-accept').onclick = function () { decide('accepted'); };
-    el.querySelector('.btn-cookie-reject').onclick = function () { decide('rejected'); };
-    return el;
-  }
-
-  function rootPrefix() {
-    // La ruta hasta la raíz del sitio: '' en la home, '../' en /calculadora/ o /privacidad/
-    return document.body.getAttribute('data-root') || '';
+    document.body.appendChild(elDiv);
+    elDiv.querySelector('.btn-cookie-accept').onclick = function () { decide('accepted'); };
+    elDiv.querySelector('.btn-cookie-reject').onclick = function () { decide('rejected'); };
+    return elDiv;
   }
 
   function decide(value) {
     setConsent(value);
+    if (value === 'accepted') loadServices();
     if (banner) { banner.remove(); banner = null; }
   }
 
@@ -56,25 +86,19 @@
     if (acceptBtn) acceptBtn.focus();
   }
 
-  function openPreferences() {
-    showBanner();
-  }
-
   document.addEventListener('DOMContentLoaded', function () {
-    if (!getConsent()) showBanner();
+    var consent = getConsent();
+    if (consent === 'accepted') loadServices();
+    else if (!consent) showBanner();
 
-    var prefLinks = document.querySelectorAll('[data-cookie-preferences]');
-    prefLinks.forEach(function (link) {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        openPreferences();
-      });
+    document.querySelectorAll('[data-cookie-preferences]').forEach(function (link) {
+      link.addEventListener('click', function (e) { e.preventDefault(); showBanner(); });
     });
   });
 
   window.CalcYaConsent = {
     get: getConsent,
     hasAcceptedAds: function () { return getConsent() === 'accepted'; },
-    openPreferences: openPreferences,
+    openPreferences: showBanner,
   };
 })();

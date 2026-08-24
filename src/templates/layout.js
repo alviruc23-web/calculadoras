@@ -1,335 +1,147 @@
 const { CALCS } = require('../data/calculators');
-const { SITE, FOOTER_COLUMNS } = require('../data/site');
+const { SITE, SERVICES, CATEGORIES, INFO_PAGES } = require('../data/site');
 
-// depth 0 = index.html en la raíz; depth 1 = páginas dentro de /<id>/
+// depth = número de carpetas desde la raíz (0 = index.html en la raíz,
+// 1 = /calculadora/, 2 = /categoria/<slug>/, etc.)
 function prefixFor(depth) {
-  return depth === 0 ? '' : '../';
+  return '../'.repeat(depth);
 }
 
-function renderHeader(depth, activePage) {
-  const p = prefixFor(depth);
+/* ---- buscador --------------------------------------------------------
+   Índice ligero (id, nombre, descripción corta, palabras clave y URL)
+   embebido en cada página como JSON. Lo consume assets/js/search.js
+   para las sugerencias del buscador y el filtrado de la home. Al ser
+   datos, no HTML, es seguro de serializar sin escapes especiales.
+   ------------------------------------------------------------------- */
+function buildSearchIndex() {
+  return CALCS.map(c => ({
+    id: c.id,
+    name: c.name,
+    short: c.short,
+    cat: c.cat,
+    kw: (c.name + ' ' + c.short + ' ' + c.keywords).toLowerCase(),
+    url: c.id + '/',
+  }));
+}
 
+function renderHeader(depth, active) {
+  const p = prefixFor(depth);
   return `
 <a class="skip-link" href="#main">Saltar al contenido</a>
-
-<header>
+<header class="site-header">
   <div class="wrap hdr-in">
-
     <a href="${p}index.html" class="logo">
-      <div class="logo-mark">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <rect x="2" y="2" width="5" height="5" rx="1" fill="white"/>
-          <rect x="9" y="2" width="5" height="5" rx="1" fill="white" opacity=".6"/>
-          <rect x="2" y="9" width="5" height="5" rx="1" fill="white" opacity=".6"/>
-          <rect x="9" y="9" width="5" height="5" rx="1" fill="white"/>
+      <span class="logo-mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="5" height="5" rx="1.2" fill="white"/>
+          <rect x="9" y="2" width="5" height="5" rx="1.2" fill="white" opacity=".65"/>
+          <rect x="2" y="9" width="5" height="5" rx="1.2" fill="white" opacity=".65"/>
+          <rect x="9" y="9" width="5" height="5" rx="1.2" fill="white"/>
         </svg>
-      </div>
+      </span>
       ${SITE.name}
     </a>
-
     <nav class="main-nav" aria-label="Navegación principal">
-      <a
-        href="${p}index.html"
-        class="nav-link${activePage === 'home' ? ' on' : ''}"
-        ${activePage === 'home' ? 'aria-current="page"' : ''}
-      >
-        Inicio
-      </a>
-
-      <a href="${p}index.html#calculadoras" class="nav-link">
-        Calculadoras
-      </a>
+      <a href="${p}index.html" class="nav-link${active === 'home' ? ' on' : ''}"${active === 'home' ? ' aria-current="page"' : ''}>Inicio</a>
+      <a href="${p}index.html#categorias" class="nav-link">Categorías</a>
     </nav>
-
     <div class="spacer"></div>
-
+    <form class="hdr-search" role="search" action="${p}index.html" method="get" data-site-search>
+      <label class="sr-only" for="hdr-search-input">Buscar una calculadora</label>
+      <svg class="hdr-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      <input type="search" id="hdr-search-input" name="q" placeholder="Buscar: IVA, hipoteca, IMC…" autocomplete="off" aria-expanded="false" aria-controls="hdr-search-results" role="combobox" aria-autocomplete="list">
+      <div class="hdr-search-results" id="hdr-search-results" role="listbox" hidden></div>
+    </form>
   </div>
 </header>`;
 }
 
 function renderFooter(depth) {
   const p = prefixFor(depth);
+  const byCat = {};
+  CALCS.forEach(c => { (byCat[c.cat] = byCat[c.cat] || []).push(c); });
 
-  const byId = Object.fromEntries(
-    CALCS.map(c => [c.id, c])
-  );
-
-  const cols = FOOTER_COLUMNS.map(col => `
+  const cols = CATEGORIES.map(cat => {
+    const items = byCat[cat.slug] || [];
+    if (!items.length) return '';
+    return `
       <div class="foot-col">
-        <h2>${col.title}</h2>
-        ${col.ids.map(id => `
-          <a href="${p}${id}/">${byId[id].name}</a>
-        `).join('\n        ')}
-      </div>
-  `).join('');
+        <h2><a href="${p}categoria/${cat.slug}/">${cat.label}</a></h2>
+        ${items.map(c => `<a href="${p}${c.id}/">${c.name}</a>`).join('\n        ')}
+      </div>`;
+  }).join('');
+
+  const infoLinks = INFO_PAGES.map(pg => `<a href="${p}${pg.slug}/">${pg.navLabel}</a>`).join('\n        ');
 
   return `
-<footer>
+<footer class="site-footer">
   <div class="wrap">
-
     <div class="foot-grid">
-
-      <div>
-        <div class="foot-logo">${SITE.name}</div>
+      <div class="foot-brand">
+        <a href="${p}index.html" class="foot-logo">${SITE.name}</a>
         <p>${SITE.tagline}</p>
+      </div>${cols}
+      <div class="foot-col">
+        <h2>${SITE.name}</h2>
+        ${infoLinks}
       </div>
-
-      ${cols}
-
     </div>
-
     <div class="foot-bottom">
-
-      <span>
-        © ${SITE.year} ${SITE.name}.
-        Los resultados son orientativos.
-        Consulta siempre a un profesional para decisiones importantes.
-      </span>
-
-      <a
-        href="${p}privacidad/"
-        class="foot-legal-link"
-      >
-        Política de privacidad
-      </a>
-
-      <button
-        type="button"
-        class="foot-legal-link foot-legal-btn"
-        data-cookie-preferences
-      >
-        Preferencias de cookies
-      </button>
-
+      <span>© ${SITE.year} ${SITE.name}. Los resultados son orientativos; consulta siempre a un profesional para decisiones importantes.</span>
+      <button type="button" class="foot-legal-link" data-cookie-preferences>Preferencias de cookies</button>
     </div>
-
   </div>
 </footer>`;
 }
 
 function renderJsonLd(schemas) {
   if (!schemas || !schemas.length) return '';
-
-  return schemas
-    .map(s => `
-<script type="application/ld+json">
-${JSON.stringify(s)}
-</script>
-`)
-    .join('\n');
+  return schemas.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n');
 }
 
-// meta:
-// { title, description, canonicalPath, depth, activePage, structuredData }
-
+/* meta: { title, description, canonicalPath, depth, activePage, structuredData, noindex } */
 function pageShell(meta, bodyHtml, extraScripts) {
-
   const p = prefixFor(meta.depth);
-
-  const canonical =
-    SITE.baseUrl + (meta.canonicalPath || '');
+  const canonical = SITE.baseUrl + (meta.canonicalPath || '');
+  const searchIndex = buildSearchIndex();
 
   return `<!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
-<!-- =====================================================
-     GOOGLE ANALYTICS
-     ===================================================== -->
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-35SN7B8GFE"></script>
-
-<script>
-  window.dataLayer = window.dataLayer || [];
-
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-
-  gtag('js', new Date());
-
-  gtag('config', 'G-35SN7B8GFE');
-</script>
-
-
-<!-- =====================================================
-     GOOGLE ADSENSE
-     ===================================================== -->
-
-<script
-  async
-  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1786551149237210"
-  crossorigin="anonymous">
-</script>
-
-
-<!-- =====================================================
-     GOOGLE SITE VERIFICATION
-     ===================================================== -->
-
-<meta
-  name="google-site-verification"
-  content="OYHROaMHKcjjCctPkQ6btAdgsKgja80-pOEaiZodUyI"
-/>
-
-
-<!-- =====================================================
-     BASIC META
-     ===================================================== -->
-
+<meta name="google-site-verification" content="OYHROaMHKcjjCctPkQ6btAdgsKgja80-pOEaiZodUyI">
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${meta.title}</title>
-
-<meta
-  name="description"
-  content="${meta.description}"
->
-
-<link
-  rel="canonical"
-  href="${canonical}"
->
-
-
-<!-- =====================================================
-     FAVICON
-     ===================================================== -->
-
-<link
-  rel="icon"
-  type="image/svg+xml"
-  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E"
->
-
-
-<!-- =====================================================
-     OPEN GRAPH
-     ===================================================== -->
-
-<meta
-  property="og:site_name"
-  content="${SITE.name}"
->
-
-<meta
-  property="og:title"
-  content="${meta.title}"
->
-
-<meta
-  property="og:description"
-  content="${meta.description}"
->
-
-<meta
-  property="og:type"
-  content="website"
->
-
-<meta
-  property="og:url"
-  content="${canonical}"
->
-
-<meta
-  property="og:locale"
-  content="es_ES"
->
-
-
-<!-- =====================================================
-     TWITTER
-     ===================================================== -->
-
-<meta
-  name="twitter:card"
-  content="summary"
->
-
-<meta
-  name="twitter:title"
-  content="${meta.title}"
->
-
-<meta
-  name="twitter:description"
-  content="${meta.description}"
->
-
-
-<!-- =====================================================
-     GOOGLE FONTS
-     ===================================================== -->
-
-<link
-  rel="preconnect"
-  href="https://fonts.googleapis.com"
->
-
-<link
-  rel="preconnect"
-  href="https://fonts.gstatic.com"
-  crossorigin
->
-
-<link
-  href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
-  rel="stylesheet"
->
-
-
-<!-- =====================================================
-     CSS
-     ===================================================== -->
-
-<link
-  rel="stylesheet"
-  href="${p}assets/css/main.css"
->
-
-
-<!-- =====================================================
-     STRUCTURED DATA
-     ===================================================== -->
-
+<meta name="description" content="${meta.description}">
+<link rel="canonical" href="${canonical}">
+${meta.noindex ? '<meta name="robots" content="noindex,follow">' : ''}
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%232563EB'/%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='white'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='white' opacity='.6'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='white'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="${SITE.name}">
+<meta property="og:title" content="${meta.title}">
+<meta property="og:description" content="${meta.description}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canonical}">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${meta.title}">
+<meta name="twitter:description" content="${meta.description}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${p}assets/css/main.css">
 ${renderJsonLd(meta.structuredData)}
-
+<script>window.CALCYA_INDEX=${JSON.stringify(searchIndex)};window.CALCYA_ROOT=${JSON.stringify(p)};window.CALCYA_SERVICES=${JSON.stringify(SERVICES)};</script>
 </head>
-
-
 <body data-root="${p}">
-
 ${renderHeader(meta.depth, meta.activePage)}
-
 ${bodyHtml}
-
 ${renderFooter(meta.depth)}
-
-
-<!-- =====================================================
-     COOKIES
-     ===================================================== -->
-
 <script src="${p}assets/js/consent.js"></script>
-
-
+<script src="${p}assets/js/search.js"></script>
 ${extraScripts || ''}
-
 </body>
-
 </html>
 `;
 }
 
-module.exports = {
-  pageShell,
-  prefixFor
-};
+module.exports = { pageShell, prefixFor, buildSearchIndex };
