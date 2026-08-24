@@ -76,7 +76,7 @@ function renderCalculatorBody(c, prefix) {
         <p>${c.tip}</p>
       </div>` : '';
 
-  const faqHtml = c.faq.map(f => `<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('');
+  const faqHtml = (c.faq || []).map(f => `<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('');
 
   const relatedHtml = related.length ? `
   <section class="related" aria-labelledby="related-heading">

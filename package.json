@@ -4,7 +4,11 @@
   "description": "Calculadoras online gratis para España: IVA, nómina, hipoteca, IMC y más.",
   "scripts": {
     "build": "node build.js",
-    "test": "node --test test/",
-    "pretest": "node build.js"
+    "test": "node --test test/*.test.js",
+    "pretest": "node build.js",
+    "e2e": "node test/e2e.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
   }
 }

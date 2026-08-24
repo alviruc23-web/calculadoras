@@ -83,6 +83,12 @@ test('Porcentaje: "qué % es" sobre un total de 0 da error, no Infinity', () => 
   assert.ok(r.error);
 });
 
+test('Porcentaje: valores desorbitados dan error en vez de un resultado ilegible', () => {
+  // Antes mostraba una etiqueta con cientos de dígitos y un valor "—".
+  const r = compute('porcentaje', { modo: 'pct_de', a: '1e308', b: '1e308' });
+  assert.ok(r.error);
+});
+
 /* ------------------------------------------------------------ HIPOTECA */
 
 test('Hipoteca: cuota conocida (150.000 €, 25 años, 3 %)', () => {
@@ -109,6 +115,10 @@ test('Hipoteca: un plazo de 0 años da error (antes se convertía en 25)', () =>
   assert.ok(compute('hipoteca', { capital: '100000', anios: '0', interes: '3' }).error);
 });
 
+test('Hipoteca: un tipo de interés irreal da error, no una cuota absurda', () => {
+  assert.ok(compute('hipoteca', { capital: '100000', anios: '25', interes: '999' }).error);
+});
+
 /* ------------------------------------------------------------ PRÉSTAMO */
 
 test('Préstamo: 10.000 € al 8 % en 48 meses', () => {
@@ -120,6 +130,10 @@ test('Préstamo: el total devuelto siempre supera al capital con TIN > 0', () =>
   const r = compute('prestamo', { capital: '5000', tin: '6', meses: '24' });
   const total = parseES(r.rows.find(x => x.k === 'Total a devolver').v);
   assert.ok(total > 5000);
+});
+
+test('Préstamo: un TIN irreal da error', () => {
+  assert.ok(compute('prestamo', { capital: '5000', tin: '999', meses: '24' }).error);
 });
 
 /* -------------------------------------------------------------- AHORRO */
@@ -147,6 +161,10 @@ test('Ahorro: con rentabilidad se aporta menos que sin ella', () => {
   const sin = compute('ahorro', { objetivo: '30000', inicial: '0', anios: '10', rentabilidad: '0' });
   const con = compute('ahorro', { objetivo: '30000', inicial: '0', anios: '10', rentabilidad: '6' });
   assert.ok(parseES(con.main.value) < parseES(sin.main.value));
+});
+
+test('Ahorro: una rentabilidad irreal da error', () => {
+  assert.ok(compute('ahorro', { objetivo: '30000', inicial: '0', anios: '10', rentabilidad: '999' }).error);
 });
 
 /* ---------------------------------------------------------------- DÍAS */
@@ -226,6 +244,10 @@ test('IMC: altura 0 da error en vez de Infinity', () => {
   assert.ok(compute('imc', { peso: '70', altura: '0' }).error);
 });
 
+test('IMC: un peso irreal (fuera de rango humano) da error', () => {
+  assert.ok(compute('imc', { peso: '1e15', altura: '170' }).error);
+});
+
 /* ------------------------------------------------------------- PROPINA */
 
 test('Propina: 60 € con 10 % entre 2 personas son 33 € cada uno', () => {
@@ -240,6 +262,10 @@ test('Propina: 0 personas da error en vez de dividir por cero', () => {
 test('Propina: con 0 % el total coincide con la cuenta', () => {
   const r = compute('propina', { cuenta: '80', porcentaje: '0', personas: '4' });
   near(parseES(r.main.value), 20);
+});
+
+test('Propina: un número irreal de personas da error, no un reparto absurdo', () => {
+  assert.ok(compute('propina', { cuenta: '60', porcentaje: '10', personas: '1e15' }).error);
 });
 
 /* --------------------------------------------------------- COMBUSTIBLE */
@@ -259,6 +285,10 @@ test('Combustible: compartir gastos divide el coste de ida y vuelta', () => {
   near(porPersona, (100 * 8 / 100 * 1.5 * 2) / 4);
 });
 
+test('Combustible: un número irreal de personas da error', () => {
+  assert.ok(compute('combustible', { km: '500', consumo: '7', precio: '1.65', personas: '1e15' }).error);
+});
+
 /* ------------------------------------------------------------ FINIQUITO */
 
 test('Finiquito: 1.800 €, 15 días y 8 de vacaciones dan 1.380 € brutos', () => {
@@ -273,6 +303,14 @@ test('Finiquito: sin días ni vacaciones el importe es 0', () => {
 
 test('Finiquito: más de 31 días trabajados en un mes da error', () => {
   assert.ok(compute('finiquito', { salario: '2000', dias: '45' }).error);
+});
+
+test('Finiquito: unas vacaciones pendientes irreales dan error, no un importe absurdo', () => {
+  assert.ok(compute('finiquito', { salario: '2000', dias: '10', vacaciones: '1e10', preaviso: '0' }).error);
+});
+
+test('Finiquito: un preaviso irreal da error', () => {
+  assert.ok(compute('finiquito', { salario: '2000', dias: '10', vacaciones: '0', preaviso: '99999' }).error);
 });
 
 /* --------------------------------------------------------------- NÓMINA */

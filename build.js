@@ -29,6 +29,31 @@ const { renderAboutBody, renderContactBody, renderPrivacyBody } = require('./src
 const ROOT = __dirname;
 const written = [];
 
+/* ---- validación de contenido -----------------------------------------
+   Falla pronto y con un mensaje claro si una calculadora nueva tiene un
+   campo obligatorio mal puesto, en vez de romperse a mitad de un
+   template con un error críptico. Pensado para cuando el catálogo
+   crezca y ya no lo revise a mano quien lo añade. ------------------- */
+function validateCalcs() {
+  const catSlugs = new Set(CATEGORIES.map(c => c.slug));
+  const ids = new Set();
+  CALCS.forEach(c => {
+    const where = `La calculadora "${c.id || '(sin id)'}"`;
+    if (!c.id) throw new Error('Hay una calculadora sin "id".');
+    if (ids.has(c.id)) throw new Error(`${where} está duplicada.`);
+    ids.add(c.id);
+    if (!c.name) throw new Error(`${where} no tiene "name".`);
+    if (!c.short) throw new Error(`${where} no tiene "short".`);
+    if (!c.icon) throw new Error(`${where} no tiene "icon".`);
+    if (!c.cat || !catSlugs.has(c.cat)) throw new Error(`${where} tiene una categoría desconocida: "${c.cat}".`);
+    if (c.faq && !Array.isArray(c.faq)) throw new Error(`${where} tiene "faq" mal formado (debe ser un array).`);
+    if (c.related && !Array.isArray(c.related)) throw new Error(`${where} tiene "related" mal formado (debe ser un array).`);
+    (c.related || []).forEach(rid => {
+      if (!CALCS.some(x => x.id === rid)) throw new Error(`${where} enlaza a una calculadora relacionada inexistente: "${rid}".`);
+    });
+  });
+}
+
 function write(relPath, content) {
   const full = path.join(ROOT, relPath);
   fs.mkdirSync(path.dirname(full), { recursive: true });
@@ -154,6 +179,7 @@ function cleanOrphans() {
 }
 
 console.log(`Generando ${SITE.name}...`);
+validateCalcs();
 buildHome();
 CALCS.forEach(buildCalculatorPage);
 CATEGORIES.forEach(buildCategoryPage);

@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Tests, build y build determinista
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Pruebas de la matemática (esto ya genera el sitio una vez, vía "pretest")
+        run: npm test
+
+      - name: Regenerar el sitio y comprobar que el build es determinista y está commiteado
+        run: |
+          node build.js
+          if [ -n "$(git status --porcelain -- . ':!node_modules')" ]; then
+            echo "::error::El HTML generado no coincide con lo commiteado, o node build.js no es determinista. Ejecuta 'node build.js' localmente y commitea el resultado."
+            git status --porcelain -- . ':!node_modules'
+            git diff --stat -- . ':!node_modules'
+            exit 1
+          fi
+
+      - name: Publicar el sitio generado como artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: calcya-site-${{ github.sha }}
+          path: |
+            .
+            !node_modules
+            !.git
+          retention-days: 14
+
+  e2e:
+    name: Pruebas de extremo a extremo (navegador real)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Generar el sitio estático
+        run: node build.js
+
+      - name: Instalar Chromium para Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Servir el sitio localmente
+        run: |
+          python3 -m http.server 8123 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8123/ > /dev/null && break
+            sleep 1
+          done
+
+      - name: Ejecutar las pruebas E2E
+        run: npm run e2e
+        env:
+          E2E_BASE_URL: http://localhost:8123/

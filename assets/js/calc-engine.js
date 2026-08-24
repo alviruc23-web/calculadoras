@@ -219,6 +219,8 @@
         var dias = numOr(v.dias, 0), vac = numOr(v.vacaciones, 0), pre = numOr(v.preaviso, 0);
         if (dias < 0 || vac < 0 || pre < 0) return { error: 'Los días no pueden ser negativos.' };
         if (dias > 31) return { error: 'Un mes no puede tener más de 31 días trabajados.' };
+        if (vac > 60) return { error: 'Los días de vacaciones pendientes no pueden superar los 60.' };
+        if (pre > 90) return { error: 'Los días de preaviso no pueden superar los 90.' };
 
         var diario = salario / 30;
         var pSalario = diario * dias;
@@ -310,6 +312,7 @@
         if (anios > MAX_YEARS) return { error: 'El plazo no puede superar los ' + MAX_YEARS + ' años.' };
         var interes = numOr(v.interes, 3);
         if (interes < 0) return { error: 'El tipo de interés no puede ser negativo.' };
+        if (interes > 100) return { error: 'Introduce un tipo de interés real (en porcentaje anual, por ejemplo 3).' };
 
         var n = Math.round(anios * 12);
         var r = (interes / 100) / 12;
@@ -351,6 +354,7 @@
         if (meses > MAX_MONTHS) return { error: 'El plazo no puede superar los ' + MAX_MONTHS + ' meses.' };
         var tin = numOr(v.tin, 8);
         if (tin < 0) return { error: 'El TIN no puede ser negativo.' };
+        if (tin > 100) return { error: 'Introduce un TIN real (en porcentaje anual, por ejemplo 8).' };
 
         var n = Math.round(meses);
         var r = (tin / 100) / 12;
@@ -394,6 +398,7 @@
         if (anios > MAX_YEARS) return { error: 'El plazo no puede superar los ' + MAX_YEARS + ' años.' };
         var rent = numOr(v.rentabilidad, 3);
         if (rent < 0) return { error: 'La rentabilidad no puede ser negativa.' };
+        if (rent > 100) return { error: 'Introduce una rentabilidad anual real (en porcentaje, por ejemplo 5).' };
 
         var n = Math.round(anios * 12);
         var r = (rent / 100) / 12;
@@ -459,6 +464,7 @@
         var modo = v.modo || 'pct_de';
         var a = num(v.a), b = num(v.b);
         if (a === null || b === null) return { empty: true, hint: 'Rellena los dos valores para ver el resultado.' };
+        if (Math.abs(a) > MAX_AMOUNT || Math.abs(b) > MAX_AMOUNT) return { error: 'Introduce valores reales: alguno de los dos números es demasiado grande.' };
 
         if (modo === 'que_pct') {
           if (b === 0) return { error: 'El valor total no puede ser cero: no se puede calcular un porcentaje sobre cero.' };
@@ -558,6 +564,7 @@
         var peso = num(v.peso), altura = num(v.altura);
         if (peso === null || altura === null) return { empty: true, hint: 'Introduce tu peso y tu altura para calcular el IMC.' };
         if (peso <= 0) return { error: 'El peso debe ser mayor que cero.' };
+        if (peso > 500) return { error: 'Introduce el peso en kilogramos (por ejemplo, 70).' };
         if (altura <= 0) return { error: 'La altura debe ser mayor que cero.' };
         if (altura < 50 || altura > 260) return { error: 'Introduce la altura en centímetros (por ejemplo, 170).' };
 
@@ -606,6 +613,7 @@
 
         var personas = intOr(v.personas, 2);
         if (!(personas >= 1)) return { error: 'Tiene que haber al menos una persona.' };
+        if (personas > 1000) return { error: 'Introduce un número de personas real.' };
 
         var p = numOr(v.porcentaje, 10);
         var propina = cuenta * (p / 100);
@@ -645,6 +653,7 @@
         var precio = numOr(v.precio, 1.65);
         if (precio < 0) return { error: 'El precio no puede ser negativo.' };
         var personas = Math.max(1, intOr(v.personas, 1));
+        if (personas > 1000) return { error: 'Introduce un número de personas real.' };
 
         var litros = (km * consumo) / 100;
         var coste = litros * precio;

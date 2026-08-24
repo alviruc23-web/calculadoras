@@ -13,6 +13,12 @@
   var INDEX = window.CALCYA_INDEX || [];
   var ROOT = window.CALCYA_ROOT || '';
 
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function normalize(s) {
     return String(s || '').toLowerCase()
       .normalize('NFD').replace(/[̀-ͯ]/g, '') // quita acentos
@@ -90,9 +96,9 @@
       active = -1;
       if (!list.length) { box.hidden = true; input.setAttribute('aria-expanded', 'false'); return; }
       box.innerHTML = list.map(function (e, i) {
-        return '<a href="' + ROOT + e.url + '" class="hdr-result" role="option" id="hdr-result-' + i + '">' +
-          '<span class="hdr-result-name">' + e.name + '</span>' +
-          '<span class="hdr-result-short">' + e.short + '</span></a>';
+        return '<a href="' + esc(ROOT + e.url) + '" class="hdr-result" role="option" id="hdr-result-' + i + '">' +
+          '<span class="hdr-result-name">' + esc(e.name) + '</span>' +
+          '<span class="hdr-result-short">' + esc(e.short) + '</span></a>';
       }).join('');
       box.hidden = false;
       input.setAttribute('aria-expanded', 'true');

@@ -29,9 +29,15 @@ assets/js/           código que corre en el navegador (sin dependencias)
 
 assets/css/main.css  sistema de diseño único para todo el sitio
 
-test/math.test.js    52 pruebas de la matemática (node --test)
+test/math.test.js    58 pruebas de la matemática (node --test)
+test/e2e.js           pruebas de extremo a extremo en navegador real (Playwright)
 build.js             genera todo el HTML estático a partir de lo anterior
 ```
+
+El sitio en sí (lo que se sirve en producción) no depende de ninguna librería:
+solo HTML, CSS y JS sin frameworks. `playwright` es una dependencia de
+desarrollo, usada únicamente por `test/e2e.js` para las pruebas en CI; nunca
+se carga en el navegador del usuario.
 
 ## Cómo añadir una calculadora nueva
 
@@ -56,8 +62,17 @@ página en `/categoria/<slug>/` sola.
 
 ```
 npm run build   # genera todo el HTML estático (idempotente)
-npm test        # reconstruye y ejecuta las 52 pruebas matemáticas
+npm test        # reconstruye y ejecuta las pruebas matemáticas
+npm run e2e     # pruebas de extremo a extremo (requiere el sitio servido en localhost:8123)
 ```
+
+## Integración continua
+
+Cada `push` a `main` y cada pull request ejecutan `.github/workflows/ci.yml`:
+instala, corre las pruebas matemáticas, genera el sitio, comprueba que el
+build es determinista y que el HTML generado está commiteado, y por último
+lanza las pruebas E2E en un navegador real (Chromium) contra el sitio
+generado. Un PR no puede decir "está probado" sin que esto lo confirme.
 
 ## Monetización y medición
 
@@ -71,3 +86,21 @@ requisito de las políticas de AdSense y del RGPD, no una opción de diseño.
 GitHub Pages sirve directamente el contenido generado (no hay paso de build en
 CI). Tras cambiar cualquier fichero en `src/` o `assets/`, ejecuta
 `npm run build` y commitea también el HTML resultante.
+
+### Comprobar la versión final antes de fusionar
+
+Cada ejecución de CI publica el sitio generado como artefacto descargable
+("calcya-site-<sha>", en la pestaña Actions de la ejecución correspondiente,
+14 días de retención). Para verlo tal cual se serviría en producción:
+
+```
+npm run build
+python3 -m http.server 8123   # o cualquier servidor estático
+```
+
+y abre `http://localhost:8123/`. No hay despliegue de vista previa (preview
+deployment) automático por PR: GitHub Pages solo sirve la rama por defecto,
+y montar uno requeriría un servicio externo (Netlify, Vercel, Surge…) con una
+cuenta que este repositorio no tiene configurada. El artefacto descargable de
+CI y el comando anterior son el equivalente reproducible sin depender de un
+servicio de terceros.
