@@ -96,9 +96,21 @@
     });
   });
 
+  /* ---- analítica de producto ------------------------------------------
+     Eventos de uso (calculadora abierta, cálculo realizado, error de
+     validación, búsqueda, copiar resultado, clic en relacionada). Solo
+     se envían si hay consentimiento Y Analytics está cargado — si no,
+     no hacen nada. No sustituyen ni amplían lo que ya declara la
+     política de privacidad: usan el mismo Google Analytics ya descrito
+     ahí, no un servicio nuevo. -------------------------------------- */
+  function track(name, params) {
+    if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+  }
+
   window.CalcYaConsent = {
     get: getConsent,
     hasAcceptedAds: function () { return getConsent() === 'accepted'; },
     openPreferences: showBanner,
+    track: track,
   };
 })();

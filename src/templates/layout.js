@@ -19,6 +19,7 @@ function buildSearchIndex() {
     name: c.name,
     short: c.short,
     cat: c.cat,
+    catIcon: (CATEGORIES.find(x => x.slug === c.cat) || {}).icon || '',
     kw: (c.name + ' ' + c.short + ' ' + c.keywords).toLowerCase(),
     url: c.id + '/',
   }));
@@ -122,9 +123,13 @@ ${meta.noindex ? '<meta name="robots" content="noindex,follow">' : ''}
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonical}">
 <meta property="og:locale" content="es_ES">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${SITE.baseUrl}assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${meta.title}">
 <meta name="twitter:description" content="${meta.description}">
+<meta name="twitter:image" content="${SITE.baseUrl}assets/img/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">

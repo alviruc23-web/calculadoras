@@ -40,6 +40,7 @@ const CATEGORIES = [
     text: '#92400E',
     title: 'Calculadoras de impuestos',
     description: 'Calcula el IVA de cualquier precio y otros impuestos habituales en España, con el desglose completo.',
+    intro: 'El impuesto con el que te vas a encontrar más a menudo, ya sea comprando o facturando, es el IVA. Aquí puedes calcularlo en los dos sentidos —añadirlo a un precio o extraerlo de uno que ya lo incluye— con los tres tipos vigentes en España.',
   },
   {
     slug: 'laboral',
@@ -50,6 +51,7 @@ const CATEGORIES = [
     text: '#166534',
     title: 'Calculadoras de trabajo y nómina',
     description: 'Del salario bruto al neto, finiquitos y conceptos laborales explicados paso a paso.',
+    intro: 'De la nómina a la liquidación final: calcula cuánto vas a cobrar en tu sueldo neto mes a mes, y qué te corresponde al terminar un contrato, ya sea por baja voluntaria, despido o fin de contrato temporal.',
   },
   {
     slug: 'financiera',
@@ -60,6 +62,7 @@ const CATEGORIES = [
     text: '#1E40AF',
     title: 'Calculadoras financieras',
     description: 'Hipotecas, préstamos personales y objetivos de ahorro con interés compuesto.',
+    intro: 'Antes de firmar un préstamo o una hipoteca, comprueba la cuota real y cuánto vas a pagar en intereses durante toda la vida del préstamo. Y si lo tuyo es ahorrar, calcula cuánto necesitas apartar cada mes para llegar a tu objetivo.',
   },
   {
     slug: 'matematica',
@@ -70,6 +73,7 @@ const CATEGORIES = [
     text: '#5B21B6',
     title: 'Calculadoras de matemáticas',
     description: 'Porcentajes, variaciones y cálculos con fechas, con la fórmula siempre a la vista.',
+    intro: 'Cálculos que se usan constantemente, dentro y fuera de las finanzas: porcentajes, aumentos o descensos entre dos valores, y la diferencia exacta entre dos fechas, en días naturales o solo laborables.',
   },
   {
     slug: 'salud',
@@ -80,6 +84,7 @@ const CATEGORIES = [
     text: '#9F1239',
     title: 'Calculadoras de salud',
     description: 'Indicadores de referencia como el índice de masa corporal, con los rangos de la OMS.',
+    intro: 'Un único indicador, pero de los más consultados como primera referencia: el índice de masa corporal, calculado con los rangos oficiales de la Organización Mundial de la Salud.',
   },
   {
     slug: 'viaje',
@@ -90,6 +95,7 @@ const CATEGORIES = [
     text: '#065F46',
     title: 'Calculadoras de viajes y día a día',
     description: 'Coste de un viaje en coche, reparto de cuentas y otros cálculos cotidianos.',
+    intro: 'Para el día a día: reparte una cuenta con propina entre varias personas sin discusiones, o calcula cuánto te va a costar un trayecto en coche según el consumo del vehículo y el precio del combustible.',
   },
 ];
 

@@ -1,4 +1,5 @@
 const { CALCS } = require('../data/calculators');
+const { CATEGORIES } = require('../data/site');
 
 function calcCard(c, prefix) {
   return `
@@ -12,9 +13,18 @@ function calcCard(c, prefix) {
     </a>`;
 }
 
+function siblingCard(sib, prefix) {
+  return `
+      <a class="related-card" href="${prefix}categoria/${sib.slug}/">
+        <span class="card-icon card-icon-sm cat-${sib.slug}">${sib.icon}</span>
+        <span>${sib.label}</span>
+      </a>`;
+}
+
 function renderCategoryBody(cat, prefix) {
   const items = CALCS.filter(c => c.cat === cat.slug);
   const cards = items.map(c => calcCard(c, prefix)).join('');
+  const siblings = CATEGORIES.filter(c => c.slug !== cat.slug);
 
   return `
 <main id="main">
@@ -31,13 +41,19 @@ function renderCategoryBody(cat, prefix) {
   <div class="wrap">
     <span class="cat-hero-icon cat-${cat.slug}" aria-hidden="true">${cat.icon}</span>
     <h1>${cat.title}</h1>
-    <p>${cat.description}</p>
+    <p>${cat.intro || cat.description}</p>
   </div>
 </section>
 
 <div class="wrap grid-section">
   <div class="grid">${cards}
   </div>
+
+  <section class="related" aria-labelledby="other-cats-heading">
+    <h2 id="other-cats-heading">Otras categorías</h2>
+    <div class="related-grid">${siblings.map(s => siblingCard(s, prefix)).join('')}
+    </div>
+  </section>
 
   <a class="back-link" href="${prefix}index.html#categorias">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>

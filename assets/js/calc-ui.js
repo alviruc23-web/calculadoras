@@ -26,6 +26,12 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  function pctLabel(p) { return E.pct(p, p < 10 ? 1 : 0); }
+
+  // Analítica de producto: no-op si no hay consentimiento (ver consent.js).
+  function track(name, params) {
+    if (window.CalcYaConsent) window.CalcYaConsent.track(name, params);
+  }
 
   /* ---- construcción de campos ------------------------------------- */
 
@@ -121,12 +127,30 @@
     history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
   }
 
+  /* ---- "continuar donde lo dejaste" en la home ----------------------
+     Guarda qué calculadoras se han visitado, solo en este navegador
+     (localStorage, sin enviarse a ningún servidor), para poder
+     mostrarlas de nuevo en la home. No es medición: no depende del
+     consentimiento de cookies, igual que recordar la preferencia de
+     cookies en sí. ------------------------------------------------- */
+  var RECENT_KEY = 'calcya-recent';
+  var RECENT_MAX = 6;
+  function recordRecent(id) {
+    try {
+      var list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]').filter(function (x) { return x !== id; });
+      list.unshift(id);
+      localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, RECENT_MAX)));
+    } catch (e) {}
+  }
+
   /* ---- render ------------------------------------------------------ */
 
   function init(id) {
     var spec = E.CALC_SPECS[id];
     var root = document.getElementById('calc-' + id);
     if (!spec || !root) return;
+    recordRecent(id);
+    track('calc_view', { calc_id: id });
 
     var state = readState(spec);
     var announced = false;
@@ -180,10 +204,20 @@
           '<span class="rk">' + esc(r.k) + '</span><span class="rv">' + esc(r.v) + '</span></div>';
       }).join('');
 
+      var bar = '';
+      if (res.bar && res.bar.length) {
+        bar = '<div class="result-bar">' +
+          res.bar.map(function (s) { return '<span class="result-bar-seg result-bar-' + s.cls + '" style="width:' + s.pct.toFixed(2) + '%"></span>'; }).join('') +
+          '</div><div class="result-bar-legend">' +
+          res.bar.map(function (s) { return '<span class="result-bar-item"><i class="result-bar-dot result-bar-' + s.cls + '"></i>' + esc(s.label) + ' · ' + pctLabel(s.pct) + '</span>'; }).join('') +
+          '</div>';
+      }
+
       out.innerHTML =
         '<div class="result-headline">' +
         '<p class="result-label">' + esc(res.main.label) + '</p>' +
         '<p class="result-value">' + esc(res.main.value) + '</p>' +
+        bar +
         '</div>' +
         (rows ? '<div class="result-rows">' + rows + '</div>' : '') +
         (res.note ? '<p class="result-note">' + esc(res.note) + '</p>' : '') +
@@ -192,7 +226,7 @@
           'Copiar resultado</button></div>' : '');
 
       var btn = out.querySelector('[data-copy]');
-      if (btn) btn.addEventListener('click', function () { copy(res.copy, btn); });
+      if (btn) btn.addEventListener('click', function () { copy(res.copy, btn); track('calc_share_copy', { calc_id: id }); });
     }
 
     function copy(text, btn) {
@@ -217,6 +251,10 @@
       var res = spec.compute(state);
       renderResult(res);
       writeState(spec, state, !res.empty && !res.error);
+      if (userInitiated) {
+        if (res.error) track('calc_error', { calc_id: id });
+        else if (!res.empty) track('calc_compute', { calc_id: id });
+      }
       if (userInitiated && !announced) announced = true;
     }
 

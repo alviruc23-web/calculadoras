@@ -48,6 +48,7 @@ const CALCS = [
         { label: 'Cuota de IVA', expr: 'IVA = Total − Base' },
       ],
       note: 'El «tipo» es el porcentaje en tanto por uno: 21 % → 0,21.',
+      source: 'Tipos de IVA vigentes en España, Ley 37/1992 del Impuesto sobre el Valor Añadido.',
     },
     example: {
       title: 'Ejemplo',
@@ -112,6 +113,7 @@ const CALCS = [
         { label: 'Neto anual', expr: 'Bruto − SS − Cuota IRPF' },
       ],
       note: 'La escala se aplica por tramos: cada porción del salario tributa a su tipo, no todo el salario al tipo más alto.',
+      source: 'Escala general del IRPF y mínimo personal y familiar, Ley 35/2006 del IRPF.',
     },
     example: {
       title: 'Ejemplo',
@@ -288,6 +290,7 @@ const CALCS = [
         { label: 'Rango normal', expr: '18,5 ≤ IMC < 25' },
       ],
       note: 'La altura va en metros: 170 cm son 1,70 m, y el cuadrado es 2,89.',
+      source: 'Clasificación del IMC de la Organización Mundial de la Salud (OMS).',
     },
     example: {
       title: 'Ejemplo',

@@ -62,6 +62,7 @@ function renderCalculatorBody(c, prefix) {
       ${c.formula.lines.map(l => `<div class="formula-line"><span class="formula-label">${l.label}</span><code>${l.expr}</code></div>`).join('')}
     </div>
     ${c.formula.note ? `<p class="formula-note">${c.formula.note}</p>` : ''}
+    ${c.formula.source ? `<p class="formula-source">Fuente: ${c.formula.source}</p>` : ''}
   </section>` : '';
 
   const exampleHtml = c.example ? `

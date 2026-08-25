@@ -91,6 +91,18 @@
     return principal * rate * f / (f - 1);
   }
 
+  // Reparto proporcional para la barra visual del resultado (p. ej.
+  // capital vs. intereses). Devuelve null si no hay nada que repartir,
+  // para que la UI simplemente no dibuje la barra.
+  function splitBar(parts) {
+    var total = 0;
+    for (var i = 0; i < parts.length; i++) total += Math.max(0, parts[i].value);
+    if (!(total > 0)) return null;
+    return parts.map(function (p) {
+      return { label: p.label, value: p.value, cls: p.cls, pct: (Math.max(0, p.value) / total) * 100 };
+    });
+  }
+
   /* ---- IRPF --------------------------------------------------------
      Escala general (estatal + autonómica agregada) aplicada de forma
      PROGRESIVA por tramos. La versión anterior aplicaba el tipo del
@@ -329,6 +341,10 @@
             { k: 'Total a devolver', v: eur(totalPagado), strong: true },
             { k: 'Intereses sobre el capital', v: pct(intereses / capital * 100, 1) },
           ],
+          bar: splitBar([
+            { label: 'Capital', value: capital, cls: 'principal' },
+            { label: 'Intereses', value: intereses, cls: 'interest' },
+          ]),
           note: 'No incluye seguros, comisiones ni gastos asociados, que sí entran en el TAE.',
           copy: 'Cuota mensual: ' + eur(cuota) + '\nIntereses totales: ' + eur(intereses) + '\nTotal a devolver: ' + eur(totalPagado),
         };
@@ -371,6 +387,10 @@
             { k: 'Total a devolver', v: eur(total), strong: true },
             { k: 'TAE equivalente (sin comisiones)', v: pct(tae) },
           ],
+          bar: splitBar([
+            { label: 'Capital', value: capital, cls: 'principal' },
+            { label: 'Intereses', value: intereses, cls: 'interest' },
+          ]),
           note: 'El TAE mostrado solo refleja la capitalización del TIN. El TAE real de una oferta incluye además comisiones y gastos.',
           copy: 'Cuota mensual: ' + eur(cuota) + '\nIntereses totales: ' + eur(intereses) + '\nTotal a devolver: ' + eur(total),
         };
@@ -433,6 +453,10 @@
             { k: 'Generado por intereses', v: eur(Math.max(0, intereses)) },
             { k: 'Total al final', v: eur(objetivo), strong: true },
           ],
+          bar: splitBar([
+            { label: 'Aportado', value: aportado, cls: 'principal' },
+            { label: 'Intereses', value: intereses, cls: 'interest' },
+          ]),
           note: 'Supone aportaciones constantes a principio de cada mes y una rentabilidad estable, que en una inversión real puede variar.',
           copy: 'Para reunir ' + eur(objetivo) + ' en ' + fmt(anios, 0) + ' años necesitas ahorrar ' + eur(mensual) + ' al mes.',
         };
@@ -684,6 +708,7 @@
     payment: payment,
     progressiveTax: progressiveTax,
     childMinimum: childMinimum,
+    splitBar: splitBar,
     compute: function (id, values) {
       var spec = CALC_SPECS[id];
       if (!spec) throw new Error('Calculadora desconocida: ' + id);
