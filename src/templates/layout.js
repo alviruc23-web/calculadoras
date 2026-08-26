@@ -131,9 +131,6 @@ ${meta.noindex ? '<meta name="robots" content="noindex,follow">' : ''}
 <meta name="twitter:title" content="${meta.title}">
 <meta name="twitter:description" content="${meta.description}">
 <meta name="twitter:image" content="${SITE.baseUrl}assets/img/og-image.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${p}assets/css/main.css">
 ${renderJsonLd(meta.structuredData)}
 <script>window.CALCYA_INDEX=${JSON.stringify(searchIndex)};window.CALCYA_ROOT=${JSON.stringify(p)};window.CALCYA_SERVICES=${JSON.stringify(SERVICES)};</script>

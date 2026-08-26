@@ -4,6 +4,61 @@
    reutilizados por header, footer, tarjetas, formularios y resultado.
    ============================================================ */
 
+/* ---- tipografía, alojada en el propio sitio (assets/fonts/) --------
+   Antes se cargaba desde fonts.googleapis.com/fonts.gstatic.com: dos
+   orígenes externos antes de poder pintar texto. Mismos pesos y
+   variantes que ya se usaban, solo el subset "latin" (cubre el
+   español al completo, incluida ñ/á/é/í/ó/ú/ü/¿/¡), nada de más. */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/dm-sans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/dm-sans-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/dm-sans-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/dm-sans-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/dm-sans-400-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/dm-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/dm-mono-500.woff2') format('woff2');
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -182,6 +237,15 @@ nav.main-nav { display: flex; gap: 2px; flex-wrap: wrap; }
 @media (min-width: 540px) { .grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
 
+/* Categorías con pocas calculadoras (≤2): en escritorio, el grid de 3
+   columnas fijas dejaba un hueco vacío grande. Solo afecta a esta
+   variante marcada explícitamente — el grid normal (home, categorías
+   con más calculadoras) no cambia. Móvil y tablet ya se veían bien, así
+   que solo se ajusta a partir de 900px. */
+@media (min-width: 900px) {
+  .grid.grid-few { grid-template-columns: repeat(auto-fit, minmax(240px, 320px)); max-width: 660px; }
+}
+
 .calc-card {
   display: flex; flex-direction: column;
   background: var(--surface); border: 1px solid var(--border);
@@ -231,6 +295,8 @@ nav.main-nav { display: flex; gap: 2px; flex-wrap: wrap; }
 /* ---- panel de calculadora ---- */
 .calc-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); box-shadow: var(--shadow-md); overflow: hidden; }
 .calc-mount { padding: 24px 20px; }
+.trust-note { display: flex; align-items: center; gap: 7px; padding: 10px 20px; margin: 0; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+.trust-note svg { flex-shrink: 0; color: var(--dim); }
 .noscript-note { color: var(--muted); font-size: 14px; }
 .calc-grid { display: grid; gap: 0; }
 @media (min-width: 640px) { .calc-grid { grid-template-columns: 1fr 1fr; gap: 0 32px; } }

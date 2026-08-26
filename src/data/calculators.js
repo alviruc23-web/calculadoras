@@ -35,6 +35,7 @@ const CALCS = [
   {
     id: 'iva',
     cat: 'fiscal',
+    yearSensitive: true,
     name: 'Calculadora de IVA',
     h1: 'Calculadora de IVA',
     short: 'Añade o quita el IVA de cualquier precio, con los tipos del 21 %, 10 % y 4 %.',
@@ -67,6 +68,7 @@ const CALCS = [
   {
     id: 'finiquito',
     cat: 'laboral',
+    yearSensitive: true,
     name: 'Calculadora de finiquito',
     h1: 'Calculadora de finiquito',
     short: 'Calcula lo que te deben al terminar un contrato: días trabajados, vacaciones y preaviso.',
@@ -99,6 +101,7 @@ const CALCS = [
   {
     id: 'nomina',
     cat: 'laboral',
+    yearSensitive: true,
     name: 'Calculadora de sueldo neto',
     h1: 'Calculadora de sueldo neto',
     short: 'Convierte tu salario bruto anual en el neto que cobras, con IRPF y Seguridad Social.',
@@ -132,6 +135,7 @@ const CALCS = [
   {
     id: 'hipoteca',
     cat: 'financiera',
+    trustNote: 'No te pedimos datos ni te llamamos: el cálculo se hace en tu navegador.',
     name: 'Calculadora de hipoteca',
     h1: 'Calculadora de hipoteca',
     short: 'Cuota mensual, intereses totales y coste real de tu hipoteca.',
@@ -162,6 +166,7 @@ const CALCS = [
   {
     id: 'prestamo',
     cat: 'financiera',
+    trustNote: 'No te pedimos datos ni te llamamos: el cálculo se hace en tu navegador.',
     name: 'Calculadora de préstamo personal',
     h1: 'Calculadora de préstamo personal',
     short: 'Cuota mensual y coste total de un préstamo personal o de un crédito al consumo.',
@@ -191,6 +196,7 @@ const CALCS = [
   {
     id: 'ahorro',
     cat: 'financiera',
+    trustNote: 'No te pedimos datos ni te llamamos: el cálculo se hace en tu navegador.',
     name: 'Calculadora de ahorro',
     h1: 'Calculadora de ahorro',
     short: 'Cuánto necesitas ahorrar al mes para alcanzar un objetivo, con interés compuesto.',
