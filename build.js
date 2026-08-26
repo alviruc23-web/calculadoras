@@ -81,10 +81,14 @@ function buildCalculatorPage(c) {
   const cat = CATEGORIES.find(x => x.slug === c.cat);
   if (!cat) throw new Error(`La calculadora "${c.id}" tiene una categoría desconocida: ${c.cat}`);
   const canonicalUrl = `${SITE.baseUrl}${c.id}/`;
+  // El año vigente sale solo de SITE.year: cambiar ese único valor basta
+  // para actualizar title/H1/meta de todas las calculadoras marcadas
+  // como yearSensitive el año que viene.
+  const yearTag = c.yearSensitive ? ` ${SITE.year}` : '';
   const html = pageShell(
     {
-      title: `${c.name} — Gratis y sin registro | ${SITE.name}`,
-      description: `${c.short} Calculadora gratuita, sin registro, resultado inmediato.`,
+      title: `${c.name}${yearTag} — Gratis y sin registro | ${SITE.name}`,
+      description: `${c.short} Calculadora gratuita${c.yearSensitive ? ` y actualizada a ${SITE.year}` : ''}, sin registro, resultado inmediato.`,
       canonicalPath: `${c.id}/`,
       depth: 1,
       structuredData: buildStructuredData(c, canonicalUrl, cat),
@@ -139,8 +143,13 @@ function buildSitemap() {
     ...CALCS.map(c => ({ loc: `${SITE.baseUrl}${c.id}/`, priority: '0.9' })),
     ...INFO_PAGES.map(pg => ({ loc: `${SITE.baseUrl}${pg.slug}/`, priority: '0.3' })),
   ];
+  // lastmod: usamos SITE.reviewedOn (única fecha de revisión de contenido
+  // que existe realmente en el proyecto) para todas las URLs por igual.
+  // No hay seguimiento de fecha de modificación por página individual,
+  // así que aplicar la misma fecha a todas es la representación honesta
+  // de lo que sabemos — inventar una fecha distinta por URL sí sería falso.
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u =>
-    `  <url>\n    <loc>${u.loc}</loc>\n    <priority>${u.priority}</priority>\n  </url>`
+    `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${SITE.reviewedOn}</lastmod>\n    <priority>${u.priority}</priority>\n  </url>`
   ).join('\n')}\n</urlset>\n`;
   write('sitemap.xml', xml);
 }

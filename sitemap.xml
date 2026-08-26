@@ -2,86 +2,107 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://calculadorasfaciles.es/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/categoria/fiscal/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/categoria/laboral/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/categoria/financiera/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/categoria/matematica/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/categoria/salud/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/categoria/viaje/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/iva/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/finiquito/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/nomina/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/hipoteca/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/prestamo/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/ahorro/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/porcentaje/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/dias/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/imc/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/propina/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/combustible/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/sobre-calcya/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/contacto/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/privacidad/</loc>
+    <lastmod>2026-08</lastmod>
     <priority>0.3</priority>
   </url>
 </urlset>

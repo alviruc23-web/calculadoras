@@ -25,6 +25,9 @@ function renderCategoryBody(cat, prefix) {
   const items = CALCS.filter(c => c.cat === cat.slug);
   const cards = items.map(c => calcCard(c, prefix)).join('');
   const siblings = CATEGORIES.filter(c => c.slug !== cat.slug);
+  // Con pocas calculadoras, el grid de 3 columnas deja demasiado hueco
+  // vacío en escritorio: se acota el ancho para que no se vea incompleto.
+  const gridClass = items.length <= 2 ? 'grid grid-few' : 'grid';
 
   return `
 <main id="main">
@@ -46,7 +49,7 @@ function renderCategoryBody(cat, prefix) {
 </section>
 
 <div class="wrap grid-section">
-  <div class="grid">${cards}
+  <div class="${gridClass}">${cards}
   </div>
 
   <section class="related" aria-labelledby="other-cats-heading">

@@ -71,7 +71,7 @@ function renderPrivacyBody(prefix) {
   <p>Ambos son servicios de Google LLC y pueden instalar cookies propias. Puedes cambiar tu decisión cuando quieras desde «Preferencias de cookies» en el pie de página, y gestionar la publicidad personalizada de Google directamente en <a href="https://myadcenter.google.com" target="_blank" rel="noopener">myadcenter.google.com</a>. Más información en <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</p>
 
   <h2>4. Otros servicios de terceros</h2>
-  <p>Para la tipografía cargamos las fuentes «DM Sans» y «DM Mono» desde los servidores de Google Fonts (<code>fonts.googleapis.com</code> y <code>fonts.gstatic.com</code>). Esto implica que tu navegador contacta con servidores de Google, que puede registrar tu dirección IP según sus propias políticas. Esta carga no depende del aviso de cookies porque no instala cookies de seguimiento.</p>
+  <p>Las tipografías del sitio («DM Sans» y «DM Mono») se sirven directamente desde este dominio, no desde Google Fonts ni ningún otro servicio externo: no se realiza ninguna petición a terceros para cargar la tipografía.</p>
 
   <h2>5. Tus derechos</h2>
   <p>Si tratamos datos personales tuyos —por ejemplo, a través de la publicidad de Google una vez aceptada—, tienes derecho a acceder, rectificar, suprimir, oponerte, limitar el tratamiento y solicitar la portabilidad de tus datos, conforme al Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD). Puedes ejercerlos a través del canal de contacto del punto 1.</p>

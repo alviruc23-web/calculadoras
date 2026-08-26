@@ -77,6 +77,12 @@ function renderCalculatorBody(c, prefix) {
         <p>${c.tip}</p>
       </div>` : '';
 
+  const trustNoteHtml = c.trustNote ? `
+      <p class="trust-note">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        ${c.trustNote}
+      </p>` : '';
+
   const faqHtml = (c.faq || []).map(f => `<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('');
 
   const relatedHtml = related.length ? `
@@ -103,7 +109,7 @@ function renderCalculatorBody(c, prefix) {
   <div class="wrap">
     <span class="card-icon card-icon-lg cat-${c.cat}">${c.icon}</span>
     <div>
-      <h1>${c.h1 || c.name}</h1>
+      <h1>${c.h1 || c.name}${c.yearSensitive ? ' ' + SITE.year : ''}</h1>
       <p>${c.intro || c.short}</p>
     </div>
   </div>
@@ -112,6 +118,7 @@ function renderCalculatorBody(c, prefix) {
 <div class="wrap calc-page-grid">
   <div class="calc-main">
     <div class="calc-panel">
+      ${trustNoteHtml}
       <div id="calc-${c.id}" class="calc-mount">
         <noscript><p class="noscript-note">Esta calculadora necesita JavaScript activado para funcionar.</p></noscript>
       </div>
