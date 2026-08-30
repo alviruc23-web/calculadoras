@@ -163,7 +163,7 @@ function buildRobots() {
    (por ejemplo si se renombra o retira una calculadora) para que el
    repositorio nunca acumule HTML huérfano y sin enlazar. */
 function cleanOrphans() {
-  const known = new Set(['index.html', 'sitemap.xml', 'robots.txt', 'CNAME', 'README.md', 'package.json', 'package-lock.json', 'build.js', 'src', 'assets', 'test', 'node_modules', '.git', '.github']);
+  const known = new Set(['index.html', 'sitemap.xml', 'robots.txt', 'ads.txt', 'CNAME', 'README.md', 'package.json', 'package-lock.json', 'build.js', 'src', 'assets', 'test', 'node_modules', '.git', '.github']);
   CALCS.forEach(c => known.add(c.id));
   INFO_PAGES.forEach(pg => known.add(pg.slug));
   known.add('categoria');
