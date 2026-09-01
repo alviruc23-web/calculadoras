@@ -12,6 +12,11 @@
 
   var INDEX = window.CALCYA_INDEX || [];
   var ROOT = window.CALCYA_ROOT || '';
+  var LOCALE = window.CALCYA_LOCALE === 'en' ? 'en' : 'es';
+  var ALL_CAT = LOCALE === 'en' ? 'all' : 'todas';
+  var SEARCH_T = LOCALE === 'en'
+    ? { recent: 'Recent', recalculate: 'Calculate again' }
+    : { recent: 'Reciente', recalculate: 'Volver a calcular' };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -160,7 +165,7 @@
     var cards = page.querySelectorAll('[data-calc-card]');
     var chips = page.querySelectorAll('.chip');
     var noResults = document.getElementById('no-results');
-    var currentCat = 'todas';
+    var currentCat = ALL_CAT;
     var lastQuery = '';
 
     function apply() {
@@ -170,7 +175,7 @@
       cards.forEach(function (card) {
         var id = card.getAttribute('data-calc-card');
         var cat = card.getAttribute('data-cat');
-        var catOk = currentCat === 'todas' || cat === currentCat;
+        var catOk = currentCat === ALL_CAT || cat === currentCat;
         var qOk = !matchIds || matchIds.indexOf(id) !== -1;
         var show = catOk && qOk;
         card.style.display = show ? '' : 'none';
@@ -215,10 +220,10 @@
     grid.innerHTML = entries.map(function (e) {
       return '<a class="calc-card" href="' + esc(ROOT + e.url) + '">' +
         '<span class="card-icon cat-' + esc(e.cat) + '">' + esc(e.catIcon) + '</span>' +
-        '<span class="card-cat">Reciente</span>' +
+        '<span class="card-cat">' + SEARCH_T.recent + '</span>' +
         '<h3>' + esc(e.name) + '</h3>' +
         '<p>' + esc(e.short) + '</p>' +
-        '<span class="card-cta">Volver a calcular' +
+        '<span class="card-cta">' + SEARCH_T.recalculate +
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>';
     }).join('');
     section.hidden = false;

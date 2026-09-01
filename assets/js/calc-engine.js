@@ -12,6 +12,15 @@
 
    Para añadir una calculadora nueva basta con añadir una entrada a
    CALC_SPECS: la interfaz se genera sola desde `fields`.
+
+   Idiomas: por defecto todo el texto (campos y resultados) es
+   español — el comportamiento de siempre, sin llamar a nada nuevo.
+   `CalcEngine.configure({locale:'en'})` cambia el formato numérico
+   (fmt/eur/pct) y sustituye el texto de CALC_SPECS y de los
+   compute() por su versión en inglés, SIN tocar ninguna fórmula ni
+   valor numérico: solo cambia qué palabras se usan para mostrarlo.
+   configure({locale:'es'}) siempre puede volver al estado español
+   original, restaurado desde una copia tomada al cargar el módulo.
    ============================================================ */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -19,23 +28,38 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
+  /* ---- idioma activo ------------------------------------------------
+     Una única variable mutable que compute() lee en el momento de
+     ejecutarse (no al definirse), así que cambia con configure()
+     sin necesidad de reconstruir las specs. ------------------------ */
+  var CURRENT_LOCALE = 'es';
+
   /* ---- formato ---------------------------------------------------- */
 
   function isFiniteNum(n) {
     return typeof n === 'number' && isFinite(n);
   }
 
-  // Formatea un número en convención española. Devuelve '—' si no es finito,
-  // de modo que ningún resultado pueda mostrar NaN o Infinity al usuario.
+  // Formatea un número en la convención del idioma activo. Devuelve '—'
+  // si no es finito, de modo que ningún resultado pueda mostrar NaN o
+  // Infinity al usuario.
   function fmt(n, dec) {
     if (dec === undefined) dec = 2;
     if (!isFiniteNum(n)) return '—';
     // Evita "-0,00"
     if (Math.abs(n) < Math.pow(10, -dec) / 2) n = 0;
-    return n.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    var loc = CURRENT_LOCALE === 'en' ? 'en-US' : 'es-ES';
+    return n.toLocaleString(loc, { minimumFractionDigits: dec, maximumFractionDigits: dec });
   }
-  function eur(n) { return isFiniteNum(n) ? fmt(n, 2) + ' €' : '—'; }
-  function pct(n, dec) { return isFiniteNum(n) ? fmt(n, dec === undefined ? 2 : dec) + ' %' : '—'; }
+  function eur(n) {
+    if (!isFiniteNum(n)) return '—';
+    return CURRENT_LOCALE === 'en' ? '€' + fmt(n, 2) : fmt(n, 2) + ' €';
+  }
+  function pct(n, dec) {
+    if (!isFiniteNum(n)) return '—';
+    var s = fmt(n, dec === undefined ? 2 : dec);
+    return CURRENT_LOCALE === 'en' ? s + '%' : s + ' %';
+  }
 
   /* ---- parseo ------------------------------------------------------
      Distingue "vacío" (null) de 0. El código antiguo usaba
@@ -161,6 +185,459 @@
   }
 
   /* ================================================================
+     TEXTO — todo el texto español usado dentro de los compute() está
+     aquí (no repartido por el código), para poder ofrecer una tabla
+     en inglés en paralelo sin tocar ninguna línea de matemática.
+     `T` es la tabla activa; compute() la lee en cada llamada.
+     ================================================================ */
+
+  var T_ES = {
+    iva: {
+      hint: 'Introduce un precio para ver el desglose del IVA.',
+      errNegative: 'El precio no puede ser negativo.',
+      errTooLarge: 'El precio introducido no es un importe real.',
+      mainQuitar: 'Precio sin IVA',
+      mainAnadir: 'Precio con IVA',
+      rowBase: 'Base imponible (sin IVA)',
+      rowVat: 'IVA',
+      rowTotal: 'Total con IVA',
+      copyBase: 'Base sin IVA: ',
+      copyTotal: 'Total con IVA: ',
+    },
+    finiquito: {
+      hint: 'Introduce tu salario bruto mensual para estimar el finiquito.',
+      errNegative: 'El salario no puede ser negativo.',
+      errTooLarge: 'El salario introducido no es un importe real.',
+      errDaysNegative: 'Los días no pueden ser negativos.',
+      errDaysMax: 'Un mes no puede tener más de 31 días trabajados.',
+      errVacationMax: 'Los días de vacaciones pendientes no pueden superar los 60.',
+      errNoticeMax: 'Los días de preaviso no pueden superar los 90.',
+      rowDaily: 'Salario diario',
+      rowWorked: 'Días trabajados',
+      rowVacation: 'Vacaciones no disfrutadas',
+      rowNotice: 'Preaviso no trabajado',
+      rowTotal: 'Total bruto',
+      mainLabel: 'Finiquito bruto',
+      note: 'Importe bruto: todavía se le aplicarán IRPF y Seguridad Social. El finiquito no incluye la indemnización por despido, que es un concepto aparte.',
+      copyPrefix: 'Finiquito bruto estimado: ',
+      copyWorked: '\n- Días trabajados: ',
+      copyVacation: '\n- Vacaciones: ',
+    },
+    nomina: {
+      hint: 'Introduce tu salario bruto anual para calcular el neto.',
+      errNegative: 'El salario no puede ser negativo.',
+      errTooLarge: 'El salario introducido no es un importe real.',
+      mainLabel: 'Neto por paga',
+      pagasSuffix: ' pagas',
+      rowGross: 'Bruto anual',
+      rowSS: 'Seguridad Social',
+      rowIRPF: 'Retención IRPF',
+      rowNetAnnual: 'Neto anual',
+      rowNetPaga: 'Neto por paga',
+      rowNetMonthly: 'Neto mensual equivalente',
+      note: 'Cálculo orientativo con la escala general del IRPF y el mínimo personal y familiar. Tu retención real depende de tu comunidad autónoma y de tu situación concreta (modelo 145).',
+      copyGross: 'Bruto anual: ',
+      copyNetAnnual: '\nNeto anual: ',
+      copyNetPaga: '\nNeto por paga (',
+    },
+    hipoteca: {
+      hint: 'Introduce el importe del préstamo para ver tu cuota mensual.',
+      errZero: 'El importe del préstamo debe ser mayor que cero.',
+      errTooLarge: 'El importe es demasiado grande para un préstamo real.',
+      errTermMin: 'El plazo debe ser de al menos un año.',
+      errTermMax: 'El plazo no puede superar los ',
+      errTermMaxSuffix: ' años.',
+      errRateNegative: 'El tipo de interés no puede ser negativo.',
+      errRateReal: 'Introduce un tipo de interés real (en porcentaje anual, por ejemplo 3).',
+      mainLabel: 'Cuota mensual',
+      rowCapital: 'Capital prestado',
+      rowTerm: 'Plazo',
+      termYearsOpen: ' años (',
+      termInstallmentsClose: ' cuotas)',
+      rowInterestTotal: 'Intereses totales',
+      rowTotalToRepay: 'Total a devolver',
+      rowInterestPctCapital: 'Intereses sobre el capital',
+      barCapital: 'Capital',
+      barInterest: 'Intereses',
+      note: 'No incluye seguros, comisiones ni gastos asociados, que sí entran en el TAE.',
+    },
+    prestamo: {
+      hint: 'Introduce el importe para calcular la cuota del préstamo.',
+      errZero: 'El importe del préstamo debe ser mayor que cero.',
+      errTooLarge: 'El importe es demasiado grande para un préstamo real.',
+      errTermMin: 'El plazo debe ser de al menos un mes.',
+      errTermMax: 'El plazo no puede superar los ',
+      errTermMaxSuffix: ' meses.',
+      errRateNegative: 'El TIN no puede ser negativo.',
+      errRateReal: 'Introduce un TIN real (en porcentaje anual, por ejemplo 8).',
+      mainLabel: 'Cuota mensual',
+      rowCapital: 'Capital',
+      rowInterestTotal: 'Intereses totales',
+      rowTotalToRepay: 'Total a devolver',
+      rowTAE: 'TAE equivalente (sin comisiones)',
+      barCapital: 'Capital',
+      barInterest: 'Intereses',
+      note: 'El TAE mostrado solo refleja la capitalización del TIN. El TAE real de una oferta incluye además comisiones y gastos.',
+    },
+    ahorro: {
+      hint: 'Introduce cuánto quieres reunir para saber cuánto ahorrar al mes.',
+      errZero: 'El objetivo debe ser mayor que cero.',
+      errTooLarge: 'El objetivo es demasiado grande.',
+      errTermMin: 'El plazo debe ser de al menos un año.',
+      errTermMax: 'El plazo no puede superar los ',
+      errTermMaxSuffix: ' años.',
+      errRateNegative: 'La rentabilidad no puede ser negativa.',
+      errRateReal: 'Introduce una rentabilidad anual real (en porcentaje, por ejemplo 5).',
+      mainLabel: 'Ahorro mensual necesario',
+      rowGoal: 'Objetivo',
+      rowCurrent: 'Tienes ahora',
+      rowFutureValue: 'Valor en ',
+      yearsOpen: ' años',
+      noteZero: 'Con la rentabilidad indicada, tu ahorro actual ya supera el objetivo en ese plazo sin necesidad de aportar nada más.',
+      copyGoal: 'Objetivo: ',
+      copyNoContribution: 'No necesitas aportaciones: tu ahorro actual llega a ',
+      rowTerm: 'Plazo',
+      termYearsOpen: ' años (',
+      termMonthsClose: ' meses)',
+      rowContributed: 'Aportado de tu bolsillo',
+      rowInterestGenerated: 'Generado por intereses',
+      rowTotalFinal: 'Total al final',
+      barContributed: 'Aportado',
+      barInterest: 'Intereses',
+      note: 'Supone aportaciones constantes a principio de cada mes y una rentabilidad estable, que en una inversión real puede variar.',
+      copyToReach: 'Para reunir ',
+      copyInYears: ' en ',
+      copyYearsSuffix: ' años necesitas ahorrar ',
+      copyPerMonth: ' al mes.',
+    },
+    porcentaje: {
+      hint: 'Rellena los dos valores para ver el resultado.',
+      errTooLarge: 'Introduce valores reales: alguno de los dos números es demasiado grande.',
+      errZeroTotal: 'El valor total no puede ser cero: no se puede calcular un porcentaje sobre cero.',
+      errZeroInitial: 'No se puede calcular la variación porcentual partiendo de cero.',
+      quePctIs: ' es',
+      rowPartial: 'Valor parcial',
+      rowTotal: 'Valor total',
+      rowPercentage: 'Porcentaje',
+      copyQuePct: ' es el ',
+      copyQuePctOf: ' de ',
+      variacionUp: 'Aumento',
+      variacionDown: 'Descenso',
+      rowInitial: 'Valor inicial',
+      rowFinal: 'Valor final',
+      rowAbsDiff: 'Diferencia absoluta',
+      rowChange: 'Variación',
+      copyFrom: 'De ',
+      copyTo: ' a ',
+      of: ' de ',
+      rowAmount: 'Cantidad',
+      rowResult: 'Resultado',
+      rowAmountMinus: 'Cantidad menos ese %',
+      rowAmountPlus: 'Cantidad más ese %',
+      copyThe: 'El ',
+      copyIs: ' es ',
+    },
+    dias: {
+      hint: 'Selecciona las dos fechas para calcular la diferencia.',
+      mainWorking: 'Días laborables',
+      mainTotal: 'Días totales',
+      daySingular: ' día',
+      dayPlural: ' días',
+      rowCalendar: 'Días naturales',
+      rowWorking: 'Días laborables (L-V)',
+      rowWeekend: 'Fines de semana',
+      rowFullWeeks: 'Semanas completas',
+      rowMonths: 'Meses aproximados',
+      note: 'No se descuentan los festivos nacionales, autonómicos ni locales.',
+      copyBetween: 'Entre ',
+      copyAnd: ' y ',
+      copyThereAre: ' hay ',
+      copyCalendarDays: ' días naturales (',
+      copyWorkingSuffix: ' laborables).',
+    },
+    imc: {
+      hint: 'Introduce tu peso y tu altura para calcular el IMC.',
+      errWeightZero: 'El peso debe ser mayor que cero.',
+      errWeightReal: 'Introduce el peso en kilogramos (por ejemplo, 70).',
+      errHeightZero: 'La altura debe ser mayor que cero.',
+      errHeightReal: 'Introduce la altura en centímetros (por ejemplo, 170).',
+      catUnder: 'Bajo peso', noteUnder: 'Por debajo del rango de referencia de la OMS.',
+      catNormal: 'Peso normal', noteNormal: 'Dentro del rango de referencia de la OMS.',
+      catOver: 'Sobrepeso', noteOver: 'Por encima del rango de referencia de la OMS.',
+      catObese1: 'Obesidad grado I', noteObese1: 'Conviene valorarlo con un profesional sanitario.',
+      catObese2: 'Obesidad grado II', noteObese2: 'Se recomienda valoración médica.',
+      catObese3: 'Obesidad grado III', noteObese3: 'Se recomienda valoración médica prioritaria.',
+      mainLabel: 'Índice de masa corporal',
+      rowCategory: 'Categoría (OMS)',
+      rowRange: 'Rango de peso normal para tu altura',
+      rowDiff: 'Diferencia con el rango',
+      diffWithinRange: 'Dentro del rango',
+      noteSuffix: ' El IMC es un indicador orientativo: no distingue entre masa muscular y grasa, ni sustituye una valoración médica.',
+      copyPrefix: 'IMC: ',
+    },
+    propina: {
+      hint: 'Introduce el total de la cuenta para repartirla.',
+      errNegative: 'La cuenta no puede ser negativa.',
+      errTooLarge: 'El importe de la cuenta no es real.',
+      errPeopleMin: 'Tiene que haber al menos una persona.',
+      errPeopleReal: 'Introduce un número de personas real.',
+      mainLabel: 'Paga cada persona',
+      rowBill: 'Cuenta',
+      rowTip: 'Propina',
+      rowTotalWithTip: 'Total con propina',
+      rowTipPerPerson: 'Propina por persona',
+      rowTotalPerPerson: 'Total por persona',
+      copyBill: 'Cuenta ',
+      copyPlusTip: ' + propina ',
+      copyEquals: ' = ',
+      copyEachPerson: '. Cada persona: ',
+    },
+    combustible: {
+      hint: 'Introduce los kilómetros del viaje para calcular el coste.',
+      errNegative: 'La distancia no puede ser negativa.',
+      errTooLarge: 'Esa distancia no corresponde a un viaje real.',
+      errConsumptionZero: 'El consumo debe ser mayor que cero.',
+      errPriceNegative: 'El precio no puede ser negativo.',
+      errPeopleReal: 'Introduce un número de personas real.',
+      rowLiters: 'Litros necesarios',
+      rowCostPerKm: 'Coste por kilómetro',
+      rowOneWay: 'Coste solo ida',
+      rowRoundTrip: 'Ida y vuelta',
+      rowPerPerson: 'Por persona (ida y vuelta)',
+      mainLabel: 'Coste del viaje (ida)',
+      note: 'El consumo real suele ser un 10–15 % superior al homologado, sobre todo en ciudad o con el coche cargado.',
+      copyTrip: 'Viaje de ',
+      copyKm: ' km: ',
+      copyLiters: ' litros, ',
+      copyOneWaySuffix: ' (ida).',
+    },
+  };
+
+  var T_EN = {
+    iva: {
+      hint: 'Enter a price to see the VAT breakdown.',
+      errNegative: 'The price cannot be negative.',
+      errTooLarge: 'The price entered is not a real amount.',
+      mainQuitar: 'Price excluding VAT',
+      mainAnadir: 'Price including VAT',
+      rowBase: 'Tax base (excluding VAT)',
+      rowVat: 'VAT',
+      rowTotal: 'Total including VAT',
+      copyBase: 'Base excluding VAT: ',
+      copyTotal: 'Total including VAT: ',
+    },
+    finiquito: {
+      hint: 'Enter your gross monthly salary to estimate severance pay.',
+      errNegative: 'Salary cannot be negative.',
+      errTooLarge: 'The salary entered is not a real amount.',
+      errDaysNegative: 'Days cannot be negative.',
+      errDaysMax: 'A month cannot have more than 31 days worked.',
+      errVacationMax: 'Unused holiday days cannot exceed 60.',
+      errNoticeMax: 'Notice days cannot exceed 90.',
+      rowDaily: 'Daily wage',
+      rowWorked: 'Days worked',
+      rowVacation: 'Unused holiday',
+      rowNotice: 'Unpaid notice',
+      rowTotal: 'Gross total',
+      mainLabel: 'Gross severance pay',
+      note: 'Gross amount: Spanish income tax (IRPF) and Social Security contributions will still be applied. Severance pay does not include dismissal compensation, which is a separate concept.',
+      copyPrefix: 'Estimated gross severance pay: ',
+      copyWorked: '\n- Days worked: ',
+      copyVacation: '\n- Holiday: ',
+    },
+    nomina: {
+      hint: 'Enter your gross annual salary to calculate the net amount.',
+      errNegative: 'Salary cannot be negative.',
+      errTooLarge: 'The salary entered is not a real amount.',
+      mainLabel: 'Net per payment',
+      pagasSuffix: ' payments',
+      rowGross: 'Gross annual',
+      rowSS: 'Social Security',
+      rowIRPF: 'Income tax withholding (IRPF)',
+      rowNetAnnual: 'Net annual',
+      rowNetPaga: 'Net per payment',
+      rowNetMonthly: 'Net monthly equivalent',
+      note: 'An estimate based on the general IRPF scale and the personal/family allowance. Your actual withholding depends on your Spanish region and your specific situation (form 145).',
+      copyGross: 'Gross annual: ',
+      copyNetAnnual: '\nNet annual: ',
+      copyNetPaga: '\nNet per payment (',
+    },
+    hipoteca: {
+      hint: 'Enter the loan amount to see your monthly payment.',
+      errZero: 'The loan amount must be greater than zero.',
+      errTooLarge: 'The amount is too large for a real loan.',
+      errTermMin: 'The term must be at least one year.',
+      errTermMax: 'The term cannot exceed ',
+      errTermMaxSuffix: ' years.',
+      errRateNegative: 'The interest rate cannot be negative.',
+      errRateReal: 'Enter a real interest rate (annual percentage, e.g. 3).',
+      mainLabel: 'Monthly payment',
+      rowCapital: 'Loan principal',
+      rowTerm: 'Term',
+      termYearsOpen: ' years (',
+      termInstallmentsClose: ' payments)',
+      rowInterestTotal: 'Total interest',
+      rowTotalToRepay: 'Total to repay',
+      rowInterestPctCapital: 'Interest as % of principal',
+      barCapital: 'Principal',
+      barInterest: 'Interest',
+      note: 'Does not include insurance, fees or associated costs, which are included in the TAE (APR).',
+    },
+    prestamo: {
+      hint: 'Enter the amount to calculate the loan payment.',
+      errZero: 'The loan amount must be greater than zero.',
+      errTooLarge: 'The amount is too large for a real loan.',
+      errTermMin: 'The term must be at least one month.',
+      errTermMax: 'The term cannot exceed ',
+      errTermMaxSuffix: ' months.',
+      errRateNegative: 'The TIN cannot be negative.',
+      errRateReal: 'Enter a real TIN (annual percentage, e.g. 8).',
+      mainLabel: 'Monthly payment',
+      rowCapital: 'Principal',
+      rowInterestTotal: 'Total interest',
+      rowTotalToRepay: 'Total to repay',
+      rowTAE: 'Equivalent TAE (excluding fees)',
+      barCapital: 'Principal',
+      barInterest: 'Interest',
+      note: 'The TAE shown only reflects the compounding of the TIN. The real TAE of an offer also includes fees and costs.',
+    },
+    ahorro: {
+      hint: 'Enter how much you want to reach to see how much to save each month.',
+      errZero: 'The goal must be greater than zero.',
+      errTooLarge: 'The goal is too large.',
+      errTermMin: 'The term must be at least one year.',
+      errTermMax: 'The term cannot exceed ',
+      errTermMaxSuffix: ' years.',
+      errRateNegative: 'The return cannot be negative.',
+      errRateReal: 'Enter a real annual return (percentage, e.g. 5).',
+      mainLabel: 'Required monthly savings',
+      rowGoal: 'Goal',
+      rowCurrent: 'You currently have',
+      rowFutureValue: 'Value in ',
+      yearsOpen: ' years',
+      noteZero: 'At the return rate shown, your current savings already exceed the goal over that period, with no need to contribute anything more.',
+      copyGoal: 'Goal: ',
+      copyNoContribution: 'No contributions needed: your current savings reach ',
+      rowTerm: 'Term',
+      termYearsOpen: ' years (',
+      termMonthsClose: ' months)',
+      rowContributed: 'Contributed out of pocket',
+      rowInterestGenerated: 'Generated by interest',
+      rowTotalFinal: 'Total at the end',
+      barContributed: 'Contributed',
+      barInterest: 'Interest',
+      note: 'Assumes constant contributions at the start of each month and a stable return, which can vary in a real investment.',
+      copyToReach: 'To reach ',
+      copyInYears: ' in ',
+      copyYearsSuffix: ' years you need to save ',
+      copyPerMonth: ' a month.',
+    },
+    porcentaje: {
+      hint: 'Fill in both values to see the result.',
+      errTooLarge: 'Enter real values: one of the two numbers is too large.',
+      errZeroTotal: 'The total value cannot be zero: a percentage cannot be calculated on zero.',
+      errZeroInitial: 'The percentage change cannot be calculated starting from zero.',
+      quePctIs: ' is',
+      rowPartial: 'Partial value',
+      rowTotal: 'Total value',
+      rowPercentage: 'Percentage',
+      copyQuePct: ' is ',
+      copyQuePctOf: ' of ',
+      variacionUp: 'Increase',
+      variacionDown: 'Decrease',
+      rowInitial: 'Initial value',
+      rowFinal: 'Final value',
+      rowAbsDiff: 'Absolute difference',
+      rowChange: 'Change',
+      copyFrom: 'From ',
+      copyTo: ' to ',
+      of: ' of ',
+      rowAmount: 'Amount',
+      rowResult: 'Result',
+      rowAmountMinus: 'Amount minus that %',
+      rowAmountPlus: 'Amount plus that %',
+      copyThe: '',
+      copyIs: ' is ',
+    },
+    dias: {
+      hint: 'Select both dates to calculate the difference.',
+      mainWorking: 'Working days',
+      mainTotal: 'Total days',
+      daySingular: ' day',
+      dayPlural: ' days',
+      rowCalendar: 'Calendar days',
+      rowWorking: 'Working days (Mon-Fri)',
+      rowWeekend: 'Weekend days',
+      rowFullWeeks: 'Full weeks',
+      rowMonths: 'Approximate months',
+      note: 'National, regional and local public holidays are not excluded.',
+      copyBetween: 'Between ',
+      copyAnd: ' and ',
+      copyThereAre: ' there are ',
+      copyCalendarDays: ' calendar days (',
+      copyWorkingSuffix: ' working).',
+    },
+    imc: {
+      hint: 'Enter your weight and height to calculate your BMI.',
+      errWeightZero: 'Weight must be greater than zero.',
+      errWeightReal: 'Enter your weight in kilograms (e.g. 70).',
+      errHeightZero: 'Height must be greater than zero.',
+      errHeightReal: 'Enter your height in centimeters (e.g. 170).',
+      catUnder: 'Underweight', noteUnder: 'Below the WHO reference range.',
+      catNormal: 'Normal weight', noteNormal: 'Within the WHO reference range.',
+      catOver: 'Overweight', noteOver: 'Above the WHO reference range.',
+      catObese1: 'Obesity class I', noteObese1: 'Worth assessing with a healthcare professional.',
+      catObese2: 'Obesity class II', noteObese2: 'Medical assessment recommended.',
+      catObese3: 'Obesity class III', noteObese3: 'Priority medical assessment recommended.',
+      mainLabel: 'Body Mass Index',
+      rowCategory: 'Category (WHO)',
+      rowRange: 'Normal weight range for your height',
+      rowDiff: 'Difference from the range',
+      diffWithinRange: 'Within the range',
+      noteSuffix: ' BMI is a general indicator: it does not distinguish between muscle and fat, and does not replace a medical assessment.',
+      copyPrefix: 'BMI: ',
+    },
+    propina: {
+      hint: 'Enter the total bill to split it.',
+      errNegative: 'The bill cannot be negative.',
+      errTooLarge: 'The bill amount is not real.',
+      errPeopleMin: 'There must be at least one person.',
+      errPeopleReal: 'Enter a real number of people.',
+      mainLabel: 'Each person pays',
+      rowBill: 'Bill',
+      rowTip: 'Tip',
+      rowTotalWithTip: 'Total with tip',
+      rowTipPerPerson: 'Tip per person',
+      rowTotalPerPerson: 'Total per person',
+      copyBill: 'Bill ',
+      copyPlusTip: ' + tip ',
+      copyEquals: ' = ',
+      copyEachPerson: '. Each person: ',
+    },
+    combustible: {
+      hint: 'Enter the trip distance to calculate the cost.',
+      errNegative: 'The distance cannot be negative.',
+      errTooLarge: 'That distance does not correspond to a real trip.',
+      errConsumptionZero: 'Consumption must be greater than zero.',
+      errPriceNegative: 'The price cannot be negative.',
+      errPeopleReal: 'Enter a real number of people.',
+      rowLiters: 'Liters needed',
+      rowCostPerKm: 'Cost per kilometer',
+      rowOneWay: 'One-way cost',
+      rowRoundTrip: 'Round trip',
+      rowPerPerson: 'Per person (round trip)',
+      mainLabel: 'Trip cost (one-way)',
+      note: 'Real-world consumption is usually 10-15% higher than the official figure, especially in the city or with a loaded car.',
+      copyTrip: 'Trip of ',
+      copyKm: ' km: ',
+      copyLiters: ' liters, ',
+      copyOneWaySuffix: ' (one-way).',
+    },
+  };
+
+  var T = T_ES;
+
+  /* ================================================================
      ESPECIFICACIONES
      Cada entrada: { fields, submitLabel, compute }
      `compute(v)` recibe los valores ya parseados y devuelve:
@@ -190,9 +667,9 @@
       ],
       compute: function (v) {
         var precio = num(v.precio);
-        if (precio === null) return { empty: true, hint: 'Introduce un precio para ver el desglose del IVA.' };
-        if (precio < 0) return { error: 'El precio no puede ser negativo.' };
-        if (precio > MAX_AMOUNT) return { error: 'El precio introducido no es un importe real.' };
+        if (precio === null) return { empty: true, hint: T.iva.hint };
+        if (precio < 0) return { error: T.iva.errNegative };
+        if (precio > MAX_AMOUNT) return { error: T.iva.errTooLarge };
 
         var rate = numOr(v.tipo, 21) / 100;
         var base, iva, total;
@@ -201,14 +678,15 @@
         } else {
           base = precio; iva = precio * rate; total = base + iva;
         }
+        var vatRow = T.iva.rowVat + ' (' + pct(numOr(v.tipo, 21), 0) + ')';
         return {
-          main: { label: v.modo === 'quitar' ? 'Precio sin IVA' : 'Precio con IVA', value: eur(v.modo === 'quitar' ? base : total) },
+          main: { label: v.modo === 'quitar' ? T.iva.mainQuitar : T.iva.mainAnadir, value: eur(v.modo === 'quitar' ? base : total) },
           rows: [
-            { k: 'Base imponible (sin IVA)', v: eur(base) },
-            { k: 'IVA (' + fmt(numOr(v.tipo, 21), 0) + ' %)', v: eur(iva) },
-            { k: 'Total con IVA', v: eur(total), strong: true },
+            { k: T.iva.rowBase, v: eur(base) },
+            { k: vatRow, v: eur(iva) },
+            { k: T.iva.rowTotal, v: eur(total), strong: true },
           ],
-          copy: 'Base sin IVA: ' + eur(base) + '\nIVA (' + fmt(numOr(v.tipo, 21), 0) + ' %): ' + eur(iva) + '\nTotal con IVA: ' + eur(total),
+          copy: T.iva.copyBase + eur(base) + '\n' + vatRow + ': ' + eur(iva) + '\n' + T.iva.copyTotal + eur(total),
         };
       },
     },
@@ -224,15 +702,15 @@
       ],
       compute: function (v) {
         var salario = num(v.salario);
-        if (salario === null) return { empty: true, hint: 'Introduce tu salario bruto mensual para estimar el finiquito.' };
-        if (salario < 0) return { error: 'El salario no puede ser negativo.' };
-        if (salario > MAX_AMOUNT) return { error: 'El salario introducido no es un importe real.' };
+        if (salario === null) return { empty: true, hint: T.finiquito.hint };
+        if (salario < 0) return { error: T.finiquito.errNegative };
+        if (salario > MAX_AMOUNT) return { error: T.finiquito.errTooLarge };
 
         var dias = numOr(v.dias, 0), vac = numOr(v.vacaciones, 0), pre = numOr(v.preaviso, 0);
-        if (dias < 0 || vac < 0 || pre < 0) return { error: 'Los días no pueden ser negativos.' };
-        if (dias > 31) return { error: 'Un mes no puede tener más de 31 días trabajados.' };
-        if (vac > 60) return { error: 'Los días de vacaciones pendientes no pueden superar los 60.' };
-        if (pre > 90) return { error: 'Los días de preaviso no pueden superar los 90.' };
+        if (dias < 0 || vac < 0 || pre < 0) return { error: T.finiquito.errDaysNegative };
+        if (dias > 31) return { error: T.finiquito.errDaysMax };
+        if (vac > 60) return { error: T.finiquito.errVacationMax };
+        if (pre > 90) return { error: T.finiquito.errNoticeMax };
 
         var diario = salario / 30;
         var pSalario = diario * dias;
@@ -241,18 +719,18 @@
         var total = pSalario + pVacaciones + pPreaviso;
 
         var rows = [
-          { k: 'Salario diario', v: eur(diario) },
-          { k: 'Días trabajados (' + fmt(dias, 0) + ')', v: eur(pSalario) },
-          { k: 'Vacaciones no disfrutadas (' + fmt(vac, 1) + ')', v: eur(pVacaciones) },
+          { k: T.finiquito.rowDaily, v: eur(diario) },
+          { k: T.finiquito.rowWorked + ' (' + fmt(dias, 0) + ')', v: eur(pSalario) },
+          { k: T.finiquito.rowVacation + ' (' + fmt(vac, 1) + ')', v: eur(pVacaciones) },
         ];
-        if (pre > 0) rows.push({ k: 'Preaviso no trabajado (' + fmt(pre, 0) + ')', v: eur(pPreaviso) });
-        rows.push({ k: 'Total bruto', v: eur(total), strong: true });
+        if (pre > 0) rows.push({ k: T.finiquito.rowNotice + ' (' + fmt(pre, 0) + ')', v: eur(pPreaviso) });
+        rows.push({ k: T.finiquito.rowTotal, v: eur(total), strong: true });
 
         return {
-          main: { label: 'Finiquito bruto', value: eur(total) },
+          main: { label: T.finiquito.mainLabel, value: eur(total) },
           rows: rows,
-          note: 'Importe bruto: todavía se le aplicarán IRPF y Seguridad Social. El finiquito no incluye la indemnización por despido, que es un concepto aparte.',
-          copy: 'Finiquito bruto estimado: ' + eur(total) + '\n- Días trabajados: ' + eur(pSalario) + '\n- Vacaciones: ' + eur(pVacaciones),
+          note: T.finiquito.note,
+          copy: T.finiquito.copyPrefix + eur(total) + T.finiquito.copyWorked + eur(pSalario) + T.finiquito.copyVacation + eur(pVacaciones),
         };
       },
     },
@@ -270,9 +748,9 @@
       ],
       compute: function (v) {
         var bruto = num(v.bruto);
-        if (bruto === null) return { empty: true, hint: 'Introduce tu salario bruto anual para calcular el neto.' };
-        if (bruto < 0) return { error: 'El salario no puede ser negativo.' };
-        if (bruto > MAX_AMOUNT) return { error: 'El salario introducido no es un importe real.' };
+        if (bruto === null) return { empty: true, hint: T.nomina.hint };
+        if (bruto < 0) return { error: T.nomina.errNegative };
+        if (bruto > MAX_AMOUNT) return { error: T.nomina.errTooLarge };
 
         var pagas = intOr(v.pagas, 14);
         var hijos = Math.max(0, intOr(v.hijos, 0));
@@ -290,17 +768,17 @@
         var netoPaga = pagas > 0 ? netoAnual / pagas : NaN;
 
         return {
-          main: { label: 'Neto por paga (' + pagas + ' pagas)', value: eur(netoPaga) },
+          main: { label: T.nomina.mainLabel + ' (' + pagas + T.nomina.pagasSuffix + ')', value: eur(netoPaga) },
           rows: [
-            { k: 'Bruto anual', v: eur(bruto) },
-            { k: 'Seguridad Social (6,35 %)', v: '− ' + eur(ss) },
-            { k: 'Retención IRPF (' + pct(tipo, 1) + ')', v: '− ' + eur(cuota) },
-            { k: 'Neto anual', v: eur(netoAnual), strong: true },
-            { k: 'Neto por paga', v: eur(netoPaga) },
-            { k: 'Neto mensual equivalente', v: eur(netoAnual / 12) },
+            { k: T.nomina.rowGross, v: eur(bruto) },
+            { k: T.nomina.rowSS + ' (' + pct(SS_RATE * 100, 2) + ')', v: '− ' + eur(ss) },
+            { k: T.nomina.rowIRPF + ' (' + pct(tipo, 1) + ')', v: '− ' + eur(cuota) },
+            { k: T.nomina.rowNetAnnual, v: eur(netoAnual), strong: true },
+            { k: T.nomina.rowNetPaga, v: eur(netoPaga) },
+            { k: T.nomina.rowNetMonthly, v: eur(netoAnual / 12) },
           ],
-          note: 'Cálculo orientativo con la escala general del IRPF y el mínimo personal y familiar. Tu retención real depende de tu comunidad autónoma y de tu situación concreta (modelo 145).',
-          copy: 'Bruto anual: ' + eur(bruto) + '\nNeto anual: ' + eur(netoAnual) + '\nNeto por paga (' + pagas + '): ' + eur(netoPaga),
+          note: T.nomina.note,
+          copy: T.nomina.copyGross + eur(bruto) + T.nomina.copyNetAnnual + eur(netoAnual) + T.nomina.copyNetPaga + pagas + '): ' + eur(netoPaga),
         };
       },
     },
@@ -315,16 +793,16 @@
       ],
       compute: function (v) {
         var capital = num(v.capital);
-        if (capital === null) return { empty: true, hint: 'Introduce el importe del préstamo para ver tu cuota mensual.' };
-        if (capital <= 0) return { error: 'El importe del préstamo debe ser mayor que cero.' };
+        if (capital === null) return { empty: true, hint: T.hipoteca.hint };
+        if (capital <= 0) return { error: T.hipoteca.errZero };
 
-        if (capital > MAX_AMOUNT) return { error: 'El importe es demasiado grande para un préstamo real.' };
+        if (capital > MAX_AMOUNT) return { error: T.hipoteca.errTooLarge };
         var anios = numOr(v.anios, 25);
-        if (!(anios > 0)) return { error: 'El plazo debe ser de al menos un año.' };
-        if (anios > MAX_YEARS) return { error: 'El plazo no puede superar los ' + MAX_YEARS + ' años.' };
+        if (!(anios > 0)) return { error: T.hipoteca.errTermMin };
+        if (anios > MAX_YEARS) return { error: T.hipoteca.errTermMax + MAX_YEARS + T.hipoteca.errTermMaxSuffix };
         var interes = numOr(v.interes, 3);
-        if (interes < 0) return { error: 'El tipo de interés no puede ser negativo.' };
-        if (interes > 100) return { error: 'Introduce un tipo de interés real (en porcentaje anual, por ejemplo 3).' };
+        if (interes < 0) return { error: T.hipoteca.errRateNegative };
+        if (interes > 100) return { error: T.hipoteca.errRateReal };
 
         var n = Math.round(anios * 12);
         var r = (interes / 100) / 12;
@@ -333,20 +811,20 @@
         var intereses = totalPagado - capital;
 
         return {
-          main: { label: 'Cuota mensual', value: eur(cuota) },
+          main: { label: T.hipoteca.mainLabel, value: eur(cuota) },
           rows: [
-            { k: 'Capital prestado', v: eur(capital) },
-            { k: 'Plazo', v: fmt(anios, 0) + ' años (' + n + ' cuotas)' },
-            { k: 'Intereses totales', v: eur(intereses) },
-            { k: 'Total a devolver', v: eur(totalPagado), strong: true },
-            { k: 'Intereses sobre el capital', v: pct(intereses / capital * 100, 1) },
+            { k: T.hipoteca.rowCapital, v: eur(capital) },
+            { k: T.hipoteca.rowTerm, v: fmt(anios, 0) + T.hipoteca.termYearsOpen + n + T.hipoteca.termInstallmentsClose },
+            { k: T.hipoteca.rowInterestTotal, v: eur(intereses) },
+            { k: T.hipoteca.rowTotalToRepay, v: eur(totalPagado), strong: true },
+            { k: T.hipoteca.rowInterestPctCapital, v: pct(intereses / capital * 100, 1) },
           ],
           bar: splitBar([
-            { label: 'Capital', value: capital, cls: 'principal' },
-            { label: 'Intereses', value: intereses, cls: 'interest' },
+            { label: T.hipoteca.barCapital, value: capital, cls: 'principal' },
+            { label: T.hipoteca.barInterest, value: intereses, cls: 'interest' },
           ]),
-          note: 'No incluye seguros, comisiones ni gastos asociados, que sí entran en el TAE.',
-          copy: 'Cuota mensual: ' + eur(cuota) + '\nIntereses totales: ' + eur(intereses) + '\nTotal a devolver: ' + eur(totalPagado),
+          note: T.hipoteca.note,
+          copy: T.hipoteca.mainLabel + ': ' + eur(cuota) + '\n' + T.hipoteca.rowInterestTotal + ': ' + eur(intereses) + '\n' + T.hipoteca.rowTotalToRepay + ': ' + eur(totalPagado),
         };
       },
     },
@@ -361,16 +839,16 @@
       ],
       compute: function (v) {
         var capital = num(v.capital);
-        if (capital === null) return { empty: true, hint: 'Introduce el importe para calcular la cuota del préstamo.' };
-        if (capital <= 0) return { error: 'El importe del préstamo debe ser mayor que cero.' };
+        if (capital === null) return { empty: true, hint: T.prestamo.hint };
+        if (capital <= 0) return { error: T.prestamo.errZero };
 
-        if (capital > MAX_AMOUNT) return { error: 'El importe es demasiado grande para un préstamo real.' };
+        if (capital > MAX_AMOUNT) return { error: T.prestamo.errTooLarge };
         var meses = numOr(v.meses, 48);
-        if (!(meses >= 1)) return { error: 'El plazo debe ser de al menos un mes.' };
-        if (meses > MAX_MONTHS) return { error: 'El plazo no puede superar los ' + MAX_MONTHS + ' meses.' };
+        if (!(meses >= 1)) return { error: T.prestamo.errTermMin };
+        if (meses > MAX_MONTHS) return { error: T.prestamo.errTermMax + MAX_MONTHS + T.prestamo.errTermMaxSuffix };
         var tin = numOr(v.tin, 8);
-        if (tin < 0) return { error: 'El TIN no puede ser negativo.' };
-        if (tin > 100) return { error: 'Introduce un TIN real (en porcentaje anual, por ejemplo 8).' };
+        if (tin < 0) return { error: T.prestamo.errRateNegative };
+        if (tin > 100) return { error: T.prestamo.errRateReal };
 
         var n = Math.round(meses);
         var r = (tin / 100) / 12;
@@ -380,19 +858,19 @@
         var tae = (Math.pow(1 + r, 12) - 1) * 100;
 
         return {
-          main: { label: 'Cuota mensual', value: eur(cuota) },
+          main: { label: T.prestamo.mainLabel, value: eur(cuota) },
           rows: [
-            { k: 'Capital', v: eur(capital) },
-            { k: 'Intereses totales', v: eur(intereses) },
-            { k: 'Total a devolver', v: eur(total), strong: true },
-            { k: 'TAE equivalente (sin comisiones)', v: pct(tae) },
+            { k: T.prestamo.rowCapital, v: eur(capital) },
+            { k: T.prestamo.rowInterestTotal, v: eur(intereses) },
+            { k: T.prestamo.rowTotalToRepay, v: eur(total), strong: true },
+            { k: T.prestamo.rowTAE, v: pct(tae) },
           ],
           bar: splitBar([
-            { label: 'Capital', value: capital, cls: 'principal' },
-            { label: 'Intereses', value: intereses, cls: 'interest' },
+            { label: T.prestamo.barCapital, value: capital, cls: 'principal' },
+            { label: T.prestamo.barInterest, value: intereses, cls: 'interest' },
           ]),
-          note: 'El TAE mostrado solo refleja la capitalización del TIN. El TAE real de una oferta incluye además comisiones y gastos.',
-          copy: 'Cuota mensual: ' + eur(cuota) + '\nIntereses totales: ' + eur(intereses) + '\nTotal a devolver: ' + eur(total),
+          note: T.prestamo.note,
+          copy: T.prestamo.mainLabel + ': ' + eur(cuota) + '\n' + T.prestamo.rowInterestTotal + ': ' + eur(intereses) + '\n' + T.prestamo.rowTotalToRepay + ': ' + eur(total),
         };
       },
     },
@@ -408,17 +886,17 @@
       ],
       compute: function (v) {
         var objetivo = num(v.objetivo);
-        if (objetivo === null) return { empty: true, hint: 'Introduce cuánto quieres reunir para saber cuánto ahorrar al mes.' };
-        if (objetivo <= 0) return { error: 'El objetivo debe ser mayor que cero.' };
+        if (objetivo === null) return { empty: true, hint: T.ahorro.hint };
+        if (objetivo <= 0) return { error: T.ahorro.errZero };
 
         var inicial = Math.max(0, numOr(v.inicial, 0));
-        if (objetivo > MAX_AMOUNT) return { error: 'El objetivo es demasiado grande.' };
+        if (objetivo > MAX_AMOUNT) return { error: T.ahorro.errTooLarge };
         var anios = numOr(v.anios, 5);
-        if (!(anios > 0)) return { error: 'El plazo debe ser de al menos un año.' };
-        if (anios > MAX_YEARS) return { error: 'El plazo no puede superar los ' + MAX_YEARS + ' años.' };
+        if (!(anios > 0)) return { error: T.ahorro.errTermMin };
+        if (anios > MAX_YEARS) return { error: T.ahorro.errTermMax + MAX_YEARS + T.ahorro.errTermMaxSuffix };
         var rent = numOr(v.rentabilidad, 3);
-        if (rent < 0) return { error: 'La rentabilidad no puede ser negativa.' };
-        if (rent > 100) return { error: 'Introduce una rentabilidad anual real (en porcentaje, por ejemplo 5).' };
+        if (rent < 0) return { error: T.ahorro.errRateNegative };
+        if (rent > 100) return { error: T.ahorro.errRateReal };
 
         var n = Math.round(anios * 12);
         var r = (rent / 100) / 12;
@@ -429,14 +907,14 @@
         // aportación necesaria es cero (antes salía un importe negativo).
         if (falta <= 0) {
           return {
-            main: { label: 'Ahorro mensual necesario', value: '0,00 €' },
+            main: { label: T.ahorro.mainLabel, value: eur(0) },
             rows: [
-              { k: 'Objetivo', v: eur(objetivo) },
-              { k: 'Tienes ahora', v: eur(inicial) },
-              { k: 'Valor en ' + fmt(anios, 0) + ' años', v: eur(futuroInicial), strong: true },
+              { k: T.ahorro.rowGoal, v: eur(objetivo) },
+              { k: T.ahorro.rowCurrent, v: eur(inicial) },
+              { k: T.ahorro.rowFutureValue + fmt(anios, 0) + T.ahorro.yearsOpen, v: eur(futuroInicial), strong: true },
             ],
-            note: 'Con la rentabilidad indicada, tu ahorro actual ya supera el objetivo en ese plazo sin necesidad de aportar nada más.',
-            copy: 'Objetivo: ' + eur(objetivo) + '\nNo necesitas aportaciones: tu ahorro actual llega a ' + eur(futuroInicial) + '.',
+            note: T.ahorro.noteZero,
+            copy: T.ahorro.copyGoal + eur(objetivo) + '\n' + T.ahorro.copyNoContribution + eur(futuroInicial) + '.',
           };
         }
 
@@ -445,20 +923,20 @@
         var intereses = objetivo - aportado;
 
         return {
-          main: { label: 'Ahorro mensual necesario', value: eur(mensual) },
+          main: { label: T.ahorro.mainLabel, value: eur(mensual) },
           rows: [
-            { k: 'Objetivo', v: eur(objetivo) },
-            { k: 'Plazo', v: fmt(anios, 0) + ' años (' + n + ' meses)' },
-            { k: 'Aportado de tu bolsillo', v: eur(aportado) },
-            { k: 'Generado por intereses', v: eur(Math.max(0, intereses)) },
-            { k: 'Total al final', v: eur(objetivo), strong: true },
+            { k: T.ahorro.rowGoal, v: eur(objetivo) },
+            { k: T.ahorro.rowTerm, v: fmt(anios, 0) + T.ahorro.termYearsOpen + n + T.ahorro.termMonthsClose },
+            { k: T.ahorro.rowContributed, v: eur(aportado) },
+            { k: T.ahorro.rowInterestGenerated, v: eur(Math.max(0, intereses)) },
+            { k: T.ahorro.rowTotalFinal, v: eur(objetivo), strong: true },
           ],
           bar: splitBar([
-            { label: 'Aportado', value: aportado, cls: 'principal' },
-            { label: 'Intereses', value: intereses, cls: 'interest' },
+            { label: T.ahorro.barContributed, value: aportado, cls: 'principal' },
+            { label: T.ahorro.barInterest, value: intereses, cls: 'interest' },
           ]),
-          note: 'Supone aportaciones constantes a principio de cada mes y una rentabilidad estable, que en una inversión real puede variar.',
-          copy: 'Para reunir ' + eur(objetivo) + ' en ' + fmt(anios, 0) + ' años necesitas ahorrar ' + eur(mensual) + ' al mes.',
+          note: T.ahorro.note,
+          copy: T.ahorro.copyToReach + eur(objetivo) + T.ahorro.copyInYears + fmt(anios, 0) + T.ahorro.copyYearsSuffix + eur(mensual) + T.ahorro.copyPerMonth,
         };
       },
     },
@@ -480,6 +958,11 @@
       ],
       // Las etiquetas de A y B cambian según el modo elegido.
       labelsFor: function (modo) {
+        if (CURRENT_LOCALE === 'en') {
+          if (modo === 'que_pct') return { a: 'Partial value', b: 'Total value' };
+          if (modo === 'variacion') return { a: 'Initial value', b: 'Final value' };
+          return { a: 'Percentage (%)', b: 'Amount' };
+        }
         if (modo === 'que_pct') return { a: 'Valor parcial', b: 'Valor total' };
         if (modo === 'variacion') return { a: 'Valor inicial', b: 'Valor final' };
         return { a: 'Porcentaje (%)', b: 'Cantidad' };
@@ -487,46 +970,46 @@
       compute: function (v) {
         var modo = v.modo || 'pct_de';
         var a = num(v.a), b = num(v.b);
-        if (a === null || b === null) return { empty: true, hint: 'Rellena los dos valores para ver el resultado.' };
-        if (Math.abs(a) > MAX_AMOUNT || Math.abs(b) > MAX_AMOUNT) return { error: 'Introduce valores reales: alguno de los dos números es demasiado grande.' };
+        if (a === null || b === null) return { empty: true, hint: T.porcentaje.hint };
+        if (Math.abs(a) > MAX_AMOUNT || Math.abs(b) > MAX_AMOUNT) return { error: T.porcentaje.errTooLarge };
 
         if (modo === 'que_pct') {
-          if (b === 0) return { error: 'El valor total no puede ser cero: no se puede calcular un porcentaje sobre cero.' };
+          if (b === 0) return { error: T.porcentaje.errZeroTotal };
           var p = (a / b) * 100;
           return {
-            main: { label: fmt(a, 2) + ' de ' + fmt(b, 2) + ' es', value: pct(p) },
-            rows: [{ k: 'Valor parcial', v: fmt(a, 2) }, { k: 'Valor total', v: fmt(b, 2) }, { k: 'Porcentaje', v: pct(p), strong: true }],
-            copy: fmt(a, 2) + ' es el ' + pct(p) + ' de ' + fmt(b, 2),
+            main: { label: fmt(a, 2) + T.porcentaje.of + fmt(b, 2) + T.porcentaje.quePctIs, value: pct(p) },
+            rows: [{ k: T.porcentaje.rowPartial, v: fmt(a, 2) }, { k: T.porcentaje.rowTotal, v: fmt(b, 2) }, { k: T.porcentaje.rowPercentage, v: pct(p), strong: true }],
+            copy: fmt(a, 2) + T.porcentaje.copyQuePct + pct(p) + T.porcentaje.copyQuePctOf + fmt(b, 2),
           };
         }
 
         if (modo === 'variacion') {
-          if (a === 0) return { error: 'No se puede calcular la variación porcentual partiendo de cero.' };
+          if (a === 0) return { error: T.porcentaje.errZeroInitial };
           var d = ((b - a) / a) * 100;
           var sign = d >= 0 ? '+' : '';
           return {
-            main: { label: d >= 0 ? 'Aumento' : 'Descenso', value: sign + pct(d) },
+            main: { label: d >= 0 ? T.porcentaje.variacionUp : T.porcentaje.variacionDown, value: sign + pct(d) },
             rows: [
-              { k: 'Valor inicial', v: fmt(a, 2) },
-              { k: 'Valor final', v: fmt(b, 2) },
-              { k: 'Diferencia absoluta', v: fmt(b - a, 2) },
-              { k: 'Variación', v: sign + pct(d), strong: true },
+              { k: T.porcentaje.rowInitial, v: fmt(a, 2) },
+              { k: T.porcentaje.rowFinal, v: fmt(b, 2) },
+              { k: T.porcentaje.rowAbsDiff, v: fmt(b - a, 2) },
+              { k: T.porcentaje.rowChange, v: sign + pct(d), strong: true },
             ],
-            copy: 'De ' + fmt(a, 2) + ' a ' + fmt(b, 2) + ': ' + sign + pct(d),
+            copy: T.porcentaje.copyFrom + fmt(a, 2) + T.porcentaje.copyTo + fmt(b, 2) + ': ' + sign + pct(d),
           };
         }
 
         var res = (a / 100) * b;
         return {
-          main: { label: fmt(a, 2) + ' % de ' + fmt(b, 2), value: fmt(res, 2) },
+          main: { label: pct(a, 2) + T.porcentaje.of + fmt(b, 2), value: fmt(res, 2) },
           rows: [
-            { k: 'Porcentaje', v: pct(a) },
-            { k: 'Cantidad', v: fmt(b, 2) },
-            { k: 'Resultado', v: fmt(res, 2), strong: true },
-            { k: 'Cantidad menos ese %', v: fmt(b - res, 2) },
-            { k: 'Cantidad más ese %', v: fmt(b + res, 2) },
+            { k: T.porcentaje.rowPercentage, v: pct(a) },
+            { k: T.porcentaje.rowAmount, v: fmt(b, 2) },
+            { k: T.porcentaje.rowResult, v: fmt(res, 2), strong: true },
+            { k: T.porcentaje.rowAmountMinus, v: fmt(b - res, 2) },
+            { k: T.porcentaje.rowAmountPlus, v: fmt(b + res, 2) },
           ],
-          copy: 'El ' + pct(a) + ' de ' + fmt(b, 2) + ' es ' + fmt(res, 2),
+          copy: T.porcentaje.copyThe + pct(a) + T.porcentaje.of + fmt(b, 2) + T.porcentaje.copyIs + fmt(res, 2),
         };
       },
     },
@@ -541,7 +1024,7 @@
       ],
       compute: function (v) {
         var d1 = parseISODate(v.inicio), d2 = parseISODate(v.fin);
-        if (!d1 || !d2) return { empty: true, hint: 'Selecciona las dos fechas para calcular la diferencia.' };
+        if (!d1 || !d2) return { empty: true, hint: T.dias.hint };
 
         var start = d1 <= d2 ? d1 : d2;
         var end = d1 <= d2 ? d2 : d1;
@@ -563,16 +1046,16 @@
         var valor = soloLab ? laborables : dias;
 
         return {
-          main: { label: soloLab ? 'Días laborables' : 'Días totales', value: fmt(valor, 0) + (valor === 1 ? ' día' : ' días') },
+          main: { label: soloLab ? T.dias.mainWorking : T.dias.mainTotal, value: fmt(valor, 0) + (valor === 1 ? T.dias.daySingular : T.dias.dayPlural) },
           rows: [
-            { k: 'Días naturales', v: fmt(dias, 0), strong: !soloLab },
-            { k: 'Días laborables (L-V)', v: fmt(laborables, 0), strong: soloLab },
-            { k: 'Fines de semana', v: fmt(dias - laborables, 0) },
-            { k: 'Semanas completas', v: fmt(semanasEnteras, 0) },
-            { k: 'Meses aproximados', v: fmt(dias / 30.44, 1) },
+            { k: T.dias.rowCalendar, v: fmt(dias, 0), strong: !soloLab },
+            { k: T.dias.rowWorking, v: fmt(laborables, 0), strong: soloLab },
+            { k: T.dias.rowWeekend, v: fmt(dias - laborables, 0) },
+            { k: T.dias.rowFullWeeks, v: fmt(semanasEnteras, 0) },
+            { k: T.dias.rowMonths, v: fmt(dias / 30.44, 1) },
           ],
-          note: 'No se descuentan los festivos nacionales, autonómicos ni locales.',
-          copy: 'Entre ' + v.inicio + ' y ' + v.fin + ' hay ' + fmt(dias, 0) + ' días naturales (' + fmt(laborables, 0) + ' laborables).',
+          note: T.dias.note,
+          copy: T.dias.copyBetween + v.inicio + T.dias.copyAnd + v.fin + T.dias.copyThereAre + fmt(dias, 0) + T.dias.copyCalendarDays + fmt(laborables, 0) + T.dias.copyWorkingSuffix,
         };
       },
     },
@@ -586,34 +1069,34 @@
       ],
       compute: function (v) {
         var peso = num(v.peso), altura = num(v.altura);
-        if (peso === null || altura === null) return { empty: true, hint: 'Introduce tu peso y tu altura para calcular el IMC.' };
-        if (peso <= 0) return { error: 'El peso debe ser mayor que cero.' };
-        if (peso > 500) return { error: 'Introduce el peso en kilogramos (por ejemplo, 70).' };
-        if (altura <= 0) return { error: 'La altura debe ser mayor que cero.' };
-        if (altura < 50 || altura > 260) return { error: 'Introduce la altura en centímetros (por ejemplo, 170).' };
+        if (peso === null || altura === null) return { empty: true, hint: T.imc.hint };
+        if (peso <= 0) return { error: T.imc.errWeightZero };
+        if (peso > 500) return { error: T.imc.errWeightReal };
+        if (altura <= 0) return { error: T.imc.errHeightZero };
+        if (altura < 50 || altura > 260) return { error: T.imc.errHeightReal };
 
         var m = altura / 100;
         var imc = peso / (m * m);
 
         var cat, nota;
-        if (imc < 18.5) { cat = 'Bajo peso'; nota = 'Por debajo del rango de referencia de la OMS.'; }
-        else if (imc < 25) { cat = 'Peso normal'; nota = 'Dentro del rango de referencia de la OMS.'; }
-        else if (imc < 30) { cat = 'Sobrepeso'; nota = 'Por encima del rango de referencia de la OMS.'; }
-        else if (imc < 35) { cat = 'Obesidad grado I'; nota = 'Conviene valorarlo con un profesional sanitario.'; }
-        else if (imc < 40) { cat = 'Obesidad grado II'; nota = 'Se recomienda valoración médica.'; }
-        else { cat = 'Obesidad grado III'; nota = 'Se recomienda valoración médica prioritaria.'; }
+        if (imc < 18.5) { cat = T.imc.catUnder; nota = T.imc.noteUnder; }
+        else if (imc < 25) { cat = T.imc.catNormal; nota = T.imc.noteNormal; }
+        else if (imc < 30) { cat = T.imc.catOver; nota = T.imc.noteOver; }
+        else if (imc < 35) { cat = T.imc.catObese1; nota = T.imc.noteObese1; }
+        else if (imc < 40) { cat = T.imc.catObese2; nota = T.imc.noteObese2; }
+        else { cat = T.imc.catObese3; nota = T.imc.noteObese3; }
 
         var pesoMin = 18.5 * m * m, pesoMax = 24.9 * m * m;
 
         return {
-          main: { label: 'Índice de masa corporal', value: fmt(imc, 1) },
+          main: { label: T.imc.mainLabel, value: fmt(imc, 1) },
           rows: [
-            { k: 'Categoría (OMS)', v: cat, strong: true },
-            { k: 'Rango de peso normal para tu altura', v: fmt(pesoMin, 1) + ' – ' + fmt(pesoMax, 1) + ' kg' },
-            { k: 'Diferencia con el rango', v: imc < 18.5 ? '−' + fmt(pesoMin - peso, 1) + ' kg' : (imc >= 25 ? '+' + fmt(peso - pesoMax, 1) + ' kg' : 'Dentro del rango') },
+            { k: T.imc.rowCategory, v: cat, strong: true },
+            { k: T.imc.rowRange, v: fmt(pesoMin, 1) + ' – ' + fmt(pesoMax, 1) + ' kg' },
+            { k: T.imc.rowDiff, v: imc < 18.5 ? '−' + fmt(pesoMin - peso, 1) + ' kg' : (imc >= 25 ? '+' + fmt(peso - pesoMax, 1) + ' kg' : T.imc.diffWithinRange) },
           ],
-          note: nota + ' El IMC es un indicador orientativo: no distingue entre masa muscular y grasa, ni sustituye una valoración médica.',
-          copy: 'IMC: ' + fmt(imc, 1) + ' (' + cat + ')',
+          note: nota + T.imc.noteSuffix,
+          copy: T.imc.copyPrefix + fmt(imc, 1) + ' (' + cat + ')',
         };
       },
     },
@@ -631,28 +1114,28 @@
       ],
       compute: function (v) {
         var cuenta = num(v.cuenta);
-        if (cuenta === null) return { empty: true, hint: 'Introduce el total de la cuenta para repartirla.' };
-        if (cuenta < 0) return { error: 'La cuenta no puede ser negativa.' };
-        if (cuenta > MAX_AMOUNT) return { error: 'El importe de la cuenta no es real.' };
+        if (cuenta === null) return { empty: true, hint: T.propina.hint };
+        if (cuenta < 0) return { error: T.propina.errNegative };
+        if (cuenta > MAX_AMOUNT) return { error: T.propina.errTooLarge };
 
         var personas = intOr(v.personas, 2);
-        if (!(personas >= 1)) return { error: 'Tiene que haber al menos una persona.' };
-        if (personas > 1000) return { error: 'Introduce un número de personas real.' };
+        if (!(personas >= 1)) return { error: T.propina.errPeopleMin };
+        if (personas > 1000) return { error: T.propina.errPeopleReal };
 
         var p = numOr(v.porcentaje, 10);
         var propina = cuenta * (p / 100);
         var total = cuenta + propina;
 
         return {
-          main: { label: 'Paga cada persona', value: eur(total / personas) },
+          main: { label: T.propina.mainLabel, value: eur(total / personas) },
           rows: [
-            { k: 'Cuenta', v: eur(cuenta) },
-            { k: 'Propina (' + fmt(p, 0) + ' %)', v: eur(propina) },
-            { k: 'Total con propina', v: eur(total), strong: true },
-            { k: 'Propina por persona', v: eur(propina / personas) },
-            { k: 'Total por persona (' + personas + ')', v: eur(total / personas) },
+            { k: T.propina.rowBill, v: eur(cuenta) },
+            { k: T.propina.rowTip + ' (' + pct(p, 0) + ')', v: eur(propina) },
+            { k: T.propina.rowTotalWithTip, v: eur(total), strong: true },
+            { k: T.propina.rowTipPerPerson, v: eur(propina / personas) },
+            { k: T.propina.rowTotalPerPerson + ' (' + personas + ')', v: eur(total / personas) },
           ],
-          copy: 'Cuenta ' + eur(cuenta) + ' + propina ' + eur(propina) + ' = ' + eur(total) + '. Cada persona: ' + eur(total / personas) + '.',
+          copy: T.propina.copyBill + eur(cuenta) + T.propina.copyPlusTip + eur(propina) + T.propina.copyEquals + eur(total) + T.propina.copyEachPerson + eur(total / personas) + '.',
         };
       },
     },
@@ -668,37 +1151,189 @@
       ],
       compute: function (v) {
         var km = num(v.km);
-        if (km === null) return { empty: true, hint: 'Introduce los kilómetros del viaje para calcular el coste.' };
-        if (km < 0) return { error: 'La distancia no puede ser negativa.' };
-        if (km > 1e7) return { error: 'Esa distancia no corresponde a un viaje real.' };
+        if (km === null) return { empty: true, hint: T.combustible.hint };
+        if (km < 0) return { error: T.combustible.errNegative };
+        if (km > 1e7) return { error: T.combustible.errTooLarge };
 
         var consumo = numOr(v.consumo, 7);
-        if (!(consumo > 0)) return { error: 'El consumo debe ser mayor que cero.' };
+        if (!(consumo > 0)) return { error: T.combustible.errConsumptionZero };
         var precio = numOr(v.precio, 1.65);
-        if (precio < 0) return { error: 'El precio no puede ser negativo.' };
+        if (precio < 0) return { error: T.combustible.errPriceNegative };
         var personas = Math.max(1, intOr(v.personas, 1));
-        if (personas > 1000) return { error: 'Introduce un número de personas real.' };
+        if (personas > 1000) return { error: T.combustible.errPeopleReal };
 
         var litros = (km * consumo) / 100;
         var coste = litros * precio;
 
         var rows = [
-          { k: 'Litros necesarios', v: fmt(litros, 2) + ' l' },
-          { k: 'Coste por kilómetro', v: km > 0 ? fmt(coste / km, 3) + ' €/km' : '—' },
-          { k: 'Coste solo ida', v: eur(coste), strong: true },
-          { k: 'Ida y vuelta', v: eur(coste * 2) },
+          { k: T.combustible.rowLiters, v: fmt(litros, 2) + ' l' },
+          { k: T.combustible.rowCostPerKm, v: km > 0 ? fmt(coste / km, 3) + ' €/km' : '—' },
+          { k: T.combustible.rowOneWay, v: eur(coste), strong: true },
+          { k: T.combustible.rowRoundTrip, v: eur(coste * 2) },
         ];
-        if (personas > 1) rows.push({ k: 'Por persona (ida y vuelta)', v: eur(coste * 2 / personas) });
+        if (personas > 1) rows.push({ k: T.combustible.rowPerPerson, v: eur(coste * 2 / personas) });
 
         return {
-          main: { label: 'Coste del viaje (ida)', value: eur(coste) },
+          main: { label: T.combustible.mainLabel, value: eur(coste) },
           rows: rows,
-          note: 'El consumo real suele ser un 10–15 % superior al homologado, sobre todo en ciudad o con el coche cargado.',
-          copy: 'Viaje de ' + fmt(km, 0) + ' km: ' + fmt(litros, 2) + ' litros, ' + eur(coste) + ' (ida).',
+          note: T.combustible.note,
+          copy: T.combustible.copyTrip + fmt(km, 0) + T.combustible.copyKm + fmt(litros, 2) + T.combustible.copyLiters + eur(coste) + T.combustible.copyOneWaySuffix,
         };
       },
     },
   };
+
+  /* ================================================================
+     TEXTO DE CAMPOS EN INGLÉS — labels/placeholders/help/unit/options
+     de CALC_SPECS. Se aplican por encima de los valores españoles (que
+     son los que ya están escritos arriba, sin cambios) cuando se llama
+     a configure({locale:'en'}). No se toca ninguna `compute`.
+     ================================================================ */
+
+  var FIELD_EN = {
+    iva: {
+      submitLabel: 'Calculate VAT',
+      fields: {
+        precio: { label: 'Price' },
+        tipo: { label: 'VAT rate', options: { '4': '4%', '10': '10%', '21': '21%' } },
+        modo: { label: 'Operation', options: { anadir: 'Add VAT (price excluding VAT → including VAT)', quitar: 'Remove VAT (price including VAT → excluding VAT)' } },
+      },
+    },
+    finiquito: {
+      submitLabel: 'Calculate severance pay',
+      fields: {
+        salario: { label: 'Gross monthly salary' },
+        dias: { label: 'Days worked in the current month', help: 'Days worked in the month of leaving or dismissal.' },
+        vacaciones: { label: 'Unused holiday days' },
+        preaviso: { label: 'Unworked notice days', help: 'Only if notice was not worked and compensation applies.' },
+      },
+    },
+    nomina: {
+      submitLabel: 'Calculate net salary',
+      fields: {
+        bruto: { label: 'Gross annual salary', help: 'The full-year total, before tax.' },
+        pagas: { label: 'Number of payments', options: { '12': '12 payments', '14': '14 payments' } },
+        hijos: { label: 'Dependent children under 25' },
+      },
+    },
+    hipoteca: {
+      submitLabel: 'Calculate payment',
+      fields: {
+        capital: { label: 'Loan amount' },
+        anios: { label: 'Term', unit: 'years' },
+        interes: { label: 'Annual interest rate', help: 'For a variable-rate mortgage, use the current Euríbor plus your margin.' },
+      },
+    },
+    prestamo: {
+      submitLabel: 'Calculate payment',
+      fields: {
+        capital: { label: 'Loan amount' },
+        tin: { label: 'Annual interest rate (TIN)' },
+        meses: { label: 'Term', unit: 'months' },
+      },
+    },
+    ahorro: {
+      submitLabel: 'Calculate monthly savings',
+      fields: {
+        objetivo: { label: 'Savings goal' },
+        inicial: { label: 'Current savings' },
+        anios: { label: 'Term', unit: 'years' },
+        rentabilidad: { label: 'Expected annual return', help: 'Savings account: 2-3%. Global index fund, historically: 7-9%.' },
+      },
+    },
+    porcentaje: {
+      submitLabel: 'Calculate',
+      fields: {
+        modo: { label: 'Calculation type', options: { pct_de: 'X% of Y', que_pct: 'What % is it?', variacion: 'Change' } },
+        a: { label: 'Value A' },
+        b: { label: 'Value B' },
+      },
+    },
+    dias: {
+      submitLabel: 'Calculate days',
+      fields: {
+        inicio: { label: 'Start date' },
+        fin: { label: 'End date' },
+        soloLaborables: { label: 'Count working days only (Monday to Friday)' },
+      },
+    },
+    imc: {
+      submitLabel: 'Calculate BMI',
+      fields: {
+        peso: { label: 'Weight' },
+        altura: { label: 'Height' },
+      },
+    },
+    propina: {
+      submitLabel: 'Calculate split',
+      fields: {
+        cuenta: { label: 'Total bill' },
+        porcentaje: { label: 'Tip', options: { '0': '0%', '5': '5%', '10': '10%', '15': '15%' } },
+        personas: { label: 'People' },
+      },
+    },
+    combustible: {
+      submitLabel: 'Calculate cost',
+      fields: {
+        km: { label: 'Trip distance' },
+        consumo: { label: 'Average consumption', unit: 'L/100 km' },
+        precio: { label: 'Fuel price', unit: '€/liter' },
+        personas: { label: 'People sharing the cost' },
+      },
+    },
+  };
+
+  // Copia de los textos de campo originales (español), tomada una sola
+  // vez al cargar el módulo, antes de cualquier mutación — así
+  // configure({locale:'es'}) siempre puede restaurar el estado exacto
+  // de partida sin depender del orden en que se llame.
+  var FIELD_ES_SNAPSHOT = {};
+  Object.keys(CALC_SPECS).forEach(function (id) {
+    var spec = CALC_SPECS[id];
+    var snap = { submitLabel: spec.submitLabel, fields: {} };
+    spec.fields.forEach(function (f) {
+      var fs = { label: f.label, unit: f.unit, placeholder: f.placeholder, help: f.help };
+      if (f.options) fs.options = f.options.map(function (o) { return o.label; });
+      snap.fields[f.id] = fs;
+    });
+    FIELD_ES_SNAPSHOT[id] = snap;
+  });
+
+  function applyFieldText(locale) {
+    Object.keys(CALC_SPECS).forEach(function (id) {
+      var spec = CALC_SPECS[id];
+      var base = FIELD_ES_SNAPSHOT[id];
+      var over = locale === 'en' ? FIELD_EN[id] : null;
+
+      spec.submitLabel = (over && over.submitLabel) || base.submitLabel;
+      spec.fields.forEach(function (f) {
+        var b = base.fields[f.id];
+        var o = over && over.fields[f.id];
+        f.label = (o && o.label) || b.label;
+        f.unit = (o && o.unit) || b.unit;
+        f.placeholder = b.placeholder; // los ejemplos numéricos no cambian con el idioma
+        f.help = (o && o.help) || b.help;
+        if (f.options && b.options) {
+          f.options.forEach(function (opt, i) {
+            var oOpt = o && o.options && o.options[String(opt.value)];
+            opt.label = oOpt || b.options[i];
+          });
+        }
+      });
+    });
+  }
+
+  /* Cambia el idioma activo: formato numérico (fmt/eur/pct), texto de
+     resultado (compute) y texto de formulario (CALC_SPECS), todo a la
+     vez y de forma reversible. No toca ninguna fórmula. */
+  function configure(opts) {
+    opts = opts || {};
+    var locale = opts.locale === 'en' ? 'en' : 'es';
+    CURRENT_LOCALE = locale;
+    T = locale === 'en' ? T_EN : T_ES;
+    applyFieldText(locale);
+    return { locale: CURRENT_LOCALE };
+  }
 
   return {
     CALC_SPECS: CALC_SPECS,
@@ -709,6 +1344,7 @@
     progressiveTax: progressiveTax,
     childMinimum: childMinimum,
     splitBar: splitBar,
+    configure: configure,
     compute: function (id, values) {
       var spec = CALC_SPECS[id];
       if (!spec) throw new Error('Calculadora desconocida: ' + id);

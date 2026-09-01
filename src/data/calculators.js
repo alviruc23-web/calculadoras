@@ -8,9 +8,17 @@
 
    Para añadir una calculadora nueva:
      1. añade su spec (campos + compute) en assets/js/calc-engine.js
-     2. añade su entrada aquí
+     2. añade su entrada aquí (con su bloque `en` si se quiere en inglés)
    El build genera la página, la mete en su categoría, en el sitemap,
    en el buscador y en el enlazado interno automáticamente.
+
+   Idiomas: `id` es la clave estable (español, nunca cambia — es la
+   que usa CALC_SPECS[id] y el mount-div calc-${id}). `slug` es lo
+   único que construye la URL: en español slug === id; en inglés es
+   `en.enSlug`, optimizado por palabra clave, no traducción literal.
+   getCalcs(locale) es el único punto que las plantillas y build.js
+   deben usar para obtener la lista de calculadoras en el idioma
+   correcto — para 'es' devuelve CALCS tal cual (cero riesgo).
    ============================================================ */
 
 const ICONS = {
@@ -63,6 +71,34 @@ const CALCS = [
     ],
     tip: 'Si eres autónomo, guarda siempre la factura completa: sin ella no puedes deducir el IVA soportado aunque la compra esté relacionada con tu actividad.',
     related: ['porcentaje', 'nomina', 'prestamo'],
+    en: {
+      enSlug: 'vat-calculator',
+      name: 'Spanish VAT Calculator',
+      h1: 'Spanish VAT Calculator',
+      short: 'Add or remove Spanish VAT (IVA) from any price, at the 21%, 10% and 4% rates.',
+      intro: 'Enter a price and instantly get the tax base, the VAT amount, and the total. Works both ways: add VAT to a price that excludes tax, or work out the base from a price that already includes it.',
+      formula: {
+        title: 'The VAT formula',
+        lines: [
+          { label: 'Add VAT', expr: 'Total = Base × (1 + rate)' },
+          { label: 'Remove VAT', expr: 'Base = Total ÷ (1 + rate)' },
+          { label: 'VAT amount', expr: 'VAT = Total − Base' },
+        ],
+        note: 'The "rate" is the percentage as a decimal: 21% → 0.21.',
+        source: 'Current Spanish VAT rates, Law 37/1992 on Value Added Tax (IVA).',
+      },
+      example: {
+        title: 'Example',
+        text: "A €100 service excluding VAT at the standard 21% rate: the VAT is 100 × 0.21 = €21, and the total to invoice is €121. The other way round, if you're charged €121 including VAT, the base is 121 ÷ 1.21 = €100.",
+      },
+      faq: [
+        { q: 'Which VAT rate applies?', a: 'The standard rate is 21% and covers most goods and services. The reduced 10% rate applies to hospitality, passenger transport and most food. The super-reduced 4% rate covers basic foodstuffs, books, newspapers and medicines.' },
+        { q: 'How do I know if a price already includes VAT?', a: 'In a shop, the price shown to the public always includes VAT. On quotes and invoices between businesses, the base and the VAT amount are usually shown separately, and the invoice must break both out.' },
+        { q: 'Can I deduct the VAT I pay?', a: "Only if you're self-employed or a business, the purchase relates to your economic activity, and you hold a full invoice in your name. A final consumer cannot deduct it." },
+        { q: 'What happens if I apply the wrong rate on an invoice?', a: "You'd need to issue a corrective invoice. If the difference has already been declared, it's corrected in the next return or via a supplementary one." },
+      ],
+      tip: "If you're self-employed, always keep the full invoice: without it you can't deduct input VAT, even if the purchase relates to your business.",
+    },
   },
 
   {
@@ -96,6 +132,34 @@ const CALCS = [
     ],
     tip: 'Si el importe no te cuadra, el plazo para reclamar por la vía laboral es corto. Revisa el desglose cuanto antes y pide asesoramiento si ves diferencias.',
     related: ['nomina', 'dias', 'ahorro'],
+    en: {
+      enSlug: 'severance-pay-calculator',
+      name: 'Spanish Severance Pay Calculator',
+      h1: 'Spanish Severance Pay Calculator',
+      short: "Work out what you're owed at the end of a Spanish employment contract: days worked, unused holiday and notice.",
+      intro: "Finiquito is what a company owes you up to your last day under Spanish employment law: the pro-rata share of the month worked, any holiday you haven't taken, and unpaid notice if it applies. This tool estimates the gross amount and shows the breakdown item by item.",
+      formula: {
+        title: 'How it is calculated',
+        lines: [
+          { label: 'Daily wage', expr: 'Monthly salary ÷ 30' },
+          { label: 'Days worked', expr: 'Daily wage × days worked in the month' },
+          { label: 'Holiday', expr: 'Daily wage × unused holiday days' },
+          { label: 'Total', expr: 'Days worked + Holiday + Notice' },
+        ],
+        note: 'A 30-day divisor is used, the standard convention for monthly payroll in Spain.',
+      },
+      example: {
+        title: 'Example',
+        text: 'With a gross monthly salary of €1,800, you leave the company having worked 15 days of the month with 8 days of unused holiday. The daily wage is 1,800 ÷ 30 = €60. The gross severance pay is 60 × 15 + 60 × 8 = 900 + 480 = €1,380.',
+      },
+      faq: [
+        { q: 'Are severance pay (finiquito) and dismissal compensation the same thing?', a: "No. Finiquito is what you've already earned and is owed to you regardless of why you're leaving. Dismissal/redundancy compensation compensates job loss and only applies to certain types of dismissal or contract endings." },
+        { q: 'When should I be paid?', a: "Spanish law doesn't set an exact deadline. In practice it's paid on your last working day or with the following month's payroll. An unjustified delay can be challenged." },
+        { q: 'Do I have to sign it on the spot?', a: 'No. You can ask for a copy, review it calmly, and if you disagree, sign it marked "no conforme" (not in agreement): that lets you collect the amount while keeping the right to claim the difference.' },
+        { q: 'Is tax deducted from severance pay?', a: 'Yes. This tool calculates the gross amount: Spanish income tax withholding (IRPF) and Social Security contributions are applied on top, as applicable.' },
+      ],
+      tip: "If the amount doesn't add up, the deadline to challenge it through a Spanish labor tribunal is short. Review the breakdown as soon as possible and get advice if you spot a difference.",
+    },
   },
 
   {
@@ -130,6 +194,35 @@ const CALCS = [
     ],
     tip: 'Si tu situación personal cambia (un hijo, una hipoteca con derecho a deducción, un cambio de contrato), actualiza el modelo 145 en tu empresa: es lo que ajusta la retención.',
     related: ['finiquito', 'ahorro', 'iva'],
+    en: {
+      enSlug: 'spanish-payroll-calculator',
+      name: 'Spanish Payroll Calculator (Net Salary)',
+      h1: 'Spanish Net Salary Calculator',
+      short: 'Convert your gross annual salary in Spain into net take-home pay, with income tax and Social Security.',
+      intro: "Getting from gross to net involves two deductions under Spanish rules: Social Security contributions and income tax withholding (IRPF). This calculator applies Spain's progressive IRPF tax bands and accounts for the personal and family allowance, which is why two identical salaries are taxed differently depending on dependent children.",
+      formula: {
+        title: 'How it is calculated',
+        lines: [
+          { label: 'Social Security', expr: 'Gross × 6.35%' },
+          { label: 'IRPF tax base', expr: 'Gross − Social Security − allowable expenses − reduction' },
+          { label: 'Tax due', expr: 'Progressive scale(base) − Scale(personal allowance)' },
+          { label: 'Net annual', expr: 'Gross − Social Security − IRPF due' },
+        ],
+        note: 'The scale is applied by bracket: each slice of salary is taxed at its own rate, not the whole salary at the top rate.',
+        source: "Spain's general IRPF tax scale and personal/family allowance, Law 35/2006 on Personal Income Tax (IRPF).",
+      },
+      example: {
+        title: 'Example',
+        text: 'With €28,000 gross per year and no children, around €1,778 is deducted for Social Security. The progressive scale is then applied to the resulting base, minus the personal allowance — leaving a withholding well below the 30% you might expect from just looking at the top bracket your salary falls into.',
+      },
+      faq: [
+        { q: "Why doesn't my actual withholding match exactly?", a: 'The withholding your employer applies depends on your Spanish region, your full family situation, your contract type and other data declared on form 145. This calculator uses the general scale and personal allowance, so it gives a close estimate, not an identical figure.' },
+        { q: 'Does net annual pay change with the number of payments?', a: 'No. Being paid over 12 or 14 installments just splits the same money differently: the net annual amount is identical, only the amount per payslip changes.' },
+        { q: 'What is the personal and family allowance?', a: "It's the part of your income considered to cover basic needs, which in practice isn't taxed. It increases with dependent children, which is why withholding drops once you declare them." },
+        { q: 'Do I pay Social Security on my entire salary?', a: 'Contributions are based on a contribution base that has an annual cap. Above that base, a higher salary no longer increases your contribution, though it still increases IRPF.' },
+      ],
+      tip: "If your personal situation changes (a child, a mortgage with a tax deduction, a new contract type), update form 145 with your employer — that's what adjusts the withholding.",
+    },
   },
 
   {
@@ -161,6 +254,33 @@ const CALCS = [
     ],
     tip: 'Antes de firmar, pide la FEIN y compara el TAE entre entidades: dos ofertas con el mismo TIN pueden costar miles de euros de diferencia por comisiones y productos vinculados.',
     related: ['prestamo', 'ahorro', 'nomina'],
+    en: {
+      enSlug: 'mortgage-calculator',
+      name: 'Spanish Mortgage Calculator',
+      h1: 'Spanish Mortgage Calculator',
+      short: 'Monthly payment, total interest and the real cost of a mortgage in Spain.',
+      intro: "Calculate the monthly payment of a mortgage using the French amortization system, used by practically every bank in Spain. You'll also see the total interest you'll pay and what proportion that represents of the amount borrowed.",
+      trustNote: "We don't ask for your details or call you: the calculation runs entirely in your browser.",
+      formula: {
+        title: 'The payment formula (French amortization)',
+        lines: [
+          { label: 'Payment', expr: 'P × i × (1+i)ⁿ ÷ [(1+i)ⁿ − 1]' },
+          { label: 'where', expr: 'P = principal · i = monthly interest rate · n = number of payments' },
+        ],
+        note: 'The monthly rate is the annual rate divided by 12. The payment stays constant, but early on you pay more interest and less principal.',
+      },
+      example: {
+        title: 'Example',
+        text: "A €150,000 mortgage over 25 years at 3% annual interest gives a monthly payment of around €711. In total you'll repay close to €213,000, of which about €63,000 is interest — an extra 42% on top of the amount borrowed.",
+      },
+      faq: [
+        { q: "What's the difference between TIN and TAE?", a: 'TIN is the pure interest rate of the loan. TAE (APR) also factors in fees, costs and how interest compounds, making it the figure that lets you compare offers realistically.' },
+        { q: 'Fixed or variable rate?', a: 'A fixed rate keeps the payment constant for the whole term, in exchange for a somewhat higher starting rate. A variable rate is pegged to the Euríbor plus a margin and is reviewed periodically, so the payment can rise or fall.' },
+        { q: 'How much of my income should the mortgage take up?', a: "Spanish lenders typically use a rule of thumb that all your loan payments combined shouldn't exceed 30-35% of your net monthly income." },
+        { q: 'Is it worth paying off early?', a: 'The earlier you pay down principal, the more interest you save, because the interest portion of each payment is highest early in the loan. Check whether your mortgage deed includes an early repayment fee.' },
+      ],
+      tip: 'Before signing, ask for the FEIN (the standardized pre-contract information sheet) and compare the TAE between lenders: two offers with the same TIN can differ by thousands of euros once fees and tied products are factored in.',
+    },
   },
 
   {
@@ -191,6 +311,32 @@ const CALCS = [
     ],
     tip: 'Cuidado con la financiación «sin intereses» del punto de venta: a veces el coste está incorporado al precio del producto. Compara siempre el importe total a pagar.',
     related: ['hipoteca', 'ahorro', 'porcentaje'],
+    en: {
+      enSlug: 'loan-calculator',
+      name: 'Personal Loan Calculator',
+      h1: 'Personal Loan Calculator',
+      short: 'Monthly payment and total cost of a personal loan or consumer credit.',
+      intro: "Calculate the monthly payment of a personal loan from the amount, the interest rate (TIN) and the term in months. You'll also see the total interest paid — the figure that actually lets you compare offers.",
+      trustNote: "We don't ask for your details or call you: the calculation runs entirely in your browser.",
+      formula: {
+        title: 'The payment formula',
+        lines: [
+          { label: 'Payment', expr: 'P × i × (1+i)ⁿ ÷ [(1+i)ⁿ − 1]' },
+          { label: 'Total cost', expr: 'Payment × n − P' },
+        ],
+        note: 'This is the same French amortization system used for mortgages.',
+      },
+      example: {
+        title: 'Example',
+        text: "A €10,000 loan at 8% TIN over 48 months gives a monthly payment of around €244. By the end you'll have repaid about €11,718 — that's €1,718 in interest.",
+      },
+      faq: [
+        { q: 'Why is the TAE higher than the TIN?', a: "Because the TAE (APR) includes the loan's fees and costs on top of the interest, plus the compounding effect. If a loan has no fees, TIN and TAE end up very close." },
+        { q: 'Is a longer term a good idea?', a: 'A longer term lowers the monthly payment but increases the total interest you end up paying. Aim for the shortest term your budget can comfortably handle.' },
+        { q: 'Can I pay it off early?', a: 'Yes. For consumer loans, the early repayment fee is capped by law and in many cases is zero. Check the contract before signing.' },
+      ],
+      tip: 'Watch out for "interest-free" financing offered at the point of sale — sometimes the cost is baked into the product price instead. Always compare the total amount payable.',
+    },
   },
 
   {
@@ -222,6 +368,33 @@ const CALCS = [
     ],
     tip: 'Automatiza la aportación el mismo día que cobras. Ahorrar lo que sobra a fin de mes funciona mucho peor que apartar la cantidad al principio.',
     related: ['prestamo', 'hipoteca', 'porcentaje'],
+    en: {
+      enSlug: 'savings-calculator',
+      name: 'Savings Calculator',
+      h1: 'Savings Calculator',
+      short: 'How much you need to save each month to reach a goal, with compound interest.',
+      intro: "Tell us how much you want to reach, over what time frame, and what return you expect, and we'll calculate the monthly contribution you need. Separating what you contribute from what the interest generates makes the long-term effect of compound interest easy to see.",
+      trustNote: "We don't ask for your details or call you: the calculation runs entirely in your browser.",
+      formula: {
+        title: 'The contribution formula',
+        lines: [
+          { label: 'Amount still needed', expr: 'Goal − Current savings × (1+i)ⁿ' },
+          { label: 'Contribution', expr: 'Amount needed × i ÷ [(1+i)ⁿ − 1]' },
+        ],
+        note: 'i is the monthly rate of return and n the number of months. If your current savings already reach the goal on their own, the required contribution is zero.',
+      },
+      example: {
+        title: 'Example',
+        text: "To reach €20,000 in 5 years starting from zero, with a 3% annual return, you need to save around €309 a month. You'll have contributed about €18,560 out of pocket, with the rest generated by interest.",
+      },
+      faq: [
+        { q: 'What is compound interest?', a: "It's the effect where interest earned is reinvested and, in turn, earns more interest. Its impact is small over short periods and very large over long ones." },
+        { q: 'What return is reasonable to use?', a: 'A savings account or a term deposit currently runs around 2-3%. A global index fund has historically returned between 7% and 9% a year over the long term, but with drawdowns along the way and no guarantee of repeating that.' },
+        { q: 'Does the calculation account for inflation?', a: "No. The result is in today's euros, without discounting for inflation: in 20 years, that amount will have less purchasing power than it does now." },
+        { q: 'What about tax on the returns?', a: 'Savings gains are taxed when withdrawn. The calculator shows the gross amount, without deducting the tax treatment of whatever product you use.' },
+      ],
+      tip: 'Automate the contribution on the day you get paid. Saving whatever is left over at the end of the month works far worse than setting the amount aside first.',
+    },
   },
 
   {
@@ -251,6 +424,31 @@ const CALCS = [
       { q: '¿Qué diferencia hay entre puntos porcentuales y por ciento?', a: 'Si algo pasa del 10 % al 12 %, ha subido 2 puntos porcentuales, pero un 20 % en términos relativos. Confundirlos es un error muy común al leer noticias.' },
     ],
     related: ['iva', 'dias', 'ahorro'],
+    en: {
+      enSlug: 'percentage-calculator',
+      name: 'Percentage Calculator',
+      h1: 'Percentage Calculator',
+      short: 'Three calculations in one: X% of an amount, what percentage one value is of another, and the change between two figures.',
+      intro: 'This tool covers the three cases that come up all the time: calculating the percentage of an amount (discounts, tips, commissions), finding out what percentage one value represents of another, and measuring the change between two figures.',
+      formula: {
+        title: 'The three formulas',
+        lines: [
+          { label: 'X% of Y', expr: 'Y × X ÷ 100' },
+          { label: 'What % is A of B?', expr: 'A ÷ B × 100' },
+          { label: 'Change', expr: '(Final − Initial) ÷ Initial × 100' },
+        ],
+        note: 'For change, a negative result means a decrease.',
+      },
+      example: {
+        title: 'Example',
+        text: 'A €150 jacket with a 20% discount: the discount is 150 × 20 ÷ 100 = €30, and you pay €120. If the price later rises from €120 to €150, the change is (150 − 120) ÷ 120 × 100 = +25%.',
+      },
+      faq: [
+        { q: "Why doesn't decreasing by 20% and then increasing by 20% return the original price?", a: 'Because each percentage is applied to a different base. From €100, a −20% leaves €80, and a +20% on €80 is €96, not €100. To undo a 20% discount you need to increase by 25%.' },
+        { q: 'How do I remove a percentage already included in a price?', a: 'Divide by 1 plus the percentage as a decimal. To remove a 21% already included: price ÷ 1.21.' },
+        { q: "What's the difference between percentage points and percent?", a: "If something goes from 10% to 12%, it's risen by 2 percentage points, but by 20% in relative terms. Mixing these up is a very common mistake when reading the news." },
+      ],
+    },
   },
 
   {
@@ -279,6 +477,30 @@ const CALCS = [
       { q: '¿Para qué plazos se usa habitualmente?', a: 'Preavisos de baja voluntaria, plazos de contratos de alquiler, vencimientos de facturas, periodos de prueba o días de vacaciones acumulados.' },
     ],
     related: ['porcentaje', 'finiquito'],
+    en: {
+      enSlug: 'days-between-dates-calculator',
+      name: 'Days Between Dates Calculator',
+      h1: 'Days Between Two Dates',
+      short: 'How many days, working days, weeks and months there are between two dates.',
+      intro: 'Calculate the exact difference between two dates, broken down into calendar days and working days. Useful for contract deadlines, notice periods, invoice due dates, or simply finding out how long is left until a given date.',
+      formula: {
+        title: 'How it is calculated',
+        lines: [
+          { label: 'Calendar days', expr: '(End date − Start date) ÷ 1 day' },
+          { label: 'Working days', expr: 'Full weeks × 5 + remaining Mon-Fri days' },
+        ],
+        note: 'The calculation is done in universal time, so the result stays the same regardless of the country you check it from.',
+      },
+      example: {
+        title: 'Example',
+        text: 'Between 1 and 31 January 2026 there are 30 calendar days. Of those, 22 are working days (Monday to Friday) and 8 fall on a weekend.',
+      },
+      faq: [
+        { q: 'Are public holidays excluded?', a: "No. Working-day mode only excludes Saturdays and Sundays. National, regional and local public holidays vary by location and aren't excluded automatically." },
+        { q: 'Is the first day counted?', a: "The difference between the two dates is calculated, so the start day isn't counted as a full day. If you need to include both endpoints, add one to the result." },
+        { q: 'What is this typically used for?', a: 'Resignation notice periods, rental contract terms, invoice due dates, probation periods, or accrued holiday days.' },
+      ],
+    },
   },
 
   {
@@ -309,6 +531,32 @@ const CALCS = [
     ],
     tip: 'El perímetro de cintura aporta información que el IMC no recoge y es un complemento sencillo para valorar el riesgo metabólico.',
     related: ['propina', 'dias'],
+    en: {
+      enSlug: 'bmi-calculator',
+      name: 'BMI Calculator',
+      h1: 'BMI Calculator (Body Mass Index)',
+      short: 'Your Body Mass Index and the reference weight range for your height.',
+      intro: 'Body Mass Index relates weight and height and serves as a first population-level reference. We show your value, the World Health Organization category it falls into, and what weight range would correspond to your height.',
+      formula: {
+        title: 'The BMI formula',
+        lines: [
+          { label: 'BMI', expr: 'Weight (kg) ÷ Height (m)²' },
+          { label: 'Normal range', expr: '18.5 ≤ BMI < 25' },
+        ],
+        note: 'Height goes in meters: 170 cm is 1.70 m, and the square is 2.89.',
+        source: 'World Health Organization (WHO) BMI classification.',
+      },
+      example: {
+        title: 'Example',
+        text: 'A person weighing 70 kg at 170 cm: 70 ÷ (1.70 × 1.70) = 70 ÷ 2.89 = 24.2. That is within the normal weight range, whose upper limit for that height is around 72 kg.',
+      },
+      faq: [
+        { q: 'Does BMI work for everyone?', a: "It's a population-level indicator, not an individual one. It doesn't distinguish between muscle and fat, so it can classify very muscular people as overweight, and it doesn't account for where fat is stored, which is what's most linked to cardiovascular risk." },
+        { q: 'What are the WHO ranges?', a: 'Underweight below 18.5. Normal weight between 18.5 and 24.9. Overweight between 25 and 29.9. Obesity class I between 30 and 34.9, class II between 35 and 39.9, and class III from 40 upward.' },
+        { q: 'Does it apply to children or older adults?', a: "Under-18s use age- and sex-specific percentiles, not the adult ranges. Interpretation also changes for older adults. In both cases, a healthcare professional's assessment is recommended." },
+      ],
+      tip: "Waist circumference captures information BMI doesn't, and it's a simple complement for assessing metabolic risk.",
+    },
   },
 
   {
@@ -336,6 +584,29 @@ const CALCS = [
       { q: '¿La propina se calcula antes o después del IVA?', a: 'En España la cuenta que te entregan ya incluye el IVA, así que el porcentaje se aplica sobre ese total.' },
     ],
     related: ['combustible', 'porcentaje'],
+    en: {
+      enSlug: 'tip-calculator',
+      name: 'Tip Calculator',
+      h1: 'Tip Calculator & Bill Splitter',
+      short: 'Calculate the tip and split the bill among everyone at the table.',
+      intro: "Enter the total bill, choose the tip percentage and the number of people, and we'll tell you how much each person owes, with the tip included and shown separately.",
+      formula: {
+        title: 'How it is calculated',
+        lines: [
+          { label: 'Tip', expr: 'Bill × percentage ÷ 100' },
+          { label: 'Per person', expr: '(Bill + Tip) ÷ number of people' },
+        ],
+      },
+      example: {
+        title: 'Example',
+        text: 'A €60 bill with a 10% tip is an extra €6, €66 in total. Split between two people, that is €33 each.',
+      },
+      faq: [
+        { q: 'How much do people tip in Spain?', a: "There's no rule or obligation. It's common to round up or leave 5-10% if the service was good, and around 10% is typical at higher-end restaurants." },
+        { q: 'What about when I travel elsewhere?', a: "It varies a lot. In the US, 15-20% is expected because it forms part of staff wages. In Japan, by contrast, leaving a tip can be awkward. It's worth checking local customs before you travel." },
+        { q: 'Is the tip calculated before or after VAT?', a: 'In Spain the bill you receive already includes VAT, so the percentage is applied to that total.' },
+      ],
+    },
   },
 
   {
@@ -364,11 +635,50 @@ const CALCS = [
       { q: '¿El cálculo incluye peajes o desgaste?', a: 'No. Solo cubre el carburante. Para el coste real del viaje habría que sumar peajes y el desgaste del vehículo, que se suele estimar aparte por kilómetro.' },
     ],
     related: ['propina', 'porcentaje'],
+    en: {
+      enSlug: 'fuel-cost-calculator',
+      name: 'Fuel Cost Calculator',
+      h1: 'Fuel Cost Calculator',
+      short: 'How much a car trip costs based on distance, fuel consumption and fuel price.',
+      intro: "Calculate the liters you'll use and what a trip will cost, one-way or round-trip. If you're traveling with others, it also splits the cost between passengers.",
+      formula: {
+        title: 'How it is calculated',
+        lines: [
+          { label: 'Liters', expr: 'Distance × consumption ÷ 100' },
+          { label: 'Cost', expr: 'Liters × price per liter' },
+        ],
+        note: "Consumption is expressed in liters per 100 km, as shown on a vehicle's spec sheet.",
+      },
+      example: {
+        title: 'Example',
+        text: "A 500 km trip with fuel consumption of 7 L/100 km and diesel at €1.65/L: you'll use 35 liters, around €57.75 one-way — about €115.50 round-trip.",
+      },
+      faq: [
+        { q: "Where do I find my car's real fuel consumption?", a: 'The onboard computer gives the real average consumption, which is usually 10-15% higher than the official spec-sheet figure, especially in city driving, with a loaded car, or at high motorway speeds.' },
+        { q: 'Where can I check fuel prices?', a: "Spain's Ministry for Ecological Transition publishes prices for every service station in the country, and several apps show the cheapest ones near your route." },
+        { q: 'Does this include tolls or vehicle wear?', a: 'No. It only covers fuel. For the real cost of a trip you would need to add tolls and vehicle depreciation, which is usually estimated separately per kilometer.' },
+      ],
+    },
   },
 ];
 
-CALCS.forEach(c => { c.icon = icon(c.id); });
+CALCS.forEach(c => { c.icon = icon(c.id); c.slug = c.id; });
 
 const CALC_BY_ID = Object.fromEntries(CALCS.map(c => [c.id, c]));
 
-module.exports = { CALCS, CALC_BY_ID };
+/* Devuelve la lista de calculadoras en el idioma pedido. Para 'es'
+   devuelve CALCS tal cual (mismos objetos, cero riesgo). Para 'en'
+   devuelve una copia superficial por calculadora con los campos de
+   `en` superpuestos y `slug` apuntando a la URL en inglés — los
+   campos estructurales (id, cat, icon, related, yearSensitive) no
+   están en `en` y se heredan sin cambios. */
+function getCalcs(locale) {
+  if (locale !== 'en') return CALCS;
+  return CALCS.map(c => Object.assign({}, c, c.en, { slug: c.en.enSlug }));
+}
+
+function getCalcById(locale, id) {
+  return getCalcs(locale).find(c => c.id === id);
+}
+
+module.exports = { CALCS, CALC_BY_ID, getCalcs, getCalcById };

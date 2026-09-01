@@ -15,6 +15,19 @@
   var E = window.CalcEngine;
   if (!E) return;
 
+  // Las 3 cadenas de interfaz propias de este fichero (el resto del
+  // texto de la calculadora viene de CalcEngine.CALC_SPECS, ya
+  // localizado por CalcEngine.configure()).
+  var UI_T = {
+    es: { reset: 'Restablecer', copy: 'Copiar resultado', copied: '✓ Copiado' },
+    en: { reset: 'Reset', copy: 'Copy result', copied: '✓ Copied' },
+  };
+  var uiLocale = 'es';
+  function configure(opts) {
+    uiLocale = (opts && opts.locale === 'en') ? 'en' : 'es';
+  }
+  function ui() { return UI_T[uiLocale]; }
+
   function el(tag, attrs, html) {
     var n = document.createElement(tag);
     if (attrs) for (var k in attrs) if (attrs[k] !== null && attrs[k] !== undefined) n.setAttribute(k, attrs[k]);
@@ -170,7 +183,7 @@
       form.innerHTML = html +
         '<div class="calc-actions">' +
         '<button type="submit" class="btn btn-primary">' + esc(spec.submitLabel) + '</button>' +
-        '<button type="button" class="btn btn-ghost" data-reset>Restablecer</button>' +
+        '<button type="button" class="btn btn-ghost" data-reset>' + esc(ui().reset) + '</button>' +
         '</div>';
     }
 
@@ -223,7 +236,7 @@
         (res.note ? '<p class="result-note">' + esc(res.note) + '</p>' : '') +
         (res.copy ? '<div class="result-actions"><button type="button" class="btn-copy" data-copy>' +
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>' +
-          'Copiar resultado</button></div>' : '');
+          esc(ui().copy) + '</button></div>' : '');
 
       var btn = out.querySelector('[data-copy]');
       if (btn) btn.addEventListener('click', function () { copy(res.copy, btn); track('calc_share_copy', { calc_id: id }); });
@@ -232,7 +245,7 @@
     function copy(text, btn) {
       var done = function () {
         var old = btn.innerHTML;
-        btn.innerHTML = '✓ Copiado';
+        btn.innerHTML = ui().copied;
         btn.classList.add('is-done');
         setTimeout(function () { btn.innerHTML = old; btn.classList.remove('is-done'); }, 1800);
       };
@@ -308,5 +321,5 @@
     run(false);
   }
 
-  window.CalcUI = { init: init };
+  window.CalcUI = { init: init, configure: configure };
 })();
