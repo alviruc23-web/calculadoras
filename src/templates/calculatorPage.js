@@ -1,6 +1,7 @@
 const { getCalcById } = require('../data/calculators');
 const { localeData } = require('../data/site');
 const { t } = require('../data/i18n');
+const { renderAdSlot } = require('./adSlot');
 
 const APP_CATEGORY = {
   fiscal: 'FinanceApplication',
@@ -97,6 +98,13 @@ function renderCalculatorBody(c, prefix, locale) {
     </div>
   </section>` : '';
 
+  // Mientras adsEnabled sea false, renderAdSlot() devuelve '' y adSlotBlock
+  // queda vacío: el HTML generado es entonces byte-idéntico al de antes de
+  // este hueco (ninguna línea en blanco extra), verificado por el guard de
+  // determinismo del build.
+  const adSlotHtml = renderAdSlot('content', locale);
+  const adSlotBlock = adSlotHtml ? `\n\n    ${adSlotHtml}` : '';
+
   return `
 <main id="main">
 
@@ -136,7 +144,7 @@ function renderCalculatorBody(c, prefix, locale) {
       <h2 id="faq-heading">${s.faqHeading}</h2>
       <div class="faq">${faqHtml}</div>
     </section>
-
+${adSlotBlock}
     ${relatedHtml}
 
     <a class="back-link" href="${prefix}categoria/${cat.slug}/">

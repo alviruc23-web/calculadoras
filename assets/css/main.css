@@ -420,6 +420,15 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 details[open] summary::after { content: '−'; }
 .faq p { font-size: 13.5px; color: var(--muted); padding: 0 2px 14px; line-height: 1.6; }
 
+/* ---- hueco de anuncio ----------------------------------------------
+   A propósito NO se parece a .tip-box ni a .btn: sin color de marca,
+   sin forma de botón, para que nunca pueda confundirse con contenido
+   propio o con una llamada a la acción. Alto mínimo fijado en línea
+   (ver adSlot.js) para reservar espacio y no producir CLS al cargar
+   el anuncio real. */
+.ad-slot { margin-top: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--bg); border: 1px dashed var(--border); border-radius: var(--r); overflow: hidden; }
+.ad-slot-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+
 /* ---- calculadoras relacionadas ---- */
 .related { margin-top: 32px; }
 .related h2 { font-size: 16px; font-weight: 700; margin-bottom: 12px; letter-spacing: -.01em; }

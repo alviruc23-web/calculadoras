@@ -49,6 +49,13 @@ const SITE_EN = {
 const SERVICES = {
   analyticsId: 'G-35SN7B8GFE',
   adsenseClient: 'ca-pub-1786551149237210',
+  // Interruptor único para los huecos de anuncio (ver src/templates/adSlot.js).
+  // En `false`, renderAdSlot() no genera ningún HTML: el build es idéntico
+  // al de hoy, sin cajas vacías ni reserva de espacio visible. Cuando
+  // AdSense apruebe el sitio, cambiar a `true` activa los huecos ya
+  // maquetados (con alto reservado, para no producir CLS) sin tocar
+  // ninguna plantilla ni añadir ninguna dependencia nueva.
+  adsEnabled: false,
 };
 
 /* ---- Categorías -------------------------------------------------------
