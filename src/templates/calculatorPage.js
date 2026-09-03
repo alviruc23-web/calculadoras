@@ -49,7 +49,7 @@ function buildStructuredData(c, canonicalUrl, cat, locale) {
 
 function relatedCard(r, prefix) {
   return `
-      <a class="related-card" href="${prefix}${r.slug}/">
+      <a class="related-card" href="${prefix}${r.slug}/" data-calc-id="${r.id}">
         <span class="card-icon card-icon-sm cat-${r.cat}">${r.icon}</span>
         <span>${r.name}</span>
       </a>`;

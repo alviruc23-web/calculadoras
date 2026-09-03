@@ -129,7 +129,9 @@
     });
     document.addEventListener('click', function (e) { if (!form.contains(e.target)) box.hidden = true; });
     box.addEventListener('click', function (e) {
-      if (e.target.closest('.hdr-result')) track('search', { search_term: input.value });
+      // No se envía el texto buscado (input.value): sería contenido de
+      // formulario, prohibido por la política de privacidad de eventos.
+      if (e.target.closest('.hdr-result')) track('search', { locale: LOCALE });
     });
 
     form.addEventListener('submit', function (e) {
@@ -138,7 +140,7 @@
       var results = search(input.value, 1);
       if (results.length) {
         e.preventDefault();
-        track('search', { search_term: input.value });
+        track('search', { locale: LOCALE });
         location.href = ROOT + results[0].url;
       }
     });
@@ -229,11 +231,21 @@
     section.hidden = false;
   }
 
-  /* ---- clic en "calculadoras relacionadas" (página de calculadora) --- */
+  /* ---- clic en "calculadoras relacionadas" (página de calculadora) ---
+     IDs de calculadora (origen y destino), no la URL completa ni nada
+     introducido por el usuario. */
   function initRelatedTracking() {
+    var mount = document.querySelector('.calc-mount');
+    var fromId = mount ? mount.id.replace(/^calc-/, '') : '';
     document.addEventListener('click', function (e) {
       var link = e.target.closest('.related-card');
-      if (link) track('related_click', { to_href: link.getAttribute('href') });
+      if (link) {
+        track('related_calculator_clicked', {
+          from_calc_id: fromId,
+          to_calc_id: link.getAttribute('data-calc-id') || '',
+          locale: LOCALE,
+        });
+      }
     });
   }
 

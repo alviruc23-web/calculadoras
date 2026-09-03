@@ -163,7 +163,7 @@
     var root = document.getElementById('calc-' + id);
     if (!spec || !root) return;
     recordRecent(id);
-    track('calc_view', { calc_id: id });
+    track('calculator_view', { calc_id: id, locale: uiLocale });
 
     var state = readState(spec);
     var announced = false;
@@ -239,7 +239,7 @@
           esc(ui().copy) + '</button></div>' : '');
 
       var btn = out.querySelector('[data-copy]');
-      if (btn) btn.addEventListener('click', function () { copy(res.copy, btn); track('calc_share_copy', { calc_id: id }); });
+      if (btn) btn.addEventListener('click', function () { copy(res.copy, btn); track('calc_share_copy', { calc_id: id, locale: uiLocale }); });
     }
 
     function copy(text, btn) {
@@ -265,8 +265,13 @@
       renderResult(res);
       writeState(spec, state, !res.empty && !res.error);
       if (userInitiated) {
-        if (res.error) track('calc_error', { calc_id: id });
-        else if (!res.empty) track('calc_compute', { calc_id: id });
+        // calculator_used: cualquier intento de cálculo (éxito, error o
+        // vacío) — el paso "USED" del embudo. result_generated: solo
+        // cuando produce un resultado válido — el paso "RESULT". Nunca
+        // se envían los valores introducidos ni el resultado en sí.
+        track('calculator_used', { calc_id: id, locale: uiLocale });
+        if (res.error) track('calc_error', { calc_id: id, locale: uiLocale });
+        else if (!res.empty) track('result_generated', { calc_id: id, locale: uiLocale });
         // En móvil, el formulario y el resultado quedan uno encima del
         // otro (breakpoint de .calc-grid a 640px): tras enviar, el
         // resultado puede quedar fuera de la pantalla. Lo llevamos a la
