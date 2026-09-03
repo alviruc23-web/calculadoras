@@ -134,6 +134,14 @@ nav.main-nav { display: flex; gap: 2px; flex-wrap: wrap; }
 .nav-link.on { color: var(--blue); }
 .spacer { flex: 1; min-width: 8px; }
 
+/* ---- selector de idioma (enlaza a la misma página en el otro idioma,
+   nunca a la home — reutiliza el mismo hreflang alternate ya calculado
+   por página) ---- */
+.lang-switch { display: flex; align-items: center; gap: 5px; padding: 6px 11px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--text); text-decoration: none; flex-shrink: 0; transition: background .15s, border-color .15s; }
+.lang-switch:hover { background: var(--bg); border-color: var(--muted); }
+.lang-switch:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.lang-switch svg { color: var(--muted); flex-shrink: 0; }
+
 /* ---- buscador de cabecera ---- */
 .hdr-search { position: relative; width: 100%; max-width: 320px; }
 .hdr-search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--dim); pointer-events: none; }
@@ -392,14 +400,14 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .formula-line:last-child { border-bottom: none; }
 .formula-label { font-size: 13px; color: var(--muted); font-weight: 500; }
 .formula-line code { font-family: 'DM Mono', ui-monospace, monospace; font-size: 13.5px; color: var(--blue-dark); background: var(--blue-soft); padding: 3px 8px; border-radius: 6px; }
-.formula-note { margin-top: 12px; font-size: 12.5px; color: var(--dim); }
-.formula-source { margin-top: 6px; font-size: 11.5px; color: var(--dim); font-style: italic; }
+.formula-note { margin-top: 12px; font-size: 12.5px; color: var(--muted); }
+.formula-source { margin-top: 6px; font-size: 11.5px; color: var(--muted); font-style: italic; }
 .example-block p { background: var(--bg); border-radius: var(--r); padding: 14px 16px; border: 1px solid var(--border); }
 
 .tip-box { display: flex; gap: 10px; align-items: flex-start; background: var(--blue-soft); border: 1px solid var(--blue-mid); border-radius: var(--r); padding: 14px 16px; }
 .tip-box svg { color: var(--blue); flex-shrink: 0; margin-top: 1px; }
 .tip-box p { font-size: 13px; color: #1E40AF; line-height: 1.55; }
-.side-updated { font-size: 12px; color: var(--dim); padding: 0 2px; }
+.side-updated { font-size: 12px; color: var(--muted); padding: 0 2px; }
 
 /* ---- FAQ ---- */
 .faq-block { margin-top: 32px; }
@@ -411,6 +419,15 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .faq summary::after { content: '+'; color: var(--muted); font-weight: 400; flex-shrink: 0; }
 details[open] summary::after { content: '−'; }
 .faq p { font-size: 13.5px; color: var(--muted); padding: 0 2px 14px; line-height: 1.6; }
+
+/* ---- hueco de anuncio ----------------------------------------------
+   A propósito NO se parece a .tip-box ni a .btn: sin color de marca,
+   sin forma de botón, para que nunca pueda confundirse con contenido
+   propio o con una llamada a la acción. Alto mínimo fijado en línea
+   (ver adSlot.js) para reservar espacio y no producir CLS al cargar
+   el anuncio real. */
+.ad-slot { margin-top: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--bg); border: 1px dashed var(--border); border-radius: var(--r); overflow: hidden; }
+.ad-slot-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
 
 /* ---- calculadoras relacionadas ---- */
 .related { margin-top: 32px; }

@@ -12,6 +12,11 @@
 
   var INDEX = window.CALCYA_INDEX || [];
   var ROOT = window.CALCYA_ROOT || '';
+  var LOCALE = window.CALCYA_LOCALE === 'en' ? 'en' : 'es';
+  var ALL_CAT = LOCALE === 'en' ? 'all' : 'todas';
+  var SEARCH_T = LOCALE === 'en'
+    ? { recent: 'Recent', recalculate: 'Calculate again' }
+    : { recent: 'Reciente', recalculate: 'Volver a calcular' };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -124,7 +129,9 @@
     });
     document.addEventListener('click', function (e) { if (!form.contains(e.target)) box.hidden = true; });
     box.addEventListener('click', function (e) {
-      if (e.target.closest('.hdr-result')) track('search', { search_term: input.value });
+      // No se envía el texto buscado (input.value): sería contenido de
+      // formulario, prohibido por la política de privacidad de eventos.
+      if (e.target.closest('.hdr-result')) track('search', { locale: LOCALE });
     });
 
     form.addEventListener('submit', function (e) {
@@ -133,7 +140,7 @@
       var results = search(input.value, 1);
       if (results.length) {
         e.preventDefault();
-        track('search', { search_term: input.value });
+        track('search', { locale: LOCALE });
         location.href = ROOT + results[0].url;
       }
     });
@@ -160,7 +167,7 @@
     var cards = page.querySelectorAll('[data-calc-card]');
     var chips = page.querySelectorAll('.chip');
     var noResults = document.getElementById('no-results');
-    var currentCat = 'todas';
+    var currentCat = ALL_CAT;
     var lastQuery = '';
 
     function apply() {
@@ -170,7 +177,7 @@
       cards.forEach(function (card) {
         var id = card.getAttribute('data-calc-card');
         var cat = card.getAttribute('data-cat');
-        var catOk = currentCat === 'todas' || cat === currentCat;
+        var catOk = currentCat === ALL_CAT || cat === currentCat;
         var qOk = !matchIds || matchIds.indexOf(id) !== -1;
         var show = catOk && qOk;
         card.style.display = show ? '' : 'none';
@@ -215,20 +222,30 @@
     grid.innerHTML = entries.map(function (e) {
       return '<a class="calc-card" href="' + esc(ROOT + e.url) + '">' +
         '<span class="card-icon cat-' + esc(e.cat) + '">' + esc(e.catIcon) + '</span>' +
-        '<span class="card-cat">Reciente</span>' +
+        '<span class="card-cat">' + SEARCH_T.recent + '</span>' +
         '<h3>' + esc(e.name) + '</h3>' +
         '<p>' + esc(e.short) + '</p>' +
-        '<span class="card-cta">Volver a calcular' +
+        '<span class="card-cta">' + SEARCH_T.recalculate +
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>';
     }).join('');
     section.hidden = false;
   }
 
-  /* ---- clic en "calculadoras relacionadas" (página de calculadora) --- */
+  /* ---- clic en "calculadoras relacionadas" (página de calculadora) ---
+     IDs de calculadora (origen y destino), no la URL completa ni nada
+     introducido por el usuario. */
   function initRelatedTracking() {
+    var mount = document.querySelector('.calc-mount');
+    var fromId = mount ? mount.id.replace(/^calc-/, '') : '';
     document.addEventListener('click', function (e) {
       var link = e.target.closest('.related-card');
-      if (link) track('related_click', { to_href: link.getAttribute('href') });
+      if (link) {
+        track('related_calculator_clicked', {
+          from_calc_id: fromId,
+          to_calc_id: link.getAttribute('data-calc-id') || '',
+          locale: LOCALE,
+        });
+      }
     });
   }
 
