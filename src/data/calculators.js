@@ -197,7 +197,7 @@ const CALCS = [
     en: {
       enSlug: 'spanish-payroll-calculator',
       name: 'Spanish Payroll Calculator (Net Salary)',
-      h1: 'Spanish Net Salary Calculator',
+      h1: 'Spanish Payroll Calculator (Net Salary)',
       short: 'Convert your gross annual salary in Spain into net take-home pay, with income tax and Social Security.',
       intro: "Getting from gross to net involves two deductions under Spanish rules: Social Security contributions and income tax withholding (IRPF). This calculator applies Spain's progressive IRPF tax bands and accounts for the personal and family allowance, which is why two identical salaries are taxed differently depending on dependent children.",
       formula: {
@@ -313,10 +313,10 @@ const CALCS = [
     related: ['hipoteca', 'ahorro', 'porcentaje'],
     en: {
       enSlug: 'loan-calculator',
-      name: 'Personal Loan Calculator',
-      h1: 'Personal Loan Calculator',
-      short: 'Monthly payment and total cost of a personal loan or consumer credit.',
-      intro: "Calculate the monthly payment of a personal loan from the amount, the interest rate (TIN) and the term in months. You'll also see the total interest paid — the figure that actually lets you compare offers.",
+      name: 'Spanish Personal Loan Calculator',
+      h1: 'Spanish Personal Loan Calculator',
+      short: 'Monthly payment and total cost of a personal loan under Spanish lending terms (TIN/TAE).',
+      intro: "Calculate the monthly payment of a personal loan in Spain from the amount, the interest rate (TIN) and the term in months. You'll also see the total interest paid — the figure that actually lets you compare offers.",
       trustNote: "We don't ask for your details or call you: the calculation runs entirely in your browser.",
       formula: {
         title: 'The payment formula',

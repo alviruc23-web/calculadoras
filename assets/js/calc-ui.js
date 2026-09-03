@@ -267,6 +267,17 @@
       if (userInitiated) {
         if (res.error) track('calc_error', { calc_id: id });
         else if (!res.empty) track('calc_compute', { calc_id: id });
+        // En móvil, el formulario y el resultado quedan uno encima del
+        // otro (breakpoint de .calc-grid a 640px): tras enviar, el
+        // resultado puede quedar fuera de la pantalla. Lo llevamos a la
+        // vista solo si hace falta y solo en pantallas estrechas — en
+        // escritorio están lado a lado y no hay nada que desplazar.
+        if (!res.empty && window.innerWidth < 640) {
+          var rect = out.getBoundingClientRect();
+          if (rect.top < 0 || rect.top > window.innerHeight * 0.6) {
+            out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
       }
       if (userInitiated && !announced) announced = true;
     }
