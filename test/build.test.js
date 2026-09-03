@@ -135,3 +135,25 @@ test('Formato numérico en inglés: sin coma decimal a la española en la págin
   const html = readPath('en/vat-calculator');
   assert.match(html, /CalcEngine\.configure\(\{locale:'en'\}\)/, 'la página en inglés no configura el locale del motor de cálculo antes de iniciar la UI');
 });
+
+test('Selector de idioma: cada página enlaza a su propia página equivalente, nunca a la home del otro idioma', () => {
+  const { SITE: SITE_EN } = localeData('en');
+  for (const c of CALCS) {
+    const html = readCalc(c.id);
+    const switchHref = html.match(/class="lang-switch"[^>]*href="([^"]+)"|href="([^"]+)" class="lang-switch"/);
+    const hreflangEn = html.match(/<link rel="alternate" hreflang="en" href="([^"]+)">/)[1];
+    assert.ok(switchHref, `${c.id}: sin selector de idioma en el header`);
+    const href = switchHref[1] || switchHref[2];
+    assert.equal(href, hreflangEn, `${c.id}: el selector de idioma no coincide con el hreflang alternate`);
+    assert.notEqual(href, SITE_EN.baseUrl, `${c.id}: el selector de idioma no debe llevar a la home de /en/, sino a la calculadora equivalente`);
+  }
+  for (const c of getCalcs('en')) {
+    const html = readPath(path.join('en', c.slug));
+    const switchHref = html.match(/class="lang-switch"[^>]*href="([^"]+)"|href="([^"]+)" class="lang-switch"/);
+    const hreflangEs = html.match(/<link rel="alternate" hreflang="es" href="([^"]+)">/)[1];
+    assert.ok(switchHref, `en/${c.slug}: sin selector de idioma en el header`);
+    const href = switchHref[1] || switchHref[2];
+    assert.equal(href, hreflangEs, `en/${c.slug}: el selector de idioma no coincide con el hreflang alternate`);
+    assert.notEqual(href, SITE.baseUrl, `en/${c.slug}: el selector de idioma no debe llevar a la home de español, sino a la calculadora equivalente`);
+  }
+});

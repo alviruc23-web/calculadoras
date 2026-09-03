@@ -40,10 +40,18 @@ function buildSearchIndex(locale) {
   }));
 }
 
-function renderHeader(depth, active, locale) {
+function renderHeader(depth, active, locale, altUrl) {
   const p = prefixFor(depth);
   const { SITE } = localeData(locale);
   const s = t(locale);
+  // Enlace directo a la MISMA página en el otro idioma (la URL exacta que
+  // ya lleva su propio hreflang alternate) — nunca a la home del otro
+  // idioma, así se conserva la calculadora/categoría que se está viendo.
+  const langSwitch = altUrl ? `
+    <a href="${altUrl}" class="lang-switch" hreflang="${locale === 'es' ? 'en' : 'es'}" aria-label="${s.langSwitchLabel}">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20z"/></svg>
+      ${s.langSwitchTo}
+    </a>` : '';
   return `
 <a class="skip-link" href="#main">${s.skipLink}</a>
 <header class="site-header">
@@ -69,7 +77,7 @@ function renderHeader(depth, active, locale) {
       <svg class="hdr-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
       <input type="search" id="hdr-search-input" name="q" placeholder="${s.searchPlaceholderHeader}" autocomplete="off" aria-expanded="false" aria-controls="hdr-search-results" role="combobox" aria-autocomplete="list">
       <div class="hdr-search-results" id="hdr-search-results" role="listbox" hidden></div>
-    </form>
+    </form>${langSwitch}
   </div>
 </header>`;
 }
@@ -172,7 +180,7 @@ ${renderJsonLd(meta.structuredData)}
 <script>window.CALCYA_INDEX=${JSON.stringify(searchIndex)};window.CALCYA_ROOT=${JSON.stringify(p)};window.CALCYA_SERVICES=${JSON.stringify(SERVICES)};window.CALCYA_LOCALE=${JSON.stringify(locale)};window.CALCYA_PRIVACY_PATH=${JSON.stringify(privacyPath)};</script>
 </head>
 <body data-root="${p}" data-locale="${locale}">
-${renderHeader(meta.depth, meta.activePage, locale)}
+${renderHeader(meta.depth, meta.activePage, locale, meta.hreflang && meta.hreflang[locale === 'es' ? 'en' : 'es'])}
 ${bodyHtml}
 ${renderFooter(meta.depth, locale)}
 <script src="${ap}assets/js/consent.js"></script>
