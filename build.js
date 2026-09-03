@@ -269,7 +269,7 @@ function buildRobots() {
 function cleanOrphans() {
   const enData = localeData('en');
 
-  const known = new Set(['index.html', 'sitemap.xml', 'robots.txt', 'CNAME', 'README.md', 'package.json', 'package-lock.json', 'build.js', 'src', 'assets', 'test', 'node_modules', '.git', '.github', 'en']);
+  const known = new Set(['index.html', 'sitemap.xml', 'robots.txt', 'ads.txt', 'CNAME', 'README.md', 'package.json', 'package-lock.json', 'build.js', 'src', 'assets', 'test', 'node_modules', '.git', '.github', 'en']);
   CALCS.forEach(c => known.add(c.slug));
   INFO_PAGES.forEach(pg => known.add(pg.slug));
   known.add('categoria');

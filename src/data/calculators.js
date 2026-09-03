@@ -455,7 +455,7 @@ const CALCS = [
     id: 'dias',
     cat: 'matematica',
     name: 'Calculadora de días entre fechas',
-    h1: 'Días entre dos fechas',
+    h1: 'Calculadora de días entre fechas',
     short: 'Cuántos días, laborables, semanas y meses hay entre dos fechas.',
     intro: 'Calcula la diferencia exacta entre dos fechas, con el desglose entre días naturales y laborables. Útil para plazos de contratos, preavisos, vencimientos de facturas o simplemente saber cuánto falta para una fecha señalada.',
     keywords: 'dias entre fechas calcular dias laborables plazo vencimiento cuantos dias faltan diferencia fechas semanas meses',
@@ -480,7 +480,7 @@ const CALCS = [
     en: {
       enSlug: 'days-between-dates-calculator',
       name: 'Days Between Dates Calculator',
-      h1: 'Days Between Two Dates',
+      h1: 'Days Between Dates Calculator',
       short: 'How many days, working days, weeks and months there are between two dates.',
       intro: 'Calculate the exact difference between two dates, broken down into calendar days and working days. Useful for contract deadlines, notice periods, invoice due dates, or simply finding out how long is left until a given date.',
       formula: {
