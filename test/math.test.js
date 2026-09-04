@@ -304,6 +304,58 @@ test('Combustible: un número irreal de personas da error', () => {
   assert.ok(compute('combustible', { km: '500', consumo: '7', precio: '1.65', personas: '1e15' }).error);
 });
 
+/* ------------------------------------------------------- RETENCIÓN FACTURA */
+
+test('Retención factura: 1.000 € de base, IVA 21 % y retención 15 % dan 1.060 €', () => {
+  const r = compute('retencion-factura', { base: '1000', ivaTipo: '21', retencion: '15' });
+  near(parseES(r.main.value), 1060);
+  near(parseES(r.rows.find(x => x.k.startsWith('IVA')).v), 210);
+  near(parseES(r.rows.find(x => x.k.startsWith('Retención')).v), 150);
+});
+
+test('Retención factura: una base de 0 € es un resultado válido, no un error', () => {
+  const r = compute('retencion-factura', { base: '0', ivaTipo: '21', retencion: '15' });
+  assert.ok(!r.error && !r.empty);
+  near(parseES(r.main.value), 0);
+});
+
+test('Retención factura: decimales redondean a céntimos en cada línea', () => {
+  const r = compute('retencion-factura', { base: '123.45', ivaTipo: '10', retencion: '15' });
+  near(parseES(r.rows.find(x => x.k.startsWith('IVA')).v), 12.35);
+  near(parseES(r.rows.find(x => x.k.startsWith('Retención')).v), 18.52);
+  near(parseES(r.main.value), 117.28);
+});
+
+test('Retención factura: IVA 0 % no añade impuesto, la retención sigue aplicando', () => {
+  const r = compute('retencion-factura', { base: '500', ivaTipo: '0', retencion: '15' });
+  near(parseES(r.rows.find(x => x.k.startsWith('IVA')).v), 0);
+  near(parseES(r.main.value), 425);
+});
+
+test('Retención factura: sin retención (particular) no aparece la fila de retención', () => {
+  const r = compute('retencion-factura', { base: '800', ivaTipo: '21', retencion: '0' });
+  assert.ok(!r.rows.some(x => x.k.startsWith('Retención')));
+  near(parseES(r.main.value), 968);
+});
+
+test('Retención factura: los tres supuestos de retención (0/7/15 %) dan totales distintos', () => {
+  const base = '1000', ivaTipo = '21';
+  near(parseES(compute('retencion-factura', { base, ivaTipo, retencion: '0' }).main.value), 1210);
+  near(parseES(compute('retencion-factura', { base, ivaTipo, retencion: '7' }).main.value), 1140);
+  near(parseES(compute('retencion-factura', { base, ivaTipo, retencion: '15' }).main.value), 1060);
+});
+
+test('Retención factura: entrada inválida (vacía, negativa o irreal) no calcula un resultado', () => {
+  assert.ok(compute('retencion-factura', { base: '', ivaTipo: '21', retencion: '15' }).empty);
+  assert.ok(compute('retencion-factura', { base: '-100', ivaTipo: '21', retencion: '15' }).error);
+  assert.ok(compute('retencion-factura', { base: '1e13', ivaTipo: '21', retencion: '15' }).error);
+});
+
+test('Retención factura: redondeo a céntimos no arrastra error en el total', () => {
+  const r = compute('retencion-factura', { base: '33.33', ivaTipo: '21', retencion: '15' });
+  near(parseES(r.main.value), 35.33);
+});
+
 /* ------------------------------------------------------------ FINIQUITO */
 
 test('Finiquito: 1.800 €, 15 días y 8 de vacaciones dan 1.380 € brutos', () => {

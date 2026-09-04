@@ -411,6 +411,22 @@
       copyLiters: ' litros, ',
       copyOneWaySuffix: ' (ida).',
     },
+
+    'retencion-factura': {
+      hint: 'Introduce la base imponible de la factura para calcular el resultado.',
+      errNegative: 'La base imponible no puede ser negativa.',
+      errTooLarge: 'El importe introducido no es una base real.',
+      rowBase: 'Base imponible',
+      rowVat: 'IVA',
+      rowWithholding: 'Retención IRPF',
+      rowTotal: 'El cliente te paga',
+      mainLabel: 'El cliente te paga',
+      note: 'La retención se calcula siempre sobre la base imponible, nunca sobre el importe con IVA incluido. La ingresa el cliente en Hacienda en tu nombre, como pago a cuenta de tu IRPF.',
+      copyBase: 'Base: ',
+      copyVat: '\nIVA: ',
+      copyWithholding: '\nRetención: ',
+      copyTotal: '\nEl cliente paga: ',
+    },
   };
 
   var T_EN = {
@@ -632,6 +648,22 @@
       copyKm: ' km: ',
       copyLiters: ' liters, ',
       copyOneWaySuffix: ' (one-way).',
+    },
+
+    'retencion-factura': {
+      hint: 'Enter the invoice tax base to calculate the result.',
+      errNegative: 'The tax base cannot be negative.',
+      errTooLarge: 'The amount entered is not a real tax base.',
+      rowBase: 'Tax base',
+      rowVat: 'VAT',
+      rowWithholding: 'IRPF withholding',
+      rowTotal: 'The client pays you',
+      mainLabel: 'The client pays you',
+      note: 'Withholding tax is always calculated on the tax base, never on the VAT-inclusive amount. The client pays it directly to the Spanish Tax Agency on your behalf.',
+      copyBase: 'Base: ',
+      copyVat: '\nVAT: ',
+      copyWithholding: '\nWithholding: ',
+      copyTotal: '\nClient pays: ',
     },
   };
 
@@ -1181,6 +1213,55 @@
         };
       },
     },
+
+    /* --------------------------------------------- RETENCIÓN FACTURA */
+    'retencion-factura': {
+      submitLabel: 'Calcular factura',
+      fields: [
+        { id: 'base', label: 'Base imponible', unit: '€', type: 'number', min: 0, step: '0.01', placeholder: '1000', autofocus: true },
+        {
+          id: 'ivaTipo', label: 'Tipo de IVA', type: 'segment', default: '21',
+          options: [{ value: '0', label: '0 %' }, { value: '4', label: '4 %' }, { value: '10', label: '10 %' }, { value: '21', label: '21 %' }],
+        },
+        {
+          id: 'retencion', label: 'Retención de IRPF', type: 'select', default: '15',
+          options: [
+            { value: '0', label: 'Sin retención (factura a particular)' },
+            { value: '15', label: 'General — 15 %' },
+            { value: '7', label: 'Nuevo profesional (1.er año y los 2 siguientes) — 7 %' },
+          ],
+        },
+      ],
+      compute: function (v) {
+        var T2 = T['retencion-factura'];
+        var base = num(v.base);
+        if (base === null) return { empty: true, hint: T2.hint };
+        if (base < 0) return { error: T2.errNegative };
+        if (base > MAX_AMOUNT) return { error: T2.errTooLarge };
+
+        var ivaRate = numOr(v.ivaTipo, 21) / 100;
+        var retRate = numOr(v.retencion, 15) / 100;
+        var iva = base * ivaRate;
+        var retencion = base * retRate;
+        var total = base + iva - retencion;
+
+        var rows = [
+          { k: T2.rowBase, v: eur(base) },
+          { k: T2.rowVat + ' (' + pct(numOr(v.ivaTipo, 21), 0) + ')', v: eur(iva) },
+        ];
+        if (retRate > 0) {
+          rows.push({ k: T2.rowWithholding + ' (' + pct(numOr(v.retencion, 15), 0) + ')', v: '−' + eur(retencion) });
+        }
+        rows.push({ k: T2.rowTotal, v: eur(total), strong: true });
+
+        return {
+          main: { label: T2.mainLabel, value: eur(total) },
+          rows: rows,
+          note: T2.note,
+          copy: T2.copyBase + eur(base) + T2.copyVat + eur(iva) + (retRate > 0 ? T2.copyWithholding + eur(retencion) : '') + T2.copyTotal + eur(total),
+        };
+      },
+    },
   };
 
   /* ================================================================
@@ -1279,6 +1360,21 @@
         consumo: { label: 'Average consumption', unit: 'L/100 km' },
         precio: { label: 'Fuel price', unit: '€/liter' },
         personas: { label: 'People sharing the cost' },
+      },
+    },
+    'retencion-factura': {
+      submitLabel: 'Calculate invoice',
+      fields: {
+        base: { label: 'Tax base' },
+        ivaTipo: { label: 'VAT rate', options: { '0': '0%', '4': '4%', '10': '10%', '21': '21%' } },
+        retencion: {
+          label: 'IRPF withholding',
+          options: {
+            '0': 'No withholding (invoice to a private individual)',
+            '15': 'Standard — 15%',
+            '7': 'New professional (1st year + following 2) — 7%',
+          },
+        },
       },
     },
   };

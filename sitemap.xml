@@ -127,6 +127,13 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/combustible/"/>
   </url>
   <url>
+    <loc>https://calculadorasfaciles.es/retencion-factura/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/spanish-invoice-withholding-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/retencion-factura/"/>
+  </url>
+  <url>
     <loc>https://calculadorasfaciles.es/sobre-calcya/</loc>
     <lastmod>2026-08</lastmod>
     <priority>0.3</priority>
@@ -272,6 +279,13 @@
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/fuel-cost-calculator/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/combustible/"/>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/en/spanish-invoice-withholding-calculator/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/spanish-invoice-withholding-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/retencion-factura/"/>
   </url>
   <url>
     <loc>https://calculadorasfaciles.es/en/about/</loc>

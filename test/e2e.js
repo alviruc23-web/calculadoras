@@ -29,9 +29,10 @@ const CASES = [
   { path: 'imc/', field: 'imc-peso', value: '70', extra: async p => { await p.fill('#imc-altura', '170'); }, expectMain: /24,2/ },
   { path: 'propina/', field: 'propina-cuenta', value: '60', expectMain: /33,00\s*€/ },
   { path: 'combustible/', field: 'combustible-km', value: '500', expectMain: /57,75\s*€/ },
+  { path: 'retencion-factura/', field: 'retencion-factura-base', value: '1000', expectMain: /1\.?060,00\s*€/ },
 ];
 
-const ALL_PAGES = ['', 'iva/', 'finiquito/', 'nomina/', 'hipoteca/', 'prestamo/', 'ahorro/', 'porcentaje/', 'dias/', 'imc/', 'propina/', 'combustible/',
+const ALL_PAGES = ['', 'iva/', 'finiquito/', 'nomina/', 'hipoteca/', 'prestamo/', 'ahorro/', 'porcentaje/', 'dias/', 'imc/', 'propina/', 'combustible/', 'retencion-factura/',
   'categoria/fiscal/', 'categoria/laboral/', 'categoria/financiera/', 'categoria/matematica/', 'categoria/salud/', 'categoria/viaje/',
   'sobre-calcya/', 'contacto/', 'privacidad/'];
 

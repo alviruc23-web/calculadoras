@@ -33,6 +33,7 @@ const ICONS = {
   imc: '<path d="M12 2a5 5 0 015 5c0 5.5-5 11-5 11S7 12.5 7 7a5 5 0 015-5z"/><circle cx="12" cy="7" r="2"/>',
   propina: '<path d="M17 9V7a5 5 0 00-10 0v2"/><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 12v5"/>',
   combustible: '<path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
+  'retencion-factura': '<path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M15 2v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>',
 };
 
 function icon(id) {
@@ -70,7 +71,7 @@ const CALCS = [
       { q: '¿Qué pasa si aplico mal el tipo en una factura?', a: 'Habría que emitir una factura rectificativa. Si la diferencia ya se ha declarado, se corrige en la siguiente autoliquidación o mediante una complementaria.' },
     ],
     tip: 'Si eres autónomo, guarda siempre la factura completa: sin ella no puedes deducir el IVA soportado aunque la compra esté relacionada con tu actividad.',
-    related: ['porcentaje', 'nomina', 'prestamo'],
+    related: ['porcentaje', 'nomina', 'prestamo', 'retencion-factura'],
     en: {
       enSlug: 'vat-calculator',
       name: 'Spanish VAT Calculator',
@@ -131,7 +132,7 @@ const CALCS = [
       { q: '¿Se descuentan impuestos del finiquito?', a: 'Sí. El importe que calcula esta herramienta es bruto: sobre él se aplican la retención de IRPF y las cotizaciones a la Seguridad Social que correspondan.' },
     ],
     tip: 'Si el importe no te cuadra, el plazo para reclamar por la vía laboral es corto. Revisa el desglose cuanto antes y pide asesoramiento si ves diferencias.',
-    related: ['nomina', 'dias', 'ahorro'],
+    related: ['nomina', 'dias', 'ahorro', 'retencion-factura'],
     en: {
       enSlug: 'severance-pay-calculator',
       name: 'Spanish Severance Pay Calculator',
@@ -193,7 +194,7 @@ const CALCS = [
       { q: '¿Cotizo sobre todo el salario?', a: 'Se cotiza sobre la base de cotización, que tiene un tope máximo anual. Por encima de esa base, un salario mayor ya no incrementa la cotización, aunque sí el IRPF.' },
     ],
     tip: 'Si tu situación personal cambia (un hijo, una hipoteca con derecho a deducción, un cambio de contrato), actualiza el modelo 145 en tu empresa: es lo que ajusta la retención.',
-    related: ['finiquito', 'ahorro', 'iva'],
+    related: ['finiquito', 'ahorro', 'iva', 'retencion-factura'],
     en: {
       enSlug: 'spanish-payroll-calculator',
       name: 'Spanish Payroll Calculator (Net Salary)',
@@ -657,6 +658,67 @@ const CALCS = [
         { q: "Where do I find my car's real fuel consumption?", a: 'The onboard computer gives the real average consumption, which is usually 10-15% higher than the official spec-sheet figure, especially in city driving, with a loaded car, or at high motorway speeds.' },
         { q: 'Where can I check fuel prices?', a: "Spain's Ministry for Ecological Transition publishes prices for every service station in the country, and several apps show the cheapest ones near your route." },
         { q: 'Does this include tolls or vehicle wear?', a: 'No. It only covers fuel. For the real cost of a trip you would need to add tolls and vehicle depreciation, which is usually estimated separately per kilometer.' },
+      ],
+    },
+  },
+  {
+    id: 'retencion-factura',
+    cat: 'fiscal',
+    name: 'Calculadora de retención IRPF en factura',
+    h1: 'Calculadora de retención IRPF en factura',
+    short: 'Calcula el IVA, la retención de IRPF y el total a cobrar en una factura de autónomo o profesional.',
+    intro: 'Calcula la base imponible, el IVA y —si corresponde— la retención de IRPF de una factura de autónomo o profesional, para saber exactamente cuánto te paga el cliente.',
+    keywords: 'retencion irpf factura autonomo profesional iva irpf factura calculadora factura autonomo base imponible retencion 7 15 nuevo autonomo',
+    formula: {
+      title: 'Cómo se calcula',
+      lines: [
+        { label: 'IVA', expr: 'Base × tipo de IVA' },
+        { label: 'Retención IRPF', expr: 'Base × tipo de retención' },
+        { label: 'Total a cobrar', expr: 'Base + IVA − Retención' },
+      ],
+      note: 'La retención se calcula siempre sobre la base imponible, nunca sobre el importe con IVA incluido.',
+      source: 'Tipos de retención de IRPF para actividades profesionales, Reglamento del IRPF (RD 439/2007).',
+    },
+    example: {
+      title: 'Ejemplo',
+      text: 'Una factura de 1.000 € de base, con IVA del 21 % y retención general del 15 %: el IVA es 210 €, la retención es 150 €, así que el cliente te paga 1.060 €. Esos 150 € ya los ingresa el cliente en Hacienda en tu nombre, como pago a cuenta de tu IRPF.',
+    },
+    tip: 'Si tu cliente aplica una retención distinta a la que te corresponde, coméntaselo antes de emitir la factura: corregir un error de retención después complica tu declaración.',
+    faq: [
+      { q: '¿Qué retención de IRPF lleva una factura de autónomo?', a: 'La retención general para profesionales autónomos es del 15 % sobre la base imponible. Los nuevos autónomos pueden aplicar un 7 % reducido durante el año de inicio de la actividad y los dos siguientes, de forma opcional.' },
+      { q: '¿La retención se calcula sobre el IVA o solo sobre la base?', a: 'Solo sobre la base imponible. El IVA nunca forma parte del cálculo de la retención.' },
+      { q: '¿Quién ingresa la retención en Hacienda?', a: 'La ingresa el cliente (el pagador), no tú. Es un pago a cuenta de tu IRPF que se descuenta después en tu declaración trimestral y anual.' },
+      { q: '¿Tengo que aplicar retención si mi cliente es un particular?', a: 'No. La retención solo se aplica cuando el pagador es otro autónomo o una empresa. Las facturas a consumidores finales no llevan retención.' },
+      { q: '¿Qué pasa si soy autónomo de nueva actividad?', a: 'Puedes aplicar el 7 % en el año de inicio y en los dos siguientes, aunque es opcional: también puedes elegir la retención general del 15 % si te interesa más.' },
+    ],
+    related: ['iva', 'nomina', 'finiquito'],
+    en: {
+      enSlug: 'spanish-invoice-withholding-calculator',
+      name: 'Spanish Invoice Withholding Tax Calculator',
+      h1: 'Spanish Invoice Withholding Tax Calculator',
+      short: 'Calculate VAT, IRPF withholding tax and the final amount on a Spanish freelancer invoice.',
+      intro: "Calculate the tax base, VAT and — when it applies — Spain's IRPF withholding tax on a self-employed (autónomo) or professional invoice, so you know exactly what the client pays you.",
+      formula: {
+        title: 'How it is calculated',
+        lines: [
+          { label: 'VAT', expr: 'Base × VAT rate' },
+          { label: 'IRPF withholding', expr: 'Base × withholding rate' },
+          { label: 'Amount paid', expr: 'Base + VAT − Withholding' },
+        ],
+        note: 'Withholding tax is always calculated on the tax base, never on the VAT-inclusive amount.',
+        source: "Spanish IRPF withholding rates for professional activities, Reglamento del IRPF (Royal Decree 439/2007).",
+      },
+      example: {
+        title: 'Example',
+        text: "An invoice with a €1,000 base, 21% VAT and the standard 15% withholding: VAT is €210, withholding is €150, so the client pays you €1,060. That €150 has already been paid to the Spanish Tax Agency on your behalf, as an advance payment toward your income tax.",
+      },
+      tip: "If your client applies a different withholding rate than the one that applies to you, raise it before issuing the invoice — fixing a withholding error afterwards complicates your tax return.",
+      faq: [
+        { q: 'What withholding tax applies to a Spanish freelancer invoice?', a: 'The standard rate for self-employed professionals (autónomos) is 15% of the tax base. Newly self-employed workers can apply a reduced 7% rate during their first year of activity and the following two years, optionally.' },
+        { q: 'Is the withholding calculated on the VAT or only on the base?', a: 'Only on the tax base. VAT is never part of the withholding calculation.' },
+        { q: 'Who pays the withheld amount to the tax authorities?', a: "The client (the payer) does, not you. It's an advance payment toward your Spanish income tax (IRPF), deducted later from your quarterly and annual tax return." },
+        { q: 'Do I need to withhold tax if my client is a private individual?', a: "No. Withholding only applies when the payer is another self-employed professional or a business. Invoices to private consumers don't carry withholding tax." },
+        { q: "What if I'm a newly self-employed professional?", a: 'You can apply the 7% rate during your first year of activity and the following two years, though it is optional — you can also choose the standard 15% if it suits you better.' },
       ],
     },
   },
