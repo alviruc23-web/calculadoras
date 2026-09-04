@@ -614,7 +614,7 @@ const CALCS = [
     cat: 'viaje',
     name: 'Calculadora de gasto de combustible',
     h1: 'Calculadora de gasto de combustible',
-    short: 'Cuánto cuesta un viaje en coche según los kilómetros, el consumo y el precio del carburante.',
+    short: 'Calcula los litros de combustible y el coste de un viaje: precio de ida, ida y vuelta y reparto por persona.',
     intro: 'Calcula los litros que gastarás y lo que te costará un trayecto, tanto solo de ida como de ida y vuelta. Si viajáis varios, también reparte el gasto entre los ocupantes.',
     keywords: 'gasto combustible gasolina diesel viaje coche coste kilometros litros consumo compartir gastos ruta',
     formula: {
@@ -639,7 +639,7 @@ const CALCS = [
       enSlug: 'fuel-cost-calculator',
       name: 'Fuel Cost Calculator',
       h1: 'Fuel Cost Calculator',
-      short: 'How much a car trip costs based on distance, fuel consumption and fuel price.',
+      short: 'Calculate the fuel needed and total cost of a car trip: one-way price, round trip and cost split between passengers.',
       intro: "Calculate the liters you'll use and what a trip will cost, one-way or round-trip. If you're traveling with others, it also splits the cost between passengers.",
       formula: {
         title: 'How it is calculated',
