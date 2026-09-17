@@ -615,6 +615,13 @@ const CALCS = [
     cat: 'viaje',
     name: 'Calculadora de gasto de combustible',
     h1: 'Calculadora de gasto de combustible',
+    // Title de 68 caracteres con el sufijo estándar, con riesgo de
+    // truncamiento en el SERP: 77 impresiones / 0 clics en GSC (posición
+    // media 7,3) mientras el resto de calculadoras sí registra clics.
+    // Se quita solo el sufijo " — Gratis y sin registro" (que ya está en
+    // la meta description) para acortar el title sin tocar la frase
+    // clave ni el H1. Cambio ES únicamente, sin evidencia de EN.
+    noTitleSuffix: true,
     short: 'Calcula los litros de combustible y el coste de un viaje: precio de ida, ida y vuelta y reparto por persona.',
     intro: 'Calcula los litros que gastarás y lo que te costará un trayecto, tanto solo de ida como de ida y vuelta. Si viajáis varios, también reparte el gasto entre los ocupantes.',
     keywords: 'gasto combustible gasolina diesel viaje coche coste kilometros litros consumo compartir gastos ruta',

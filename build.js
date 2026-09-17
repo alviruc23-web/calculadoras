@@ -133,7 +133,7 @@ function buildCalculatorPage(c, locale) {
   const assetPrefix = assetPrefixFor(depth, locale);
   const html = pageShell(
     {
-      title: `${c.name}${yearTag}${s.titleFreeNoSignup} | ${S.name}`,
+      title: `${c.name}${yearTag}${c.noTitleSuffix && locale === 'es' ? '' : s.titleFreeNoSignup} | ${S.name}`,
       description: `${c.short} ${s.calcDescFree}${c.yearSensitive ? `${s.calcDescUpdatedFor}${S.year}` : ''}${s.calcDescNoSignupInstant}`,
       canonicalPath: `${c.slug}/`,
       depth,
