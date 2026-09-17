@@ -233,12 +233,18 @@ const INFO_PAGES = [
   { id: 'about', slug: 'sobre-calcya', title: 'Sobre CalcYa', navLabel: 'Sobre nosotros' },
   { id: 'contact', slug: 'contacto', title: 'Contacto', navLabel: 'Contacto' },
   { id: 'privacy', slug: 'privacidad', title: 'Política de privacidad', navLabel: 'Privacidad' },
+  { id: 'legal', slug: 'aviso-legal', title: 'Aviso legal', navLabel: 'Aviso legal' },
+  { id: 'cookies', slug: 'politica-cookies', title: 'Política de cookies', navLabel: 'Cookies' },
+  { id: 'terms', slug: 'terminos', title: 'Términos de uso', navLabel: 'Términos de uso' },
 ];
 
 const INFO_PAGES_EN = [
   { id: 'about', slug: 'about', title: 'About CalcYa', navLabel: 'About us' },
   { id: 'contact', slug: 'contact', title: 'Contact', navLabel: 'Contact' },
   { id: 'privacy', slug: 'privacy-policy', title: 'Privacy Policy', navLabel: 'Privacy' },
+  { id: 'legal', slug: 'legal-notice', title: 'Legal Notice', navLabel: 'Legal notice' },
+  { id: 'cookies', slug: 'cookie-policy', title: 'Cookie Policy', navLabel: 'Cookies' },
+  { id: 'terms', slug: 'terms-of-use', title: 'Terms of Use', navLabel: 'Terms of use' },
 ];
 
 /* Único punto que build.js y las plantillas deben usar para resolver

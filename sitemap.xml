@@ -155,6 +155,27 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/privacidad/"/>
   </url>
   <url>
+    <loc>https://calculadorasfaciles.es/aviso-legal/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/aviso-legal/"/>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/politica-cookies/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/cookie-policy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/politica-cookies/"/>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/terminos/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/terms-of-use/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/terminos/"/>
+  </url>
+  <url>
     <loc>https://calculadorasfaciles.es/en/</loc>
     <lastmod>2026-08</lastmod>
     <priority>1.0</priority>
@@ -307,5 +328,26 @@
     <priority>0.3</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/privacy-policy/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/privacidad/"/>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/en/legal-notice/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/aviso-legal/"/>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/en/cookie-policy/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/cookie-policy/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/politica-cookies/"/>
+  </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/en/terms-of-use/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/terms-of-use/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/terminos/"/>
   </url>
 </urlset>

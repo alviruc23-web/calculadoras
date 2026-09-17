@@ -32,7 +32,7 @@ const { pageShell, prefixFor, assetPrefixFor } = require('./src/templates/layout
 const { renderHomeBody, buildHomeStructuredData } = require('./src/templates/home');
 const { renderCalculatorBody, buildStructuredData } = require('./src/templates/calculatorPage');
 const { renderCategoryBody, buildCategoryStructuredData } = require('./src/templates/categoryPage');
-const { renderAboutBody, renderContactBody, renderPrivacyBody } = require('./src/templates/infoPage');
+const { renderAboutBody, renderContactBody, renderPrivacyBody, renderLegalBody, renderCookiesBody, renderTermsBody } = require('./src/templates/infoPage');
 const { t } = require('./src/data/i18n');
 
 const ROOT = __dirname;
@@ -176,6 +176,9 @@ const INFO_RENDERERS = {
   about: renderAboutBody,
   contact: renderContactBody,
   privacy: renderPrivacyBody,
+  legal: renderLegalBody,
+  cookies: renderCookiesBody,
+  terms: renderTermsBody,
 };
 
 function buildInfoPage(pg, locale) {
