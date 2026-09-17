@@ -204,6 +204,46 @@ function buildInfoPage(pg, locale) {
   write(`${dirPrefix(locale)}${pg.slug}/index.html`, html);
 }
 
+// GitHub Pages solo reconoce un único 404.html en la raíz del sitio
+// (no hay una versión por idioma: un dominio con CNAME propio sirve
+// ese único fichero para cualquier URL rota, sea /en/... o no). Se
+// genera en español, que es la audiencia principal del dominio.
+function build404() {
+  const { CATEGORIES: CATS } = localeData('es');
+  const categoryLinks = CATS.map(cat =>
+    `<a class="related-card" href="/categoria/${cat.slug}/"><span>${cat.label}</span></a>`
+  ).join('\n      ');
+
+  const body = `
+<main id="main">
+<div class="wrap narrow legal-page">
+  <h1>Página no encontrada</h1>
+  <p>La página que buscas no existe o se ha movido. Puede que el enlace esté desactualizado o que hayas escrito mal la dirección.</p>
+  <p>Todas las calculadoras de CalcYa están disponibles desde la home o por categoría:</p>
+  <div class="related-grid">
+      ${categoryLinks}
+  </div>
+  <a class="back-link" href="/">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Volver al inicio
+  </a>
+</div>
+</main>`;
+
+  const html = pageShell(
+    {
+      title: 'Página no encontrada | CalcYa',
+      description: 'La página que buscas no existe. Encuentra tu calculadora desde la home de CalcYa.',
+      canonicalPath: '',
+      depth: 0,
+      noindex: true,
+      locale: 'es',
+    },
+    body
+  );
+  write('404.html', html);
+}
+
 function buildSitemap() {
   const urls = [];
   LOCALES.forEach(locale => {
@@ -269,7 +309,7 @@ function buildRobots() {
 function cleanOrphans() {
   const enData = localeData('en');
 
-  const known = new Set(['index.html', 'sitemap.xml', 'robots.txt', 'ads.txt', 'CNAME', 'README.md', 'package.json', 'package-lock.json', 'build.js', 'src', 'assets', 'test', 'node_modules', '.git', '.github', 'en']);
+  const known = new Set(['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'ads.txt', 'CNAME', 'README.md', 'package.json', 'package-lock.json', 'build.js', 'src', 'assets', 'test', 'node_modules', '.git', '.github', 'en']);
   CALCS.forEach(c => known.add(c.slug));
   INFO_PAGES.forEach(pg => known.add(pg.slug));
   known.add('categoria');
@@ -326,6 +366,7 @@ LOCALES.forEach(locale => {
   localeData(locale).CATEGORIES.forEach(cat => buildCategoryPage(cat, locale));
   localeData(locale).INFO_PAGES.forEach(pg => buildInfoPage(pg, locale));
 });
+build404();
 buildSitemap();
 buildRobots();
 cleanOrphans();
