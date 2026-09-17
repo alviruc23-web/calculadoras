@@ -43,6 +43,18 @@ const SITE_EN = {
   contactUrl: SITE.contactUrl,
 };
 
+// Identidad legal del titular del sitio (LSSI art. 10, exigida en el
+// aviso legal). Compartida entre idiomas: es la misma persona real,
+// no un dato que cambie por locale. El NIF y el domicilio no se han
+// facilitado todavía — se dejan `null` explícitamente en vez de
+// inventarlos; ver cómo se muestra ese hueco en /aviso-legal/.
+const LEGAL_ENTITY = {
+  ownerName: 'Álvaro Ruiz',
+  contactEmail: 'momentumtiktok33@gmail.com',
+  nif: null,
+  address: null,
+};
+
 // Medición y monetización. Ambos scripts se cargan SOLO tras consentimiento
 // (ver assets/js/consent.js). Dejar el id vacío desactiva el servicio.
 // Compartido entre idiomas: misma cuenta de Analytics/AdSense para todo el dominio.
@@ -258,4 +270,4 @@ function localeData(locale) {
   return { SITE, CATEGORIES, CATEGORY_BY_ID, INFO_PAGES };
 }
 
-module.exports = { SITE, SITE_EN, SERVICES, CATEGORIES, CATEGORIES_EN, CATEGORY_BY_ID, CATEGORY_BY_ID_EN, INFO_PAGES, INFO_PAGES_EN, localeData };
+module.exports = { SITE, SITE_EN, SERVICES, LEGAL_ENTITY, CATEGORIES, CATEGORIES_EN, CATEGORY_BY_ID, CATEGORY_BY_ID_EN, INFO_PAGES, INFO_PAGES_EN, localeData };

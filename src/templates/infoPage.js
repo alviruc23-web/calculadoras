@@ -1,4 +1,4 @@
-const { localeData } = require('../data/site');
+const { localeData, LEGAL_ENTITY } = require('../data/site');
 const { t } = require('../data/i18n');
 
 // Devuelve la ruta (con prefix) a una página informativa por su `id`
@@ -66,20 +66,20 @@ function renderContactBody(prefix, locale) {
   const { SITE } = localeData(locale);
   if (locale === 'en') {
     const body = `
-  <p>${SITE.name} is a small project with no support team, so the contact channel is direct: the project's public GitHub repository.</p>
+  <p>${SITE.name} is a small project with no support team, so the direct contact channel is email: <a href="mailto:${LEGAL_ENTITY.contactEmail}">${LEGAL_ENTITY.contactEmail}</a>. You can also use the project's public GitHub repository.</p>
   <ul class="legal-list">
-    <li><strong>Errors in a calculator or a formula:</strong> <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">open an issue on GitHub</a>, naming the calculator and the values you used.</li>
-    <li><strong>Suggestions for new calculators:</strong> also via <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">GitHub</a>.</li>
+    <li><strong>Errors in a calculator or a formula:</strong> <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">open an issue on GitHub</a>, naming the calculator and the values you used, or write to the email above.</li>
+    <li><strong>Suggestions for new calculators:</strong> also via <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">GitHub</a> or email.</li>
     <li><strong>Privacy and cookies:</strong> see the <a href="${infoPath(prefix, locale, 'privacy')}">privacy policy</a>, which includes the same contact channel.</li>
   </ul>
   <p>We don't offer personalized tax, employment, financial or medical advice: the calculators give general, indicative results and don't replace a professional.</p>`;
     return shell('Contact', 'Contact', body, prefix, locale);
   }
   const body = `
-  <p>${SITE.name} es un proyecto pequeño y sin equipo de soporte, así que la vía de contacto es directa: el repositorio público del proyecto en GitHub.</p>
+  <p>${SITE.name} es un proyecto pequeño y sin equipo de soporte, así que la vía de contacto directa es el email: <a href="mailto:${LEGAL_ENTITY.contactEmail}">${LEGAL_ENTITY.contactEmail}</a>. También puedes usar el repositorio público del proyecto en GitHub.</p>
   <ul class="legal-list">
-    <li><strong>Errores en una calculadora o en una fórmula:</strong> <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">abre un issue en GitHub</a> indicando la calculadora y los valores que has usado.</li>
-    <li><strong>Sugerencias de nuevas calculadoras:</strong> también por <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">GitHub</a>.</li>
+    <li><strong>Errores en una calculadora o en una fórmula:</strong> <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">abre un issue en GitHub</a> indicando la calculadora y los valores que has usado, o escribe al email de arriba.</li>
+    <li><strong>Sugerencias de nuevas calculadoras:</strong> también por <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">GitHub</a> o email.</li>
     <li><strong>Privacidad y cookies:</strong> consulta la <a href="${infoPath(prefix, locale, 'privacy')}">política de privacidad</a>, que incluye el mismo canal de contacto.</li>
   </ul>
   <p>No ofrecemos asesoramiento fiscal, laboral, financiero ni médico personalizado: las calculadoras dan resultados orientativos y generales, no sustituyen a un profesional.</p>`;
@@ -93,7 +93,7 @@ function renderPrivacyBody(prefix, locale) {
   <p class="legal-updated">Last updated: ${SITE.reviewedLabel}.</p>
 
   <h2>1. Who is responsible for this site?</h2>
-  <p>${SITE.name} (${SITE.baseUrl}) is an independent project. The site is operated by the owner of the domain and repository named on this page. For any question about this policy, write to <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">the project's public GitHub repository</a>.</p>
+  <p>${SITE.name} (${SITE.baseUrl}) is an independent project operated by <strong>${LEGAL_ENTITY.ownerName}</strong>. For any question about this policy, write to <a href="mailto:${LEGAL_ENTITY.contactEmail}">${LEGAL_ENTITY.contactEmail}</a> or <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">the project's public GitHub repository</a>. Full legal identification (tax ID, registered address) is pending — see the <a href="${infoPath(prefix, locale, 'legal')}">legal notice</a>.</p>
 
   <h2>2. What data do we collect?</h2>
   <p>${SITE.name} does not require sign-up or an account. The data you enter into the calculators (salary, price, weight, dates...) is processed only in your browser: it is never sent to a server or stored. We don't collect your name, email or any other personal data through normal use of the calculators.</p>
@@ -125,7 +125,7 @@ function renderPrivacyBody(prefix, locale) {
   <p class="legal-updated">Última actualización: ${SITE.reviewedLabel}.</p>
 
   <h2>1. ¿Quién es el responsable de este sitio?</h2>
-  <p>${SITE.name} (${SITE.baseUrl}) es un proyecto independiente. El titular es el operador del dominio y del repositorio indicados en esta página. Para cualquier consulta sobre esta política, escribe en <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">el repositorio público del proyecto en GitHub</a>.</p>
+  <p>${SITE.name} (${SITE.baseUrl}) es un proyecto independiente operado por <strong>${LEGAL_ENTITY.ownerName}</strong>. Para cualquier consulta sobre esta política, escribe a <a href="mailto:${LEGAL_ENTITY.contactEmail}">${LEGAL_ENTITY.contactEmail}</a> o a <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">el repositorio público del proyecto en GitHub</a>. La identificación legal completa (NIF, domicilio) está pendiente — consulta el <a href="${infoPath(prefix, locale, 'legal')}">aviso legal</a>.</p>
 
   <h2>2. ¿Qué datos recogemos?</h2>
   <p>${SITE.name} no requiere registro ni cuenta. Los datos que introduces en las calculadoras (salario, precio, peso, fechas...) se procesan únicamente en tu navegador: no se envían a ningún servidor ni se almacenan. No recopilamos nombre, correo ni ningún otro dato personal por el uso normal de las calculadoras.</p>
@@ -161,7 +161,8 @@ function renderLegalBody(prefix, locale) {
   <p class="legal-updated">Last updated: ${SITE.reviewedLabel}.</p>
 
   <h2>1. Site owner</h2>
-  <p>${SITE.name} (${SITE.baseUrl}) is an independent, personal project. Full identification of the owner (legal or trade name, tax ID, registered address) is <strong>[pending — to be completed by the site owner]</strong>. Until it is published here, the owner can be reached through <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">the project's public GitHub repository</a>.</p>
+  <p>${SITE.name} (${SITE.baseUrl}) is an independent, personal project operated by <strong>${LEGAL_ENTITY.ownerName}</strong>. You can reach the owner at <a href="mailto:${LEGAL_ENTITY.contactEmail}">${LEGAL_ENTITY.contactEmail}</a> or through <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">the project's public GitHub repository</a>.</p>
+  <p>The tax ID and registered address for this notice are <strong>[pending — to be completed by the site owner]</strong>.</p>
 
   <h2>2. Purpose of this site</h2>
   <p>${SITE.name} offers free, browser-based calculators for everyday use (taxes, payroll, mortgages, health, and more). No account or sign-up is required. Use of the site is also governed by the <a href="${infoPath(prefix, locale, 'terms')}">terms of use</a> and the <a href="${infoPath(prefix, locale, 'privacy')}">privacy policy</a>.</p>
@@ -186,7 +187,8 @@ function renderLegalBody(prefix, locale) {
   <p class="legal-updated">Última actualización: ${SITE.reviewedLabel}.</p>
 
   <h2>1. Titular del sitio</h2>
-  <p>${SITE.name} (${SITE.baseUrl}) es un proyecto independiente y personal. La identificación completa del titular (nombre o razón social, NIF, domicilio) está <strong>[pendiente de completar por el titular]</strong>. Mientras no se publique aquí, puedes contactar con el titular a través de <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">el repositorio público del proyecto en GitHub</a>.</p>
+  <p>${SITE.name} (${SITE.baseUrl}) es un proyecto independiente y personal, operado por <strong>${LEGAL_ENTITY.ownerName}</strong>. Puedes contactar con el titular en <a href="mailto:${LEGAL_ENTITY.contactEmail}">${LEGAL_ENTITY.contactEmail}</a> o a través de <a href="${SITE.repoUrl}/issues" target="_blank" rel="noopener">el repositorio público del proyecto en GitHub</a>.</p>
+  <p>El NIF y el domicilio a efectos de este aviso están <strong>[pendientes de completar por el titular]</strong>.</p>
 
   <h2>2. Objeto del sitio</h2>
   <p>${SITE.name} ofrece calculadoras gratuitas que funcionan en el navegador para el día a día (impuestos, nómina, hipoteca, salud y más). No requiere cuenta ni registro. El uso del sitio se rige también por los <a href="${infoPath(prefix, locale, 'terms')}">términos de uso</a> y la <a href="${infoPath(prefix, locale, 'privacy')}">política de privacidad</a>.</p>
