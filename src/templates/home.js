@@ -49,7 +49,7 @@ function renderHomeBody(prefix, locale) {
     <p class="eyebrow">${s.heroEyebrow.replace('{n}', CALCS.length)}</p>
     <h1>${s.heroH1}</h1>
     <p class="lead">${s.heroLead}</p>
-    <form class="hero-search" role="search" action="${prefix}index.html" method="get" data-site-search data-hero-search>
+    <form class="hero-search" role="search" action="${prefix || '.'}" method="get" data-site-search data-hero-search>
       <label class="sr-only" for="hero-search-input">${s.searchLabel}</label>
       <svg class="hero-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
       <input type="search" id="hero-search-input" name="q" placeholder="${s.heroSearchPlaceholder}" autocomplete="off" aria-expanded="false" aria-controls="hero-search-results" role="combobox" aria-autocomplete="list">

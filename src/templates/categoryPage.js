@@ -38,7 +38,7 @@ function renderCategoryBody(cat, prefix, locale) {
 
 <div class="wrap">
   <nav class="breadcrumb" aria-label="${s.breadcrumbAriaLabel}">
-    <a href="${prefix}index.html">${s.breadcrumbHome}</a>
+    <a href="${prefix}">${s.breadcrumbHome}</a>
     <span aria-hidden="true">/</span>
     <span aria-current="page">${cat.label}</span>
   </nav>
@@ -62,7 +62,7 @@ function renderCategoryBody(cat, prefix, locale) {
     </div>
   </section>
 
-  <a class="back-link" href="${prefix}index.html#categorias">
+  <a class="back-link" href="${prefix}#categorias">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     ${s.viewAllCategoriesLink}
   </a>

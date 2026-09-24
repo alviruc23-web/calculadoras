@@ -11,6 +11,20 @@ function prefixFor(depth) {
   return '../'.repeat(depth);
 }
 
+// Los enlaces "a la home" no pueden usar simplemente prefixFor(depth):
+// en profundidad 0 (la propia home) eso da '', y un <a href=""> apunta
+// al documento actual preservando query string/hash en vez de a la home
+// limpia. '.' resuelve siempre al índice del directorio actual sin
+// arrastrar ni query ni hash — el mismo comportamiento que ya tenía
+// prefixFor en cualquier profundidad >0 (termina en '/', nunca en
+// "index.html"). Evita generar una URL alternativa (".../index.html")
+// que Search Console detecta como "página alternativa con etiqueta
+// canónica adecuada": todo enlace interno a la home pasa a apuntar
+// directamente a la URL canónica.
+function homeHref(depth) {
+  return prefixFor(depth) || '.';
+}
+
 // assets/ vive una sola vez en la raíz REAL del sitio, no se duplica
 // bajo /en/. Para inglés hace falta un nivel extra de "../" respecto a
 // prefixFor(depth) para escapar de /en/ y llegar a la raíz real.
@@ -42,6 +56,7 @@ function buildSearchIndex(locale) {
 
 function renderHeader(depth, active, locale, altUrl) {
   const p = prefixFor(depth);
+  const home = homeHref(depth);
   const { SITE } = localeData(locale);
   const s = t(locale);
   // Enlace directo a la MISMA página en el otro idioma (la URL exacta que
@@ -56,7 +71,7 @@ function renderHeader(depth, active, locale, altUrl) {
 <a class="skip-link" href="#main">${s.skipLink}</a>
 <header class="site-header">
   <div class="wrap hdr-in">
-    <a href="${p}index.html" class="logo">
+    <a href="${home}" class="logo">
       <span class="logo-mark" aria-hidden="true">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <rect x="2" y="2" width="5" height="5" rx="1.2" fill="white"/>
@@ -68,11 +83,11 @@ function renderHeader(depth, active, locale, altUrl) {
       ${SITE.name}
     </a>
     <nav class="main-nav" aria-label="${s.navAriaLabel}">
-      <a href="${p}index.html" class="nav-link${active === 'home' ? ' on' : ''}"${active === 'home' ? ' aria-current="page"' : ''}>${s.navHome}</a>
-      <a href="${p}index.html#categorias" class="nav-link">${s.navCategories}</a>
+      <a href="${home}" class="nav-link${active === 'home' ? ' on' : ''}"${active === 'home' ? ' aria-current="page"' : ''}>${s.navHome}</a>
+      <a href="${home}#categorias" class="nav-link">${s.navCategories}</a>
     </nav>
     <div class="spacer"></div>
-    <form class="hdr-search" role="search" action="${p}index.html" method="get" data-site-search>
+    <form class="hdr-search" role="search" action="${home}" method="get" data-site-search>
       <label class="sr-only" for="hdr-search-input">${s.searchLabel}</label>
       <svg class="hdr-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
       <input type="search" id="hdr-search-input" name="q" placeholder="${s.searchPlaceholderHeader}" autocomplete="off" aria-expanded="false" aria-controls="hdr-search-results" role="combobox" aria-autocomplete="list">
@@ -84,6 +99,7 @@ function renderHeader(depth, active, locale, altUrl) {
 
 function renderFooter(depth, locale) {
   const p = prefixFor(depth);
+  const home = homeHref(depth);
   const { SITE, CATEGORIES, INFO_PAGES } = localeData(locale);
   const s = t(locale);
   const CALCS = getCalcs(locale);
@@ -107,7 +123,7 @@ function renderFooter(depth, locale) {
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a href="${p}index.html" class="foot-logo">${SITE.name}</a>
+        <a href="${home}" class="foot-logo">${SITE.name}</a>
         <p>${SITE.tagline}</p>
       </div>${cols}
       <div class="foot-col">
@@ -191,4 +207,4 @@ ${extraScripts || ''}
 `;
 }
 
-module.exports = { pageShell, prefixFor, assetPrefixFor, buildSearchIndex };
+module.exports = { pageShell, prefixFor, assetPrefixFor, buildSearchIndex, homeHref };

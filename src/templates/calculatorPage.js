@@ -110,7 +110,7 @@ function renderCalculatorBody(c, prefix, locale) {
 
 <div class="wrap">
   <nav class="breadcrumb" aria-label="${s.breadcrumbAriaLabel}">
-    <a href="${prefix}index.html">${s.breadcrumbHome}</a>
+    <a href="${prefix}">${s.breadcrumbHome}</a>
     <span aria-hidden="true">/</span>
     <a href="${prefix}categoria/${cat.slug}/">${cat.label}</a>
     <span aria-hidden="true">/</span>
