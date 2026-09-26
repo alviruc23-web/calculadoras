@@ -33,6 +33,7 @@ const { renderHomeBody, buildHomeStructuredData } = require('./src/templates/hom
 const { renderCalculatorBody, buildStructuredData } = require('./src/templates/calculatorPage');
 const { renderCategoryBody, buildCategoryStructuredData } = require('./src/templates/categoryPage');
 const { renderAboutBody, renderContactBody, renderPrivacyBody, renderLegalBody, renderCookiesBody, renderTermsBody } = require('./src/templates/infoPage');
+const { renderGuideBody, buildGuideStructuredData } = require('./src/templates/guidePage');
 const { t } = require('./src/data/i18n');
 
 const ROOT = __dirname;
@@ -207,6 +208,28 @@ function buildInfoPage(pg, locale) {
   write(`${dirPrefix(locale)}${pg.slug}/index.html`, html);
 }
 
+// Guías: a diferencia de buildInfoPage, no buscan un par en el otro
+// idioma ni generan hreflang — una guía puede vivir en un solo idioma
+// (ver GUIDES/GUIDES_EN en src/data/site.js). Mismo patrón que build404().
+function buildGuidePage(g, locale) {
+  const { SITE: S } = localeData(locale);
+  const depth = 1; // /[en/]<slug>/ — distancia a la raíz del idioma
+  const canonicalUrl = `${S.baseUrl}${g.slug}/`;
+
+  const html = pageShell(
+    {
+      title: `${g.title} | ${S.name}`,
+      description: g.description,
+      canonicalPath: `${g.slug}/`,
+      depth,
+      structuredData: buildGuideStructuredData(g, canonicalUrl, locale),
+      locale,
+    },
+    renderGuideBody(g, prefixFor(depth), locale)
+  );
+  write(`${dirPrefix(locale)}${g.slug}/index.html`, html);
+}
+
 // GitHub Pages solo reconoce un único 404.html en la raíz del sitio
 // (no hay una versión por idioma: un dominio con CNAME propio sirve
 // ese único fichero para cualquier URL rota, sea /en/... o no). Se
@@ -250,7 +273,7 @@ function build404() {
 function buildSitemap() {
   const urls = [];
   LOCALES.forEach(locale => {
-    const { SITE: S, CATEGORIES: CATS, INFO_PAGES: PAGES } = localeData(locale);
+    const { SITE: S, CATEGORIES: CATS, INFO_PAGES: PAGES, GUIDES } = localeData(locale);
     const other = otherLocale(locale);
     const altBase = localeData(other).SITE.baseUrl;
 
@@ -280,6 +303,17 @@ function buildSitemap() {
         loc: `${S.baseUrl}${pg.slug}/`,
         priority: '0.3',
         hreflang: { [locale]: `${S.baseUrl}${pg.slug}/`, [other]: `${altBase}${otherPg.slug}/` },
+      });
+    });
+
+    // Las guías no tienen por qué existir en el otro idioma (ver
+    // GUIDES/GUIDES_EN): un solo hreflang, el suyo propio, sin inventar
+    // un alternate que no existe.
+    GUIDES.forEach(g => {
+      urls.push({
+        loc: `${S.baseUrl}${g.slug}/`,
+        priority: '0.6',
+        hreflang: { [locale]: `${S.baseUrl}${g.slug}/` },
       });
     });
   });
@@ -315,6 +349,7 @@ function cleanOrphans() {
   const known = new Set(['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'ads.txt', 'CNAME', 'README.md', 'package.json', 'package-lock.json', 'build.js', 'src', 'assets', 'test', 'node_modules', '.git', '.github', 'en']);
   CALCS.forEach(c => known.add(c.slug));
   INFO_PAGES.forEach(pg => known.add(pg.slug));
+  localeData('es').GUIDES.forEach(g => known.add(g.slug));
   known.add('categoria');
 
   fs.readdirSync(ROOT, { withFileTypes: true }).forEach(entry => {
@@ -340,6 +375,7 @@ function cleanOrphans() {
     const enKnown = new Set(['categoria', 'index.html']);
     getCalcs('en').forEach(c => enKnown.add(c.slug));
     enData.INFO_PAGES.forEach(pg => enKnown.add(pg.slug));
+    enData.GUIDES.forEach(g => enKnown.add(g.slug));
 
     fs.readdirSync(enRoot, { withFileTypes: true }).forEach(entry => {
       if (entry.name.startsWith('.')) return;
@@ -368,6 +404,7 @@ LOCALES.forEach(locale => {
   getCalcs(locale).forEach(c => buildCalculatorPage(c, locale));
   localeData(locale).CATEGORIES.forEach(cat => buildCategoryPage(cat, locale));
   localeData(locale).INFO_PAGES.forEach(pg => buildInfoPage(pg, locale));
+  localeData(locale).GUIDES.forEach(g => buildGuidePage(g, locale));
 });
 build404();
 buildSitemap();

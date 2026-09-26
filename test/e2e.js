@@ -34,7 +34,8 @@ const CASES = [
 
 const ALL_PAGES = ['', 'iva/', 'finiquito/', 'nomina/', 'hipoteca/', 'prestamo/', 'ahorro/', 'porcentaje/', 'dias/', 'imc/', 'propina/', 'combustible/', 'retencion-factura/',
   'categoria/fiscal/', 'categoria/laboral/', 'categoria/financiera/', 'categoria/matematica/', 'categoria/salud/', 'categoria/viaje/',
-  'sobre-calcya/', 'contacto/', 'privacidad/', 'aviso-legal/', 'politica-cookies/', 'terminos/'];
+  'sobre-calcya/', 'contacto/', 'privacidad/', 'aviso-legal/', 'politica-cookies/', 'terminos/',
+  'en/mortgages-for-non-residents-in-spain/'];
 
 (async () => {
   const browser = await chromium.launch(EXEC_PATH ? { executablePath: EXEC_PATH } : {});

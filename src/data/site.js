@@ -259,15 +259,35 @@ const INFO_PAGES_EN = [
   { id: 'terms', slug: 'terms-of-use', title: 'Terms of Use', navLabel: 'Terms of use' },
 ];
 
+// Guías de contenido evergreen. A diferencia de INFO_PAGES, NO viven
+// espejadas en los dos idiomas por diseño: cada una nace de una
+// intención de búsqueda real y concreta detectada en Search Console
+// (consultas con impresiones reales, ver commit de creación), nunca de
+// "crear una URL porque sí" (regla explícita del proyecto). Por eso
+// GUIDES (es) empieza vacío — no hay todavía ninguna guía justificada
+// por demanda real en español — y build.js/pageShell tratan estas
+// páginas como de un solo idioma, sin hreflang (mismo patrón que ya
+// usa 404.html).
+const GUIDES = [];
+const GUIDES_EN = [
+  {
+    id: 'nonResidentMortgage',
+    slug: 'mortgages-for-non-residents-in-spain',
+    title: 'Mortgages for Non-Residents Buying Property in Spain',
+    description: "How Spanish mortgages work for non-resident buyers: the French amortization system, TIN vs TAE, and what's typically different from a resident application.",
+    relatedCalcIds: ['hipoteca', 'prestamo'],
+  },
+];
+
 /* Único punto que build.js y las plantillas deben usar para resolver
    qué SITE/CATEGORIES/INFO_PAGES corresponden a un idioma. Para 'es'
    devuelve exactamente los mismos objetos de siempre (sin copia ni
    transformación), así que el comportamiento español no cambia. */
 function localeData(locale) {
   if (locale === 'en') {
-    return { SITE: SITE_EN, CATEGORIES: CATEGORIES_EN, CATEGORY_BY_ID: CATEGORY_BY_ID_EN, INFO_PAGES: INFO_PAGES_EN };
+    return { SITE: SITE_EN, CATEGORIES: CATEGORIES_EN, CATEGORY_BY_ID: CATEGORY_BY_ID_EN, INFO_PAGES: INFO_PAGES_EN, GUIDES: GUIDES_EN };
   }
-  return { SITE, CATEGORIES, CATEGORY_BY_ID, INFO_PAGES };
+  return { SITE, CATEGORIES, CATEGORY_BY_ID, INFO_PAGES, GUIDES };
 }
 
-module.exports = { SITE, SITE_EN, SERVICES, LEGAL_ENTITY, CATEGORIES, CATEGORIES_EN, CATEGORY_BY_ID, CATEGORY_BY_ID_EN, INFO_PAGES, INFO_PAGES_EN, localeData };
+module.exports = { SITE, SITE_EN, SERVICES, LEGAL_ENTITY, CATEGORIES, CATEGORIES_EN, CATEGORY_BY_ID, CATEGORY_BY_ID_EN, INFO_PAGES, INFO_PAGES_EN, GUIDES, GUIDES_EN, localeData };

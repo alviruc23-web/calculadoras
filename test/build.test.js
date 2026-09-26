@@ -10,30 +10,43 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..');
-const { SITE, CATEGORIES, INFO_PAGES, localeData } = require('../src/data/site');
+const { SITE, SITE_EN, CATEGORIES, INFO_PAGES, GUIDES, GUIDES_EN, localeData } = require('../src/data/site');
 const { CALCS, getCalcs } = require('../src/data/calculators');
 
 const readCalc = id => fs.readFileSync(path.join(ROOT, id, 'index.html'), 'utf8');
 const readPath = relPath => fs.readFileSync(path.join(ROOT, relPath, 'index.html'), 'utf8');
 
 const PAGES_PER_LOCALE = 1 + CATEGORIES.length + CALCS.length + INFO_PAGES.length;
+// Las guías (GUIDES/GUIDES_EN) son la única excepción deliberada al
+// espejo ES+EN: pueden existir en un solo idioma (ver src/data/site.js).
+// Se cuentan aparte porque no encajan en el "× 2 idiomas" del resto.
+const GUIDE_URLS = new Set([
+  ...GUIDES.map(g => `${SITE.baseUrl}${g.slug}/`),
+  ...GUIDES_EN.map(g => `${SITE_EN.baseUrl}${g.slug}/`),
+]);
+const TOTAL_GUIDES = GUIDES.length + GUIDES_EN.length;
 
-test('sitemap.xml: 2 idiomas × páginas, cada URL con <lastmod> = SITE.reviewedOn', () => {
+test('sitemap.xml: 2 idiomas × páginas + guías de un solo idioma, cada URL con <lastmod> = SITE.reviewedOn', () => {
   const xml = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
   const locs = xml.match(/<loc>/g) || [];
   const lastmods = xml.match(/<lastmod>([^<]+)<\/lastmod>/g) || [];
-  assert.equal(locs.length, PAGES_PER_LOCALE * 2, `el sitemap debería tener ${PAGES_PER_LOCALE * 2} URLs (es + en)`);
+  assert.equal(locs.length, PAGES_PER_LOCALE * 2 + TOTAL_GUIDES, `el sitemap debería tener ${PAGES_PER_LOCALE * 2 + TOTAL_GUIDES} URLs (es + en + guías)`);
   assert.equal(lastmods.length, locs.length, 'cada <url> debe tener su <lastmod>');
   for (const lm of lastmods) {
     assert.equal(lm, `<lastmod>${SITE.reviewedOn}</lastmod>`, 'lastmod debe coincidir con SITE.reviewedOn, no una fecha inventada');
   }
 });
 
-test('sitemap.xml: cada URL tiene sus dos alternates hreflang (es y en)', () => {
+test('sitemap.xml: cada URL tiene sus dos alternates hreflang, salvo las guías de un solo idioma', () => {
   const xml = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
   const blocks = xml.match(/<url>[\s\S]*?<\/url>/g) || [];
-  assert.equal(blocks.length, PAGES_PER_LOCALE * 2);
+  assert.equal(blocks.length, PAGES_PER_LOCALE * 2 + TOTAL_GUIDES);
   for (const block of blocks) {
+    const loc = (block.match(/<loc>([^<]+)<\/loc>/) || [])[1];
+    if (GUIDE_URLS.has(loc)) {
+      assert.match(block, /hreflang="(es|en)"/, 'la guía debería tener su propio hreflang: ' + loc);
+      continue;
+    }
     assert.match(block, /hreflang="es"/, 'falta alternate es en: ' + block.slice(0, 80));
     assert.match(block, /hreflang="en"/, 'falta alternate en en: ' + block.slice(0, 80));
   }

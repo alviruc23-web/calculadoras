@@ -350,4 +350,10 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/terms-of-use/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://calculadorasfaciles.es/terminos/"/>
   </url>
+  <url>
+    <loc>https://calculadorasfaciles.es/en/mortgages-for-non-residents-in-spain/</loc>
+    <lastmod>2026-08</lastmod>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://calculadorasfaciles.es/en/mortgages-for-non-residents-in-spain/"/>
+  </url>
 </urlset>
