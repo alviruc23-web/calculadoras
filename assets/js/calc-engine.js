@@ -251,6 +251,7 @@
       errRateReal: 'Introduce un tipo de interés real (en porcentaje anual, por ejemplo 3).',
       mainLabel: 'Cuota mensual',
       rowCapital: 'Capital prestado',
+      rowRate: 'Tipo de interés aplicado',
       rowTerm: 'Plazo',
       termYearsOpen: ' años (',
       termInstallmentsClose: ' cuotas)',
@@ -489,6 +490,7 @@
       errRateReal: 'Enter a real interest rate (annual percentage, e.g. 3).',
       mainLabel: 'Monthly payment',
       rowCapital: 'Loan principal',
+      rowRate: 'Interest rate applied',
       rowTerm: 'Term',
       termYearsOpen: ' years (',
       termInstallmentsClose: ' payments)',
@@ -846,6 +848,7 @@
           main: { label: T.hipoteca.mainLabel, value: eur(cuota) },
           rows: [
             { k: T.hipoteca.rowCapital, v: eur(capital) },
+            { k: T.hipoteca.rowRate, v: pct(interes, 2) },
             { k: T.hipoteca.rowTerm, v: fmt(anios, 0) + T.hipoteca.termYearsOpen + n + T.hipoteca.termInstallmentsClose },
             { k: T.hipoteca.rowInterestTotal, v: eur(intereses) },
             { k: T.hipoteca.rowTotalToRepay, v: eur(totalPagado), strong: true },
