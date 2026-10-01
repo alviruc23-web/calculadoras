@@ -144,6 +144,16 @@ nav.main-nav { display: flex; gap: 2px; flex-wrap: wrap; }
 
 /* ---- buscador de cabecera ---- */
 .hdr-search { position: relative; width: 100%; max-width: 320px; }
+/* En la home, el buscador grande del hero ya cubre la misma función.
+   Por debajo de 640px el de cabecera no cabe junto al logo/nav y
+   termina en su propia fila, duplicando el buscador justo encima del
+   hero — las dos cajas de búsqueda ocupan toda la primera pantalla
+   antes de llegar a cualquier contenido real (detectado en revisión
+   móvil real tras feedback de un usuario). Solo se oculta en la home:
+   en el resto de páginas es el único buscador y se mantiene siempre. */
+@media (max-width: 640px) {
+  .hdr-search-home { display: none; }
+}
 .hdr-search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--dim); pointer-events: none; }
 .hdr-search input {
   width: 100%; height: 40px; padding: 0 14px 0 38px;
